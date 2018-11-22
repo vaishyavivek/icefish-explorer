@@ -20,7 +20,6 @@ SOURCES += \
     SourceFiles/filefoldermodel.cpp \
     SourceFiles/rdesktopservices.cpp \
     SourceFiles/bookmarkinfomodel.cpp \
-    SourceFiles/menumodel.cpp \
     SourceFiles/notificationmodel.cpp
 
 RESOURCES += qml.qrc \
