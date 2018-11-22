@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>QML/main.qml</file>
+        <file>QML/SidePanel.qml</file>
+        <file>QML/TabViewDelegate.qml</file>
+        <file>QML/AddressBox.qml</file>
+        <file>QML/RCheckBox.qml</file>
+        <file>QML/ShortcutMenu.qml</file>
+        <file>QML/RImageButton.qml</file>
+        <file>QML/RImageExpandingButton.qml</file>
+        <file>QML/RScaleControlSpinBox.qml</file>
+        <file>QML/NotificationPanel.qml</file>
+        <file>QML/BookmarkPanel.qml</file>
+        <file>QML/RMenu.qml</file>
+        <file>QML/NewFolderDialogBox.qml</file>
+        <file>QML/RTextButton.qml</file>
+        <file>QML/NewFileDialogBox.qml</file>
+        <file>QML/RComboBox.qml</file>
+        <file>QML/SettingsPanel.qml</file>
+    </qresource>
+</RCC>

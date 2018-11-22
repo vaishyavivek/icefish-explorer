@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/local">
+        <file>Resources/icons-menu.svg</file>
+        <file>Resources/icons-move-back.svg</file>
+        <file>Resources/icons-move-forward.svg</file>
+        <file>Resources/icons-reload.svg</file>
+        <file>Resources/icons-switch.svg</file>
+        <file>Resources/not-found.svg</file>
+        <file>Resources/submenu.svg</file>
+        <file>Resources/icons-add.svg</file>
+        <file>Resources/icons-preview.svg</file>
+        <file>Resources/icons-pin.png</file>
+        <file>Resources/icons-unpin.svg</file>
+        <file>Resources/icons-close.svg</file>
+        <file>Resources/icons-check.svg</file>
+        <file>Resources/icons-search.svg</file>
+        <file>Resources/globalSettings.rde</file>
+    </qresource>
+</RCC>
