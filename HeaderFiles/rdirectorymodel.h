@@ -13,6 +13,7 @@ class RDirectoryModel : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList<QObject*> FileFolderList READ FileFolderList NOTIFY FileFolderListChanged)
+    Q_PROPERTY(int ActiveIndexInCurrentModel READ ActiveIndexInCurrentModel WRITE setActiveIndexInCurrentModel)
 
     Q_PROPERTY(bool IsHiddenItemsShown READ IsHiddenItemsShown WRITE setIsHiddenItemsShown NOTIFY IsHiddenItemsShownChanged)
     Q_PROPERTY(bool IsPreviewAvailable READ IsPreviewAvailable WRITE setIsPreviewAvailable NOTIFY IsPreviewAvailableChanged)
@@ -35,6 +36,9 @@ public:
     explicit RDirectoryModel(QObject *parent = nullptr);
 
     QList<QObject*> FileFolderList() const{ return fileFolderList;}
+
+    int ActiveIndexInCurrentModel() const;
+    void setActiveIndexInCurrentModel(const int ActiveIndexInCurrentModel);
 
     bool IsHiddenItemsShown() const{ return isHiddenItemsShown;}
     void setIsHiddenItemsShown(const bool IsHiddenItemsShown);
@@ -76,6 +80,7 @@ signals:
     void WriteBookmarkThreaded(QString filePath, bool addOrRemove);
 
     void FileFolderListChanged();
+    void activeIndexInCurrentModelChanged();
     void triggerIconCacheThreads();
 
     void IsHiddenItemsShownChanged();
@@ -128,7 +133,7 @@ private:
     //</TODO>
 
     //used for tracking navigation
-    QList<QString> navigationHistoryInfoList;
+    QList<QObject*> navigationHistoryInfoList;
     int pointerToCurrentDirectoryInNavigationHistoryInfoList;
 
     QMimeDatabase mimeDb;

@@ -26,7 +26,7 @@ Rectangle{
                 iconPath: "/local/Resources/icons-move-back.svg"
                 hoverText: "Move Backward"
                 enabled: false
-                onClicked: qtModel.navigateBackward()
+                onClicked: navigateBackward()
                 Connections{
                     target: qtModel
                     ignoreUnknownSignals: true
@@ -41,7 +41,10 @@ Rectangle{
                 iconPath: "/local/Resources/icons-move-forward.svg"
                 hoverText: "Move Forward"
                 enabled: false
-                onClicked: qtModel.navigateForward()
+                onClicked: {
+                    qtModel.navigateForward()
+                    fileFolderListView.currentIndex = qtModel.ActiveIndexInCurrentModel
+                }
                 Connections{
                     target: qtModel
                     ignoreUnknownSignals: true
@@ -83,100 +86,114 @@ Rectangle{
             height: 35
             color: "transparent"
 
-            Row{
+            Rectangle{
                 id: defaultLayout
-                opacity: 1
+                opacity: selectAll.checked ? 0 : 1
+                visible: !selectAll.checked
                 height: parent.height
                 width: height*5
+                anchors.left: parent.left
+                anchors.leftMargin: 7
 
-                Rectangle{
-                    width: 7
-                    height: parent.height
-                    color: "transparent"
-                }
+                Row{
+                    anchors.fill: parent
+                    spacing: 1
 
-                RCheckBox{
-                    id: selectAll
-                    height: parent.height*0.75
-                    width: height
-                    //onCheckedChanged:
-                }
-
-                Rectangle{
-                    width: 10
-                    height: parent.height
-                    color: "transparent"
-                }
-
-                RImageButton{
-                    id: newFileBtn
-                    height: parent.height
-                    width: height
-                    iconPath: "file://" + rDesktopService.getThemeIcon("std-name:x-office-document", 64)
-                    hoverText: "New File"
-                    Image {
-                        z: 2
-                        source: "/local/Resources/icons-add.svg"
-                        sourceSize.width: parent.width*0.4
-                        sourceSize.height: parent.height*0.4
-                        anchors.bottom: parent.bottom
-                        anchors.right: parent.right
-                        anchors.rightMargin: 2
+                    RCheckBox{
+                        id: selectAll
+                        height: parent.height*0.75
+                        width: height
                     }
-                    onClicked: newFileDialogBox.open()
 
-                    NewFileDialogBox{
-                        id: newFileDialogBox
-                        title: "New File"
-                        currentPath: qtModel.AddressBoxData
-                        width: 250
-                        height: 155
-                        //background: tabViewDelegate.color
+                    RImageButton{
+                        id: newFileBtn
+                        height: parent.height
+                        width: height
+                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:x-office-document", 64)
+                        hoverText: "New File"
+                        Image {
+                            z: 2
+                            source: "/local/Resources/icons-add.svg"
+                            sourceSize.width: parent.width*0.4
+                            sourceSize.height: parent.height*0.4
+                            anchors.bottom: parent.bottom
+                            anchors.right: parent.right
+                            anchors.rightMargin: 2
+                        }
+                        onClicked: newFileDialogBox.open()
+
+                        NewFileDialogBox{
+                            id: newFileDialogBox
+                            title: "New File"
+                            currentPath: qtModel.AddressBoxData
+                            width: 250
+                            height: 155
+                            //background: tabViewDelegate.color
+                        }
                     }
-                }
 
-                RImageButton{
-                    id: newFolderBtn
-                    height: parent.height
-                    width: height
-                    iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder", 64)
-                    hoverText: "New Folder"
-                    Image {
-                        z: 2
-                        source: "/local/Resources/icons-add.svg"
-                        sourceSize.width: parent.width*0.4
-                        sourceSize.height: parent.height*0.4
-                        anchors.bottom: parent.bottom
-                        anchors.right: parent.right
-                        anchors.rightMargin: 2
-                    }
-                    onClicked: newFolderDialogBox.open()
+                    RImageButton{
+                        id: newFolderBtn
+                        height: parent.height
+                        width: height
+                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder", 64)
+                        hoverText: "New Folder"
+                        Image {
+                            z: 2
+                            source: "/local/Resources/icons-add.svg"
+                            sourceSize.width: parent.width*0.4
+                            sourceSize.height: parent.height*0.4
+                            anchors.bottom: parent.bottom
+                            anchors.right: parent.right
+                            anchors.rightMargin: 2
+                        }
+                        onClicked: newFolderDialogBox.open()
 
-                    NewFolderDialogBox{
-                        id: newFolderDialogBox
-                        title: "New Folder"
-                        currentPath: qtModel.AddressBoxData
-                        width: 250
-                        height: 155
-                        //background: tabViewDelegate.color
+                        NewFolderDialogBox{
+                            id: newFolderDialogBox
+                            title: "New Folder"
+                            currentPath: qtModel.AddressBoxData
+                            width: 250
+                            height: 155
+                            //background: tabViewDelegate.color
+                        }
                     }
                 }
             }
 
-            Row{
+
+
+
+            Rectangle{
                 id: layoutWhenSelected
-                opacity: 0
+                opacity: selectAll.checked ? 1 : 0
+                visible: selectAll.checked
                 height: parent.height
-                width: height*6
-                anchors.leftMargin: 5
-            }
+                width: height*5
+                anchors.left: parent.left
+                anchors.leftMargin: 7
 
+                Row{
+                    anchors.fill: parent
+                    spacing: 1
+
+                    RImageButton{
+                        id: deselectAll
+                        height: parent.height
+                        width: height
+                        iconPath: "/local/Resources/icons-back-arrow.svg"
+                        onClicked: selectAll.checked = false
+                    }
+                }
+            }
 
             Row{
                 id: globalControls
                 height: parent.height
                 width: height*6.5 + 7
                 anchors.right: parent.right
+                anchors.rightMargin: 7
+                spacing: 1
 
                 RImageButton{
                     id: favoriteBtn
@@ -254,12 +271,6 @@ Rectangle{
                     background: tabViewDelegate.color
                     value: setValue(scaleFactor)
                 }
-
-                Rectangle{
-                    width: 7
-                    height: parent.height
-                    color: "transparent"
-                }
             }
         }
 
@@ -273,12 +284,11 @@ Rectangle{
         Rectangle{
             id: fileFolderListViewParentRect
             width: parent.width
-            height: parent.height - 82
+            height: parent.height - 92
             color: "transparent"
             ListView{
                 id: fileFolderListView
                 property bool editing: false
-                property int returnToIndex: []
                 anchors.fill: parent
                 anchors.leftMargin: 5
                 anchors.rightMargin: 5
@@ -303,6 +313,7 @@ Rectangle{
                             id: check
                             height: parent.height*0.5
                             width: height
+                            checked: selectAll.checked
                             onCheckedChanged: model.modelData.Checked = checked
                         }
 
@@ -467,7 +478,7 @@ Rectangle{
                                 fileFolderListView.forceActiveFocus()
                             fileFolderListView.currentIndex = index
                         }
-                        onDoubleClicked: qtModel.updateCurrentDirectory(model.modelData.Path)
+                        onDoubleClicked: updateModel(model.modelData.Path, index)
                     }
 
                     PropertyAnimation{
@@ -489,7 +500,6 @@ Rectangle{
                 }
 
                 highlightFollowsCurrentItem: true
-                highlightMoveDuration: 1000
                 highlight: Rectangle{
                     width: fileFolderListView.width
                     height: scaleFactor
@@ -502,17 +512,35 @@ Rectangle{
                 Keys.onPressed: {
                     if(!editing){
                         if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return)
-                            qtModel.updateCurrentDirectory(currentItem.filePath)
+                            updateModel(currentItem.filePath, currentIndex)
                         else if(event.key === Qt.Key_Backspace && backBtn.enabled)
-                            qtModel.navigateBackward()
+                            navigateBackward()
                     }
                 }
 
-                onCurrentIndexChanged: {
-                    editing = false
-                    returnToIndex[returnToIndex.length - 1] = currentIndex
-                }
+                onCurrentIndexChanged: editing = false
             }
         }
+    }
+
+    function navigateBackward(){
+        //c++ will update the list
+        qtModel.navigateBackward()
+
+        //set the highlight movement to maximum so that there's no time lapse in update
+        fileFolderListView.highlightMoveVelocity = -1
+        fileFolderListView.highlightMoveDuration = 10
+
+        //now change to the last active index in the model
+        fileFolderListView.currentIndex = qtModel.ActiveIndexInCurrentModel
+
+        //set the highlight to default values
+        fileFolderListView.highlightMoveVelocity = 400
+        fileFolderListView.highlightMoveDuration = -1
+    }
+
+    function updateModel(newPath, index){
+        qtModel.ActiveIndexInCurrentModel = index
+        qtModel.updateCurrentDirectory(newPath)
     }
 }

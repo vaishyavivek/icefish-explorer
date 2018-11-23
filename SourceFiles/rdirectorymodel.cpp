@@ -2,6 +2,7 @@
 #include "HeaderFiles/filefoldermodel.h"
 #include "HeaderFiles/rdesktopservices.h"
 #include "HeaderFiles/menumodel.h"
+#include "HeaderFiles/navigationhistorymodel.h"
 
 #include <QDebug>
 #include <QDateTime>
@@ -24,8 +25,11 @@ void RDirectoryModel::updateCurrentDirectory(QString newDirectoryToSwitchTo){
             for(int i = navigationHistoryInfoList.length() ; i > pointerToCurrentDirectoryInNavigationHistoryInfoList; i--){
                 navigationHistoryInfoList.removeAt(i);
             }
-            navigationHistoryInfoList.append(newDirectoryToSwitchTo);
+
+            NavigationHistoryModel *nhm = new NavigationHistoryModel(newDirectoryToSwitchTo);
+            navigationHistoryInfoList.append(nhm);
             pointerToCurrentDirectoryInNavigationHistoryInfoList++;
+
             backNavBtnEnabled(true);
 
             setAddressBoxData(newDirectoryToSwitchTo);
@@ -47,6 +51,19 @@ void RDirectoryModel::updateCurrentDirectory(QString newDirectoryToSwitchTo){
                 homeNavBtnEnabled(true);
         }*/
     }
+}
+
+int RDirectoryModel::ActiveIndexInCurrentModel() const{
+    NavigationHistoryModel *nhm = qobject_cast<NavigationHistoryModel*>(navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList));
+    return nhm->ActiveIndex();
+}
+
+void RDirectoryModel::setActiveIndexInCurrentModel(const int ActiveIndexInCurrentModel){
+    NavigationHistoryModel *nhm = qobject_cast<NavigationHistoryModel*>(navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList));
+    nhm->setActiveIndex(ActiveIndexInCurrentModel);
+    int a = 0;
+    //navigationHistoryInfoList.replace(pointerToCurrentDirectoryInNavigationHistoryInfoList, nhm);
+    //activeIndexInCurrentModel = ActiveIndexInCurrentModel;
 }
 
 
@@ -114,9 +131,6 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
             emit FileFolderListChanged();
             iconCacheThread->start();
             emit triggerIconCacheThreads();
-
-            //if(fileFolderList.isEmpty())
-              //  setNotification(1, directoryToSwitchTo);
             return 0;//no error
         }
         else
@@ -341,13 +355,14 @@ void RDirectoryModel::navigateBackward(){
      */
     if((--pointerToCurrentDirectoryInNavigationHistoryInfoList) >= 0){
 
-        QString newAddress = navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList);
+        NavigationHistoryModel *nhm = qobject_cast<NavigationHistoryModel*>(navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList));
 
-        if(updateCurrentDirectoryInternal(newAddress) != 0)
+        if(updateCurrentDirectoryInternal(nhm->Path()) != 0)
             qDebug() << "Failed to navigate backward";
 
         emit forNavBtnEnabled(true);
-        setAddressBoxData(newAddress);
+
+        setAddressBoxData(nhm->Path());
     }
     emit backNavBtnEnabled(pointerToCurrentDirectoryInNavigationHistoryInfoList > 0);
 }
@@ -361,11 +376,12 @@ void RDirectoryModel::navigateForward(){
 
     if((++pointerToCurrentDirectoryInNavigationHistoryInfoList) < navigationHistoryInfoList.length()){
 
-        QString newAddress = navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList);
+        NavigationHistoryModel *nhm = qobject_cast<NavigationHistoryModel*>(navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList));
+        //QString newAddress = navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList);
 
-        if(updateCurrentDirectoryInternal(newAddress) == 0){
+        if(updateCurrentDirectoryInternal(nhm->Path()) == 0){
             emit backNavBtnEnabled(true);
-            setAddressBoxData(newAddress);
+            setAddressBoxData(nhm->Path());
         }
         else
             qDebug() << "Failed to navigate forward";
@@ -375,9 +391,10 @@ void RDirectoryModel::navigateForward(){
 
 void RDirectoryModel::reloadCurrentDirectory(){
     emit reloadBtnEnabled(false);
-    QString newAddress = navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList);
+    NavigationHistoryModel *nhm = qobject_cast<NavigationHistoryModel*>(navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList));
+    //QString newAddress = navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList);
 
-    if(updateCurrentDirectoryInternal(newAddress) == 0){
+    if(updateCurrentDirectoryInternal(nhm->Path()) == 0){
         emit forNavBtnEnabled(pointerToCurrentDirectoryInNavigationHistoryInfoList < navigationHistoryInfoList.length());
         emit backNavBtnEnabled(pointerToCurrentDirectoryInNavigationHistoryInfoList > 0);
         emit reloadBtnEnabled(true);

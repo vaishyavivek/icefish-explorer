@@ -15,5 +15,6 @@
         <file>Resources/icons-check.svg</file>
         <file>Resources/icons-search.svg</file>
         <file>Resources/globalSettings.rde</file>
+        <file>Resources/icons-back-arrow.svg</file>
     </qresource>
 </RCC>
