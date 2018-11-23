@@ -155,13 +155,14 @@ void RDirectoryModel::applyCurrentDirectorySettings(QDir *localDirectory){
         localDirectory->setNameFilters(QStringList() << ("*" + wildSearchKey + "*"));
 
     localDirectory->setSorting(QDir::DirsFirst | QDir::Name);
-    emit changeSortOrderButtonView(0);
 
     isHiddenItemsShown = false;
     isPreviewAvailable = false;
     iconScale = 48;
     isBookmarked = false;
-
+    sortingRole = "Name";
+    sortingOrder = "Ascending";
+    sortingPreference = "DirectoryFirst";
 
     QFile dirInfo(localDirectory->path() + "/.rfmDirectorySetting");
     if(dirInfo.open(QIODevice::ReadOnly)){
@@ -172,38 +173,40 @@ void RDirectoryModel::applyCurrentDirectorySettings(QDir *localDirectory){
             info = stream.readLine();
             if(info.startsWith("HiddenFilesShown")){
                 info = info.section('=', 1);
-                if(info.startsWith("11")){
+                if(info.startsWith("1")){
                     localDirectory->setFilter(localDirectory->filter() | QDir::Hidden);
                     isHiddenItemsShown = true;
                 }
             }
             if(info.startsWith("PreviewAvailable")){
                 info = info.section('=', 1);
-                isPreviewAvailable = info.startsWith("11");
+                isPreviewAvailable = info.startsWith("1");
             }
-            else if(info.startsWith("SortRole")){
+            else if(info.startsWith("SortingRole")){
                 info = info.section('=', 1);
-                switch (info.toInt()) {
-                case 1:
-                    localDirectory->setSorting(QDir::DirsFirst | QDir::Type);
-                    emit changeSortOrderButtonView(1);
-                    break;
-                case 2:
-                    localDirectory->setSorting(QDir::DirsFirst | QDir::Size);
-                    emit changeSortOrderButtonView(2);
-                    break;
-                case 3:
-                    localDirectory->setSorting(QDir::DirsFirst | QDir::Time);
-                    emit changeSortOrderButtonView(3);
+                sortingRole = info;
+                if(info.compare("Type"))
+                    localDirectory->setSorting(QDir::Type);
+                else if(info.compare("Size"))
+                    localDirectory->setSorting(QDir::Size);
+                else if(info.compare("Time"))
+                    localDirectory->setSorting(QDir::Time);
+            }
+            else if(info.startsWith("SortingOrder")){
+                info = info.section('=', 1);
+                if(info.compare("Descending")){
+                    sortingOrder = info;
+                    localDirectory->setSorting(localDirectory->sorting() | QDir::Reversed);
                 }
             }
-            else if(info.startsWith("SortOrder")){
+            else if(info.startsWith("SortingPreference")){
                 info = info.section('=', 1);
-                switch (info.toInt()){
-                case 1:
-                    localDirectory->setSorting(QDir::Reversed);
-                    emit changeSortOrderButtonView(10);
+                if(info.compare("FileFirst")){
+                    sortingPreference = "FileFirst";
+                    localDirectory->setSorting(localDirectory->sorting() | QDir::DirsLast);
                 }
+                else
+                    localDirectory->setSorting(localDirectory->sorting() | QDir::DirsFirst);
             }
             else if(info.startsWith("CurrentView")){
                 info = info.section('=', 1);
@@ -218,30 +221,58 @@ void RDirectoryModel::applyCurrentDirectorySettings(QDir *localDirectory){
             }
             else if(info.startsWith("Bookmarked")){
                 info = info.section('=', 1);
-                isBookmarked = info.startsWith("11");
+                isBookmarked = info.startsWith("1");
             }
         }while (!info.isNull());
     }
 
+    emit IsBookmarkedChanged();
     emit IsHiddenItemsShownChanged();
     emit IsPreviewAvailableChanged();
+    emit SortingRoleChanged();
+    emit SortingOrderChanged();
+    emit SortingPreferenceChanged();
     emit IconScaleChanged();
-    emit IsBookmarkedChanged();
+
 }
 
 
+void RDirectoryModel::setIsBookmarked(const bool IsBookmarked){
+    isBookmarked = IsBookmarked;
+    updateSettingsForCurrentDirectory("Bookmarked", isBookmarked ? "1" : "0");
+    emit WriteBookmarkThreaded(addressBoxData, isBookmarked);
+    emit IsBookmarkedChanged();
+}
+
 void RDirectoryModel::setIsHiddenItemsShown(const bool IsHiddenItemsShown){
     isHiddenItemsShown = IsHiddenItemsShown;
-    updateSettingsForCurrentDirectory("HiddenFilesShown", isHiddenItemsShown ? "11" : "00");
+    updateSettingsForCurrentDirectory("HiddenFilesShown", isHiddenItemsShown ? "1" : "0");
     emit IsHiddenItemsShownChanged();
     reloadCurrentDirectory();
 }
 
 void RDirectoryModel::setIsPreviewAvailable(const bool IsPreviewAvailable){
     isPreviewAvailable = IsPreviewAvailable;
-    updateSettingsForCurrentDirectory("PreviewAvailable", isPreviewAvailable ? "11" : "00");
+    updateSettingsForCurrentDirectory("PreviewAvailable", isPreviewAvailable ? "1" : "0");
     emit IsPreviewAvailableChanged();
 }
+
+
+void RDirectoryModel::setSortingRole(const QString &SortingRole){
+    sortingRole = SortingRole;
+    updateSettingsForCurrentDirectory("SortingRole", SortingRole);
+}
+
+void RDirectoryModel::setSortingOrder(const QString &SortingOrder){
+    sortingOrder = SortingOrder;
+    updateSettingsForCurrentDirectory("SortingOrder", SortingOrder);
+}
+
+void RDirectoryModel::setSortingPreference(const QString &SortingPreference){
+    sortingPreference = SortingPreference;
+    updateSettingsForCurrentDirectory("SortingPreference", sortingPreference);
+}
+
 
 void RDirectoryModel::setIconScale(const int IconScale){
     iconScale = IconScale;
@@ -250,12 +281,6 @@ void RDirectoryModel::setIconScale(const int IconScale){
 }
 
 
-void RDirectoryModel::setIsBookmarked(const bool IsBookmarked){
-    isBookmarked = IsBookmarked;
-    updateSettingsForCurrentDirectory("Bookmarked", isBookmarked ? "11" : "00");
-    emit WriteBookmarkThreaded(addressBoxData, isBookmarked);
-    emit IsBookmarkedChanged();
-}
 
 QList<QObject*> RDirectoryModel::getActionMenuFor(QString filePath){
 

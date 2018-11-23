@@ -4,7 +4,6 @@ import QtQuick.Controls 2.1
 Button {
     id: rTextButton
     readonly property string highlightColor: "lightblue"
-    //property string te
     property string hoverText: ""
     property bool toolTipEnabled: hoverText.length > 0
 
@@ -12,8 +11,8 @@ Button {
     padding: 0
 
     contentItem: Item{
-        width: rButton.width
-        height: rButton.height
+        width: rTextButton.width
+        height: rTextButton.height
         Rectangle{
             anchors.fill: parent
             opacity: 0.4
@@ -34,8 +33,8 @@ Button {
 
     background: Rectangle {
         id: backgroundRect
-        width: rButton.width - 2
-        height: rButton.height - 2
+        width: rTextButton.width - 2
+        height: rTextButton.height - 2
         anchors.centerIn: parent
         opacity: enabled ? 1 : 0.4
         color: "transparent"

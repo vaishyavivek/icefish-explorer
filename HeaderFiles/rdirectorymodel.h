@@ -16,10 +16,16 @@ class RDirectoryModel : public QObject
     Q_PROPERTY(int ActiveIndexInCurrentModel READ ActiveIndexInCurrentModel WRITE setActiveIndexInCurrentModel)
     Q_PROPERTY(QString WildSearchKey READ WildSearchKey WRITE setWildSearchKey NOTIFY WildSearchKeyChanged)
 
+    Q_PROPERTY(bool IsBookmarked READ IsBookmarked WRITE setIsBookmarked NOTIFY IsBookmarkedChanged)
     Q_PROPERTY(bool IsHiddenItemsShown READ IsHiddenItemsShown WRITE setIsHiddenItemsShown NOTIFY IsHiddenItemsShownChanged)
     Q_PROPERTY(bool IsPreviewAvailable READ IsPreviewAvailable WRITE setIsPreviewAvailable NOTIFY IsPreviewAvailableChanged)
+
+    Q_PROPERTY(QString SortingRole READ SortingRole WRITE setSortingRole NOTIFY SortingRoleChanged)
+    Q_PROPERTY(QString SortingOrder READ SortingOrder WRITE setSortingOrder NOTIFY SortingOrderChanged)
+    Q_PROPERTY(QString SortingPreference READ SortingPreference WRITE setSortingPreference NOTIFY SortingPreferenceChanged)
+
     Q_PROPERTY(int IconScale READ IconScale WRITE setIconScale NOTIFY IconScaleChanged)
-    Q_PROPERTY(bool IsBookmarked READ IsBookmarked WRITE setIsBookmarked NOTIFY IsBookmarkedChanged)
+
 
     Q_PROPERTY(bool IsHome READ IsHome NOTIFY IsHomeChanged)
     /*Q_PROPERTY(bool IsDocuments READ IsDocuments NOTIFY IsDocumentsChanged)
@@ -45,17 +51,26 @@ public:
     void setWildSearchKey(const QString &WildSearchKey);
 
 
+    bool IsBookmarked() const{ return isBookmarked;}
+    void setIsBookmarked(const bool IsBookmarked);
+
     bool IsHiddenItemsShown() const{ return isHiddenItemsShown;}
     void setIsHiddenItemsShown(const bool IsHiddenItemsShown);
 
     bool IsPreviewAvailable() const{ return isPreviewAvailable;}
     void setIsPreviewAvailable(const bool IsPreviewAvailable);
 
+    QString SortingRole() const{ return sortingRole;}
+    void setSortingRole(const QString &SortingRole);
+
+    QString SortingOrder() const{ return sortingOrder;}
+    void setSortingOrder(const QString &SortingOrder);
+
+    QString SortingPreference() const{ return sortingPreference;}
+    void setSortingPreference(const QString &SortingPreference);
+
     int IconScale() const{ return iconScale;}
     void setIconScale(const int IconScale);
-
-    bool IsBookmarked() const{ return isBookmarked;}
-    void setIsBookmarked(const bool IsBookmarked);
 
 
     bool IsHome() const{ return isHome;}
@@ -89,10 +104,13 @@ signals:
     void WildSearchKeyChanged();
     void triggerIconCacheThreads();
 
+    void IsBookmarkedChanged();
     void IsHiddenItemsShownChanged();
     void IsPreviewAvailableChanged();
+    void SortingRoleChanged();
+    void SortingOrderChanged();
+    void SortingPreferenceChanged();
     void IconScaleChanged();
-    void IsBookmarkedChanged();
 
     void IsHomeChanged();
 
@@ -110,7 +128,6 @@ signals:
     void createNew_ChooseAnother(QString suggestedName);
 
     void changeFileFolderView(int newView);
-    void changeSortOrderButtonView(int newValue);
 
 private:
     int updateCurrentDirectoryInternal(QString directoryToSwitchTo);
@@ -124,10 +141,13 @@ private:
 
     QList<QObject*> fileFolderList;
 
+    bool isBookmarked;
     bool isHiddenItemsShown;
     bool isPreviewAvailable;
+    QString sortingRole;
+    QString sortingOrder;
+    QString sortingPreference;
     int iconScale;
-    bool isBookmarked;
 
     //<TODO>
     bool isHome;

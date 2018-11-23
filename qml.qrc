@@ -18,5 +18,6 @@
         <file>QML/RComboBox.qml</file>
         <file>QML/SettingsPanel.qml</file>
         <file>QML/WildSearchPanel.qml</file>
+        <file>QML/ItemSortingRolesPanel.qml</file>
     </qresource>
 </RCC>

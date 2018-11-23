@@ -16,5 +16,9 @@
         <file>Resources/icons-search.svg</file>
         <file>Resources/globalSettings.rde</file>
         <file>Resources/icons-back-arrow.svg</file>
+        <file>Resources/icons-sort-up.svg</file>
+        <file>Resources/icons-sort-down.svg</file>
+        <file>Resources/icons-sort-file.svg</file>
+        <file>Resources/icons-sort-dir.svg</file>
     </qresource>
 </RCC>

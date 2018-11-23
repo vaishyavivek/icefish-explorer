@@ -188,7 +188,7 @@ Rectangle{
             Row{
                 id: globalControls
                 height: parent.height
-                width: height*6.5 + 7
+                width: height*10 + 7
                 anchors.right: parent.right
                 anchors.rightMargin: 7
                 spacing: 1
@@ -256,6 +256,30 @@ Rectangle{
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
                         anchors.rightMargin: 2
+                    }
+                }
+
+                RTextButton{
+                    id: sortBtn
+                    height: parent.height*0.75
+                    width: parent.height*3.5
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: sortPopup.text
+                    checkable: false
+                    hoverText: "Sort By"
+                    onClicked: {
+                        sortPopup.isOpened ? sortPopup.close() : sortPopup.open()
+                        sortPopup.isOpened = !sortPopup.isOpened
+                    }
+
+                    ItemSortingRolesPanel{
+                        id: sortPopup
+                        width: sortBtn.width
+                        oldY: sortBtn.y
+                        newY: sortBtn.y + sortBtn.height
+                        sortingRole: qtModel.SortingRole
+                        sortingOrder: qtModel.SortingOrder
+                        sortingPreference: qtModel.SortingPreference
                     }
                 }
 
