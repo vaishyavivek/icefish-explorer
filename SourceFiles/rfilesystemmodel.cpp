@@ -81,10 +81,6 @@ void RFileSystemModel::GetAttachedDiskList(){
                                 }
 
                                 newDisk->GenerateExtras();
-                                /*if(mountDataList.at(1) == '/')
-                                    emit askToInsertNewDirectoryToEvaluationList(QDir::homePath());
-                                else
-                                    emit askToInsertNewDirectoryToEvaluationList(mountDataList.at(1));*/
                                 diskDataList.append(newDisk);
 
                                 allVolumesMountDataList.removeAt(j);
@@ -101,7 +97,6 @@ void RFileSystemModel::GetAttachedDiskList(){
             }
         }
     }
-    //emit startFileSystemEvaluation();
     emit DiskDataListChanged();
 }
 

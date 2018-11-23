@@ -28,3 +28,12 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
+
+/* TODO LIST
+ * 1- desktop services
+ * 2- properties
+ * 3- linking with global properties
+ * 4- allowing file operations
+ * 5- adding dbus support
+ * 6- adding path to theme the app
+*/
