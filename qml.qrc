@@ -17,5 +17,6 @@
         <file>QML/NewFileDialogBox.qml</file>
         <file>QML/RComboBox.qml</file>
         <file>QML/SettingsPanel.qml</file>
+        <file>QML/WildSearchPanel.qml</file>
     </qresource>
 </RCC>

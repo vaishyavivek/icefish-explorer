@@ -88,7 +88,7 @@ Rectangle{
 
             Rectangle{
                 id: defaultLayout
-                opacity: selectAll.checked ? 0 : 1
+                opacity: visible ? 1 : 0
                 visible: !selectAll.checked
                 height: parent.height
                 width: height*5
@@ -103,6 +103,7 @@ Rectangle{
                         id: selectAll
                         height: parent.height*0.75
                         width: height
+                        checked: false
                     }
 
                     RImageButton{
@@ -161,12 +162,9 @@ Rectangle{
                 }
             }
 
-
-
-
             Rectangle{
                 id: layoutWhenSelected
-                opacity: selectAll.checked ? 1 : 0
+                opacity: visible ? 1 : 0
                 visible: selectAll.checked
                 height: parent.height
                 width: height*5
@@ -289,6 +287,7 @@ Rectangle{
             ListView{
                 id: fileFolderListView
                 property bool editing: false
+                property bool searching: false
                 anchors.fill: parent
                 anchors.leftMargin: 5
                 anchors.rightMargin: 5
@@ -314,7 +313,11 @@ Rectangle{
                             height: parent.height*0.5
                             width: height
                             checked: selectAll.checked
-                            onCheckedChanged: model.modelData.Checked = checked
+                            onCheckedChanged: {
+                                model.modelData.Checked = checked
+                                //layoutWhenSelected.visible = checked
+                                //defaultLayout.visible = checked
+                            }
                         }
 
                         Rectangle{
@@ -349,6 +352,7 @@ Rectangle{
                             width: (parent.width - check.width - icon.width)*0.5
                             height: parent.height
                             color: "transparent"
+                            clip: true
                             TextInput {
                                 id: nameInput
                                 text: model.modelData.DisplayName
@@ -356,7 +360,6 @@ Rectangle{
                                 color: mainWindow.fontColor
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
-                                clip: true
 
                                 readOnly: true
                                 validator: RegExpValidator{regExp: /^[-\w^&'@{}[\],$=!#().%+~ ]+$/}
@@ -413,7 +416,7 @@ Rectangle{
 
                     Rectangle{
                         id: perItemActionMenu
-                        visible: (fileFolderListView.currentIndex === index)
+                        visible: (fileFolderListView.currentIndex === index && !selectAll.checked)
                         height: scaleFactor*0.8 + 4
                         width: scaleFactor*2.4 + 4
                         anchors.right: parent.right
@@ -473,11 +476,8 @@ Rectangle{
                         z: -1
                         onEntered: mouseEnteredAnimation.start()
                         onExited: mouseExitedAnimation.start()
-                        onClicked: {
-                            if(!fileFolderListView.focus)
-                                fileFolderListView.forceActiveFocus()
-                            fileFolderListView.currentIndex = index
-                        }
+                        onClicked: fileFolderListView.currentIndex = index
+
                         onDoubleClicked: updateModel(model.modelData.Path, index)
                     }
 
@@ -487,7 +487,7 @@ Rectangle{
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: "#9dcfe2"
-                        duration: 250
+                        duration: 100
                     }
                     PropertyAnimation{
                         id: mouseExitedAnimation
@@ -495,7 +495,7 @@ Rectangle{
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: "transparent"
-                        duration: 250
+                        duration: 100
                     }
                 }
 
@@ -513,15 +513,41 @@ Rectangle{
                     if(!editing){
                         if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return)
                             updateModel(currentItem.filePath, currentIndex)
-                        else if(event.key === Qt.Key_Backspace && backBtn.enabled)
-                            navigateBackward()
+                        else if(event.key === Qt.Key_Backspace){
+                            if(searching)
+                                wildSearchPanel.searchKey = wildSearchPanel.searchKey.substring(0, wildSearchPanel.searchKey.length - 1)
+                            else if(backBtn.enabled)
+                                navigateBackward()
+                        }
+                        else if(event.key >= Qt.Key_A && event.key <= Qt.Key_Z){
+                            searching = true
+                            wildSearchPanel.searchKey += String.fromCharCode(event.key)
+                            wildSearchPanel.open()
+                        }
                     }
                 }
 
                 onCurrentIndexChanged: editing = false
+
+                onModelChanged: {
+                    if(!fileFolderListView.focus)
+                        fileFolderListView.forceActiveFocus()
+                }
             }
         }
     }
+
+    WildSearchPanel{
+        id: wildSearchPanel
+        width: parent.width*0.5
+        height: 20
+        x: parent.width/2 - width/2
+        oldY: parent.height
+        newY: parent.height - height - 10
+        background: mainWindow.color
+    }
+
+
 
     function navigateBackward(){
         //c++ will update the list

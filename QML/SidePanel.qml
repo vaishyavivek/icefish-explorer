@@ -181,7 +181,10 @@ Popup {
                                 height: normalizedWidth
                                 iconPath: "file://" + rDesktopService.getThemeIcon("std-name:drive-harddisk", 64)
                                 text: "<b>" + model.modelData.DisplayName + "</b> (" + model.modelData.DevName + ")"
-                                onClicked: updateCurrentDirectory(model.modelData.MountPoint)
+                                onClicked: {
+                                    updateCurrentDirectory(model.modelData.MountPoint)
+                                    mainTabControl.forceActiveFocus()
+                                }
                                 ButtonGroup.group: radioGroup
                             }
                         }

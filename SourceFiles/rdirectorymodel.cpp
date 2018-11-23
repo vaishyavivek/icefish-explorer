@@ -26,6 +26,9 @@ void RDirectoryModel::updateCurrentDirectory(QString newDirectoryToSwitchTo){
                 navigationHistoryInfoList.removeAt(i);
             }
 
+            wildSearchKey = "";
+            emit WildSearchKeyChanged();
+
             NavigationHistoryModel *nhm = new NavigationHistoryModel(newDirectoryToSwitchTo);
             navigationHistoryInfoList.append(nhm);
             pointerToCurrentDirectoryInNavigationHistoryInfoList++;
@@ -61,9 +64,6 @@ int RDirectoryModel::ActiveIndexInCurrentModel() const{
 void RDirectoryModel::setActiveIndexInCurrentModel(const int ActiveIndexInCurrentModel){
     NavigationHistoryModel *nhm = qobject_cast<NavigationHistoryModel*>(navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList));
     nhm->setActiveIndex(ActiveIndexInCurrentModel);
-    int a = 0;
-    //navigationHistoryInfoList.replace(pointerToCurrentDirectoryInNavigationHistoryInfoList, nhm);
-    //activeIndexInCurrentModel = ActiveIndexInCurrentModel;
 }
 
 
@@ -150,6 +150,10 @@ void RDirectoryModel::applyCurrentDirectorySettings(QDir *localDirectory){
 
     //set default settings
     localDirectory->setFilter(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
+
+    if(!wildSearchKey.isEmpty())
+        localDirectory->setNameFilters(QStringList() << ("*" + wildSearchKey + "*"));
+
     localDirectory->setSorting(QDir::DirsFirst | QDir::Name);
     emit changeSortOrderButtonView(0);
 
@@ -367,6 +371,7 @@ void RDirectoryModel::navigateBackward(){
     emit backNavBtnEnabled(pointerToCurrentDirectoryInNavigationHistoryInfoList > 0);
 }
 
+
 void RDirectoryModel::navigateForward(){
     /* this works while popping things out of HistoryList after pointer
      * than switch to it and enable homeBtn, BackBtn.
@@ -377,7 +382,6 @@ void RDirectoryModel::navigateForward(){
     if((++pointerToCurrentDirectoryInNavigationHistoryInfoList) < navigationHistoryInfoList.length()){
 
         NavigationHistoryModel *nhm = qobject_cast<NavigationHistoryModel*>(navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList));
-        //QString newAddress = navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList);
 
         if(updateCurrentDirectoryInternal(nhm->Path()) == 0){
             emit backNavBtnEnabled(true);
@@ -389,19 +393,31 @@ void RDirectoryModel::navigateForward(){
     emit forNavBtnEnabled(pointerToCurrentDirectoryInNavigationHistoryInfoList < navigationHistoryInfoList.length());
 }
 
+
 void RDirectoryModel::reloadCurrentDirectory(){
     emit reloadBtnEnabled(false);
     NavigationHistoryModel *nhm = qobject_cast<NavigationHistoryModel*>(navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList));
-    //QString newAddress = navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList);
 
+    wildSearchKey = "";
     if(updateCurrentDirectoryInternal(nhm->Path()) == 0){
         emit forNavBtnEnabled(pointerToCurrentDirectoryInNavigationHistoryInfoList < navigationHistoryInfoList.length());
         emit backNavBtnEnabled(pointerToCurrentDirectoryInNavigationHistoryInfoList > 0);
         emit reloadBtnEnabled(true);
+
     }
     else
         qDebug() << "Failed to reload, please restart the app";
 }
+
+
+void RDirectoryModel::setWildSearchKey(const QString &WildSearchKey){
+    if(wildSearchKey != WildSearchKey){
+        wildSearchKey = WildSearchKey;
+        NavigationHistoryModel *nhm = qobject_cast<NavigationHistoryModel*>(navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList));
+        updateCurrentDirectoryInternal(nhm->Path());
+    }
+}
+
 
 void RDirectoryModel::updateAddressBoxShortcutMenuList(QString jumpAddress){
     QDir shortcutMenu(jumpAddress);

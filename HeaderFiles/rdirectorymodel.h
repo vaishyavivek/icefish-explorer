@@ -14,6 +14,7 @@ class RDirectoryModel : public QObject
     Q_OBJECT
     Q_PROPERTY(QList<QObject*> FileFolderList READ FileFolderList NOTIFY FileFolderListChanged)
     Q_PROPERTY(int ActiveIndexInCurrentModel READ ActiveIndexInCurrentModel WRITE setActiveIndexInCurrentModel)
+    Q_PROPERTY(QString WildSearchKey READ WildSearchKey WRITE setWildSearchKey NOTIFY WildSearchKeyChanged)
 
     Q_PROPERTY(bool IsHiddenItemsShown READ IsHiddenItemsShown WRITE setIsHiddenItemsShown NOTIFY IsHiddenItemsShownChanged)
     Q_PROPERTY(bool IsPreviewAvailable READ IsPreviewAvailable WRITE setIsPreviewAvailable NOTIFY IsPreviewAvailableChanged)
@@ -39,6 +40,10 @@ public:
 
     int ActiveIndexInCurrentModel() const;
     void setActiveIndexInCurrentModel(const int ActiveIndexInCurrentModel);
+
+    QString WildSearchKey() const{ return wildSearchKey;}
+    void setWildSearchKey(const QString &WildSearchKey);
+
 
     bool IsHiddenItemsShown() const{ return isHiddenItemsShown;}
     void setIsHiddenItemsShown(const bool IsHiddenItemsShown);
@@ -81,6 +86,7 @@ signals:
 
     void FileFolderListChanged();
     void activeIndexInCurrentModelChanged();
+    void WildSearchKeyChanged();
     void triggerIconCacheThreads();
 
     void IsHiddenItemsShownChanged();
@@ -135,6 +141,8 @@ private:
     //used for tracking navigation
     QList<QObject*> navigationHistoryInfoList;
     int pointerToCurrentDirectoryInNavigationHistoryInfoList;
+
+    QString wildSearchKey;
 
     QMimeDatabase mimeDb;
 
