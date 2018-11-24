@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
     ctxt->setContextProperty("rFileSystem", rfsm);
 
     RDesktopServices rds;
+    rds.startMimeCaching();
     ctxt->setContextProperty("rDesktopService", &rds);
 
     engine->load(QUrl(QStringLiteral("qrc:/QML/main.qml")));

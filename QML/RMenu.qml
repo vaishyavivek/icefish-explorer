@@ -1,9 +1,10 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 
-Popup{
+ToolTip{
     id: rmenu
     property bool isOpened: false
+    property string filePath
     property variant menuList
     padding: 0
 
@@ -36,7 +37,7 @@ Popup{
                     Text {
                         width: parent.width
                         height: parent.height
-                        text: "      " + model.modelData.DisplayText
+                        text: "      " + model.modelData.ServiceName
                         font.family: "Sans Serif"
                         font.pointSize: Math.max(scaleFactor*0.16, 8)
                         verticalAlignment: Text.AlignVCenter
@@ -57,20 +58,23 @@ Popup{
                     height: menuListDelegate.height
                     color: "transparent"
                     Text {
+                        id: displayText
                         width: parent.width
                         height: parent.height
-                        text: "<    " + model.modelData.DisplayText
+                        text: "<    " + model.modelData.ServiceName
                         font.family: "Sans Serif"
                         font.pointSize: Math.max(scaleFactor*0.16, 8)
                         verticalAlignment: Text.AlignVCenter
                     }
-                    Popup{
+                    ToolTip{
                         id: submenuPopup
                         property bool isOpened: false
+                        property string action: model.modelData.Action
                         property variant subMenuModel: model.modelData.Submenu
                         width: 200
                         height: (model.modelData.SubmenuCount)*26
                         x: parent.x - 202
+                        y: parent.y
                         padding: 0
                         ListView{
                             id: submenuListView
@@ -93,14 +97,14 @@ Popup{
                                         id: image
                                         width: parent.height
                                         height: parent.height
-                                        //source: "file://" + model.modelData.IconPath
+                                        source: model.modelData.ServiceIcon
                                         sourceSize.height: parent.height
                                         sourceSize.width: parent.height
                                     }
                                     Text {
                                         width: parent.width - image.width
                                         height: parent.height
-                                        text: model.modelData.DisplayText
+                                        text: model.modelData.ServiceName
                                         font.family: "Sans Serif"
                                         font.pointSize: Math.max(scaleFactor*0.16, 8)
                                         verticalAlignment: Text.AlignVCenter
@@ -112,6 +116,10 @@ Popup{
                                     hoverEnabled: true
                                     onEntered: submouseEnteredAnimation.start()
                                     onExited: submouseExitedAnimation.start()
+                                    onClicked: {
+                                        qtModel.performAction(filePath, submenuPopup.action, model.modelData.DesktopFile)
+                                        submenuPopup.close()
+                                    }
                                 }
 
                                 PropertyAnimation{
@@ -144,13 +152,6 @@ Popup{
                 }
             }
 
-            /*MouseArea{
-                anchors.fill: parent
-                hoverEnabled: true
-                onEntered: mouseEnteredAnimation.start()
-                onExited: mouseExitedAnimation.start()
-            }*/
-
             PropertyAnimation{
                 id: mouseEnteredAnimation
                 target: menuListDelegate
@@ -169,4 +170,5 @@ Popup{
             }
         }
     }
+    onClosed: isOpened = false
 }

@@ -7,7 +7,9 @@
 #include <QDir>
 #include <QTextStream>
 #include <QMimeDatabase>
+
 #include "notificationmodel.h"
+#include "HeaderFiles/rdesktopservices.h"
 
 class RDirectoryModel : public QObject
 {
@@ -90,8 +92,12 @@ public:
 
 public slots:
     void deleteFile(int index);
+
     bool createNewFolder(QString folderName);
     bool createNewFile(QString fileName, QString fileType);
+
+    void performAction(QString filePath, QString action, QString optionalParam = "");
+    //bool runDesktopService
 
 signals:
     void TitleChanged(QString newTitle);
@@ -170,6 +176,7 @@ private:
     QList<QObject*> addressBoxShortcutMenuList;
     QList<QObject*> addressBoxDataListView;
 
+    RDesktopServices rds;
 };
 
 #endif // RDIRECTORYMODEL_H

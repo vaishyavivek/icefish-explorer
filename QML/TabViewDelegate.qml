@@ -94,6 +94,7 @@ Rectangle{
                 width: height*5
                 anchors.left: parent.left
                 anchors.leftMargin: 7
+                color: "transparent"
 
                 Row{
                     anchors.fill: parent
@@ -170,6 +171,7 @@ Rectangle{
                 width: height*5
                 anchors.left: parent.left
                 anchors.leftMargin: 7
+                color: "transparent"
 
                 Row{
                     anchors.fill: parent
@@ -485,6 +487,7 @@ Rectangle{
                                 RMenu{
                                     id: actionMenu
                                     menuList: model.modelData.ActionsMenu
+                                    filePath: model.modelData.Path
                                     height: (model.modelData.ActionsMenuCount)*26
                                     width: 200
                                     x: propertiesBtn.x - 220
@@ -524,6 +527,9 @@ Rectangle{
                 }
 
                 highlightFollowsCurrentItem: true
+                highlightMoveVelocity: -1
+                highlightMoveDuration: 400
+
                 highlight: Rectangle{
                     width: fileFolderListView.width
                     height: scaleFactor
@@ -578,15 +584,13 @@ Rectangle{
         qtModel.navigateBackward()
 
         //set the highlight movement to maximum so that there's no time lapse in update
-        fileFolderListView.highlightMoveVelocity = -1
         fileFolderListView.highlightMoveDuration = 10
 
         //now change to the last active index in the model
         fileFolderListView.currentIndex = qtModel.ActiveIndexInCurrentModel
 
         //set the highlight to default values
-        fileFolderListView.highlightMoveVelocity = 400
-        fileFolderListView.highlightMoveDuration = -1
+        fileFolderListView.highlightMoveDuration = 400
     }
 
     function updateModel(newPath, index){

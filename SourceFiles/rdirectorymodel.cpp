@@ -1,6 +1,5 @@
 #include "HeaderFiles/rdirectorymodel.h"
 #include "HeaderFiles/filefoldermodel.h"
-#include "HeaderFiles/rdesktopservices.h"
 #include "HeaderFiles/menumodel.h"
 #include "HeaderFiles/navigationhistorymodel.h"
 
@@ -82,7 +81,7 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
         //emit WriteHistoryThreaded(directoryToSwitchTo);
 
         emit TitleChanged(directoryToSwitchTo.mid(directoryToSwitchTo.lastIndexOf('/') + 1));
-        RDesktopServices rds;
+        //RDesktopServices rds;
         emit IconPathChanged(rds.getThemeIcon(directoryToSwitchTo, 64));
 
         QDir localDirectory(directoryToSwitchTo);
@@ -136,11 +135,11 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
         else
             return 1;//directory doesn't exist
     }
-    /*else if(file.isFile()){
-        emit WriteHistoryThreaded(directoryToSwitchTo);
-        service.runDesktopService(directoryToSwitchTo);
+    else if(file.isFile()){
+        //emit WriteHistoryThreaded(directoryToSwitchTo);
+        rds.runDesktopService(directoryToSwitchTo);
         return 2;//destop service opened
-    }*/
+    }
     else
         return 3; //unknown error
 }
@@ -287,21 +286,31 @@ QList<QObject*> RDirectoryModel::getActionMenuFor(QString filePath){
     QList<QObject*> menu;
 
     MenuModel *open = new MenuModel();
-    open->setDisplayText("Open with");
+    open->setServiceName("Open with");
     open->setHasSubmenu(true);
     open->setAction("open-with");
+    open->setSubmenu(rds.getAssociatedServicesList(filePath));
 
-    QList<QObject*> submenu;
+    if(!open->Submenu().isEmpty())
+        menu.append(open);
 
-    MenuModel *some = new MenuModel();
-    some->setDisplayText("Some");
-    submenu.append(some);
-    open->setSubmenu(submenu);
+    MenuModel *cut = new MenuModel();
+    cut->setServiceName("Cut");
+    cut->setAction("cut");
+    menu.append(cut);
 
-    menu.append(open);
+    MenuModel *copy = new MenuModel();
+    copy->setServiceName("Copy");
+    copy->setAction("copy");
+    menu.append(copy);
+
+    MenuModel *share = new MenuModel();
+    share->setServiceName("Share with");
+    share->setAction("share");
+    menu.append(share);
 
     MenuModel *properties = new MenuModel();
-    properties->setDisplayText("Properties");
+    properties->setServiceName("Properties");
     properties->setAction("properties");
     menu.append(properties);
 
@@ -523,6 +532,7 @@ void RDirectoryModel::deleteFile(int index){
         qDebug() << "Failed to delete file: " + model->DisplayName();
 }
 
+
 bool RDirectoryModel::createNewFolder(QString folderName){
     QDir dir(addressBoxData);
 
@@ -544,6 +554,7 @@ bool RDirectoryModel::createNewFolder(QString folderName){
     return true;
 }
 
+
 bool RDirectoryModel::createNewFile(QString fileName, QString fileType){
     QFileInfo fileInfo(addressBoxData + "/" + fileName + "." + fileType);
 
@@ -563,4 +574,11 @@ bool RDirectoryModel::createNewFile(QString fileName, QString fileType){
 
     reloadCurrentDirectory();
     return true;
+}
+
+
+void RDirectoryModel::performAction(QString filePath, QString action, QString optionalParam){
+    if(action == "open-with"){
+        rds.runDesktopService(filePath, optionalParam);
+    }
 }

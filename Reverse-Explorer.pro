@@ -45,6 +45,7 @@ HEADERS += \
     HeaderFiles/bookmarkinfomodel.h \
     HeaderFiles/menumodel.h \
     HeaderFiles/notificationmodel.h \
-    HeaderFiles/navigationhistorymodel.h
+    HeaderFiles/navigationhistorymodel.h \
+    HeaderFiles/desktopfilemodel.h
 
 DISTFILES +=

@@ -30,6 +30,7 @@ Popup{
             Rectangle{
                 width: parent.width
                 height: 135
+                color: "transparent"
                 ButtonGroup{
                     id: roleTypeButtonGroup
                     onClicked: {
@@ -86,6 +87,7 @@ Popup{
             Rectangle{
                 width: parent.width
                 height: 45
+                color: "transparent"
                 ButtonGroup{
                     id: sortingOrderButtonGroup
                     onClicked: {
@@ -132,6 +134,7 @@ Popup{
             Rectangle{
                 width: parent.width
                 height: 45
+                color: "transparent"
                 ButtonGroup{
                     id: sortingPreferenceButtonGroup
                     onClicked: {
