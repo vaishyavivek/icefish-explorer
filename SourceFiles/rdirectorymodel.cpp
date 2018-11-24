@@ -36,22 +36,17 @@ void RDirectoryModel::updateCurrentDirectory(QString newDirectoryToSwitchTo){
 
             setAddressBoxData(newDirectoryToSwitchTo);
         }
-        /*else if(notificationLevel == 1){
-            if(diskOrFileOrLib == 0)
-                setNotification(3, newDirectoryToSwitchTo);
-            else if(diskOrFileOrLib == 1)
-                setNotification(2, newDirectoryToSwitchTo);
-        }
+        else if(notificationLevel == 1)
+            emit notify(Error::PathDoesntExist);
         else if(notificationLevel == 2){
-            //be sure that no desktop service was called, else dont update the AddressBox
-            setAddressBoxData(newDirectoryToSwitchTo.left(newDirectoryToSwitchTo.lastIndexOf("/")));
+            //setAddressBoxData(newDirectoryToSwitchTo.left(newDirectoryToSwitchTo.lastIndexOf("/")));
             if(pointerToCurrentDirectoryInNavigationHistoryInfoList < navigationHistoryInfoList.length())
                 forNavBtnEnabled(true);
             if(pointerToCurrentDirectoryInNavigationHistoryInfoList > 0)
                 backNavBtnEnabled(true);
-            if(navigationHistoryInfoList.at(pointerToCurrentDirectoryInNavigationHistoryInfoList) != "rfm://home")
-                homeNavBtnEnabled(true);
-        }*/
+        }
+        else
+            emit notify(Error::Unknown);
     }
 }
 
@@ -76,18 +71,14 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
 
     QFileInfo file = QFileInfo(directoryToSwitchTo);
 
-    if(file.exists() && file.isDir()){
-
+    if(file.exists()){
         //emit WriteHistoryThreaded(directoryToSwitchTo);
+        if(file.isDir()){
+            emit TitleChanged(directoryToSwitchTo.mid(directoryToSwitchTo.lastIndexOf('/') + 1));
+            //RDesktopServices rds;
+            emit IconPathChanged(rds.getThemeIcon(directoryToSwitchTo, 64));
 
-        emit TitleChanged(directoryToSwitchTo.mid(directoryToSwitchTo.lastIndexOf('/') + 1));
-        //RDesktopServices rds;
-        emit IconPathChanged(rds.getThemeIcon(directoryToSwitchTo, 64));
-
-        QDir localDirectory(directoryToSwitchTo);
-        //first check whether directory actually exist or not, if not that don't switch to it but throw error
-        if(localDirectory.exists()){
-
+            QDir localDirectory(directoryToSwitchTo);
             applyCurrentDirectorySettings(&localDirectory);
             QFileInfoList infoList = localDirectory.entryInfoList();
 
@@ -132,16 +123,14 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
             emit triggerIconCacheThreads();
             return 0;//no error
         }
-        else
-            return 1;//directory doesn't exist
-    }
-    else if(file.isFile()){
-        //emit WriteHistoryThreaded(directoryToSwitchTo);
-        rds.runDesktopService(directoryToSwitchTo);
-        return 2;//destop service opened
+        else if(file.isFile()){
+            rds.runDesktopService(directoryToSwitchTo);
+            return 2;//destop service opened
+        }
+        else return 3;//unknown error
     }
     else
-        return 3; //unknown error
+        return 1;//file doesn't exist
 }
 
 

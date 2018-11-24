@@ -12,7 +12,7 @@ Popup{
         id: notificationPanelParentRect
         width: parent.width
         height: parent.height
-        color: "transparent"
+        color: mainWindow.color
         border.width: 1
         Column{
             anchors.fill: parent
@@ -33,6 +33,7 @@ Popup{
                     height: parent.height
                     text: rFileSystem.NModel.Header
                     font.family: "Sans Serif"
+                    color: mainWindow.fontColor
                     clip: true
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     verticalAlignment: Text.AlignVCenter
@@ -56,6 +57,7 @@ Popup{
                     height: parent.height
                     text: rFileSystem.NModel.Comment
                     font.family: "Sans Serif"
+                    color: mainWindow.fontColor
                     clip: true
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     verticalAlignment: Text.AlignVCenter

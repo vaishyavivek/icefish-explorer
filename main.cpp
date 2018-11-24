@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 }
 
 /* TODO LIST
- * 1- desktop services
+ ************* 1- desktop services************
  * 2- properties
  * 3- linking with global properties
  * 4- allowing file operations

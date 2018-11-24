@@ -195,6 +195,5 @@ ApplicationWindow{
         x: sidePanel.width + mainTabControl.width/2 - width/2
         oldY: mainWindow.height
         newY: mainWindow.height - height - 10
-        background: mainWindow.color
     }
 }
