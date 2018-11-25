@@ -20,5 +20,6 @@
         <file>Resources/icons-sort-down.svg</file>
         <file>Resources/icons-sort-file.svg</file>
         <file>Resources/icons-sort-dir.svg</file>
+        <file>Resources/explorer-colored.png</file>
     </qresource>
 </RCC>

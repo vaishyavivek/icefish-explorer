@@ -15,6 +15,7 @@ Popup{
         width: parent.width
         height: parent.height
         border.width: 1
+        color: mainWindow.color
         Column{
             anchors.fill: parent
             spacing: 5
@@ -32,6 +33,7 @@ Popup{
                         text: "  Bookmarks"
                         anchors.verticalCenter: parent.verticalCenter
                         font.pointSize: 12
+                        color: mainWindow.fontColor
                     }
                 }
                 RImageButton{
@@ -90,6 +92,7 @@ Popup{
                                 height: parent.height
                                 text: model.modelData.DisplayName
                                 font.family: "Sans Serif"
+                                color: mainWindow.fontColor
                                 anchors.verticalCenter: parent.verticalCenter
                                 clip: true
                                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere

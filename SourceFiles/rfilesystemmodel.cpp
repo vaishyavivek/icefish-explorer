@@ -128,7 +128,7 @@ void RFileSystemModel::createNewTab(QString Path){
     FileFolderModel *ffm = new FileFolderModel();
     RDirectoryModel *newTab = new RDirectoryModel();
 
-    connect(newTab, &RDirectoryModel::TitleChanged, ffm, &FileFolderModel::setDisplayName);
+    connect(newTab, &RDirectoryModel::TitleChanged, ffm, &FileFolderModel::changeTabTitle);
     connect(newTab, &RDirectoryModel::IconPathChanged, ffm, &FileFolderModel::setIconPath);
     connect(newTab, &RDirectoryModel::notify, nm, &NotificationModel::Notify);
 

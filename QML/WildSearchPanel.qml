@@ -13,8 +13,7 @@ Popup{
         id: notificationPanelParentRect
         width: parent.width
         height: parent.height
-        color: "transparent"
-        border.width: 1
+        color: mainWindow.color
         Row{
             anchors.rightMargin: 10
             anchors.leftMargin: 10
@@ -22,11 +21,13 @@ Popup{
             spacing: 5
             Text {
                 id: title
+                color: mainWindow.fontColor
                 text: qsTr("<b>Wild Search for:</b>")
             }
             TextInput{
                 id: searchArea
                 text: searchKey
+                color: mainWindow.fontColor
                 onTextChanged: qtModel.WildSearchKey = text
             }
         }

@@ -65,6 +65,7 @@ public:
 
     QString DisplayName() const{return t_DisplayName;}
     void setDisplayName(const QString &DisplayName);
+    void changeTabTitle(const QString &Title);
 
     QString FileType() const{ return t_FileType;}
     void setFileType(QString FileType);

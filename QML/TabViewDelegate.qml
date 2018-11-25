@@ -574,10 +574,19 @@ Rectangle{
         x: parent.width/2 - width/2
         oldY: parent.height
         newY: parent.height - height - 10
-        background: mainWindow.color
     }
 
+    PropertiesPanel{
+        id: propertiesPanel
+        x: parent.width/2 - width/2
+        y: parent.height/2 - height/2
 
+        Connections{
+            target: qtModel
+            ignoreUnknownSignals: true
+            onShowProperties: propertiesPanel.open()
+        }
+    }
 
     function navigateBackward(){
         //c++ will update the list
@@ -596,5 +605,6 @@ Rectangle{
     function updateModel(newPath, index){
         qtModel.ActiveIndexInCurrentModel = index
         qtModel.updateCurrentDirectory(newPath)
+        wildSearchPanel.close()
     }
 }

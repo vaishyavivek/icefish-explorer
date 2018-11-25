@@ -8,6 +8,7 @@
 
 RDirectoryModel::RDirectoryModel(QObject *parent) : QObject(parent){
     pointerToCurrentDirectoryInNavigationHistoryInfoList = -1;
+    properties = new PropertiesInfoModel();
     isHome = false;
 }
 
@@ -569,5 +570,10 @@ bool RDirectoryModel::createNewFile(QString fileName, QString fileType){
 void RDirectoryModel::performAction(QString filePath, QString action, QString optionalParam){
     if(action == "open-with"){
         rds.runDesktopService(filePath, optionalParam);
+    }
+    else if(action == "properties"){
+        properties->setProperties(filePath);
+        emit PropertiesChanged();
+        emit showProperties();
     }
 }

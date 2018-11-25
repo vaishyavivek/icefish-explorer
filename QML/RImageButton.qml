@@ -1,5 +1,6 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+import QtGraphicalEffects 1.0
 
 Button {
     id: rButton
@@ -16,11 +17,18 @@ Button {
         height: rButton.height
         color: "transparent"
         Image{
+            id: image
             source: rButton.iconPath
             sourceSize.width: parent.width*0.75
             sourceSize.height: parent.height*0.75
             anchors.centerIn: parent
         }
+
+        /*ColorOverlay{
+            anchors.fill: image
+            source: rButton.iconPath
+            color: mainWindow.fontColor
+        }*/
     }
 
     background: Rectangle {

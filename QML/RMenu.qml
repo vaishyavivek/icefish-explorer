@@ -47,6 +47,10 @@ ToolTip{
                         hoverEnabled: true
                         onEntered: mouseEnteredAnimation.start()
                         onExited: mouseExitedAnimation.start()
+                        onClicked: {
+                            qtModel.performAction(filePath, model.modelData.Action)
+                            rmenu.close()
+                        }
                     }
                 }
             }

@@ -2,6 +2,7 @@
 //#include <QQuickStyle>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QIcon>
 
 #include "HeaderFiles/rfilesystemmodel.h"
 #include "HeaderFiles/rdesktopservices.h"
@@ -10,6 +11,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/local/Resources/explorer-colored.png"));
 
     QQmlApplicationEngine *engine = new QQmlApplicationEngine();
 
@@ -31,10 +33,12 @@ int main(int argc, char *argv[])
 }
 
 /* TODO LIST
- ************* 1- desktop services************
- * 2- properties
- * 3- linking with global properties
+ ************* 1- desktop services************done
+ ************* 2- properties ----------designed----------linking left
+ ************* 3- linking with global properties-----------designed-----------linkign left
  * 4- allowing file operations
  * 5- adding dbus support
- * 6- adding path to theme the app
+ ************* 6- adding path to theme the app----------50% done
+ * 7- recents
+ * 8- gridview
 */

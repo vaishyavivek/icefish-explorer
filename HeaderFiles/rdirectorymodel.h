@@ -10,6 +10,7 @@
 
 #include "notificationmodel.h"
 #include "HeaderFiles/rdesktopservices.h"
+#include "HeaderFiles/propertiesinfomodel.h"
 
 class RDirectoryModel : public QObject
 {
@@ -28,6 +29,7 @@ class RDirectoryModel : public QObject
 
     Q_PROPERTY(int IconScale READ IconScale WRITE setIconScale NOTIFY IconScaleChanged)
 
+    Q_PROPERTY(PropertiesInfoModel* Properties READ Properties NOTIFY PropertiesChanged)
 
     Q_PROPERTY(bool IsHome READ IsHome NOTIFY IsHomeChanged)
     /*Q_PROPERTY(bool IsDocuments READ IsDocuments NOTIFY IsDocumentsChanged)
@@ -74,6 +76,7 @@ public:
     int IconScale() const{ return iconScale;}
     void setIconScale(const int IconScale);
 
+    PropertiesInfoModel* Properties(){return properties;}
 
     bool IsHome() const{ return isHome;}
 
@@ -118,6 +121,8 @@ signals:
     void SortingPreferenceChanged();
     void IconScaleChanged();
 
+    void PropertiesChanged();
+
     void IsHomeChanged();
 
     void backNavBtnEnabled(bool newValue);
@@ -132,6 +137,8 @@ signals:
     void askAddressBoxToSwitchToListViewMode(bool newValue);
 
     void createNew_ChooseAnother(QString suggestedName);
+
+    void showProperties();
 
     void changeFileFolderView(int newView);
 
@@ -154,6 +161,8 @@ private:
     QString sortingOrder;
     QString sortingPreference;
     int iconScale;
+
+    PropertiesInfoModel *properties;
 
     //<TODO>
     bool isHome;

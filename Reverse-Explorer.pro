@@ -20,7 +20,8 @@ SOURCES += \
     SourceFiles/filefoldermodel.cpp \
     SourceFiles/rdesktopservices.cpp \
     SourceFiles/bookmarkinfomodel.cpp \
-    SourceFiles/notificationmodel.cpp
+    SourceFiles/notificationmodel.cpp \
+    SourceFiles/propertiesinfomodel.cpp
 
 RESOURCES += qml.qrc \
     iconlibrary.qrc
@@ -46,6 +47,7 @@ HEADERS += \
     HeaderFiles/menumodel.h \
     HeaderFiles/notificationmodel.h \
     HeaderFiles/navigationhistorymodel.h \
-    HeaderFiles/desktopfilemodel.h
+    HeaderFiles/desktopfilemodel.h \
+    HeaderFiles/propertiesinfomodel.h
 
 DISTFILES +=

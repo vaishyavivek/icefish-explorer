@@ -53,6 +53,12 @@ Button {
         anchors.centerIn: parent
         opacity: enabled ? 1 : 0.4
         color: "transparent"
+        Rectangle{
+            width: parent.width
+            height: 1
+            anchors.bottom: parent.bottom
+            color: highlightColor
+        }
     }
 
     PropertyAnimation{

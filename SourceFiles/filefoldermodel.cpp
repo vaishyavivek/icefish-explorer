@@ -52,6 +52,14 @@ void FileFolderModel::setDisplayName(const QString &DisplayName){
     }
 }
 
+void FileFolderModel::changeTabTitle(const QString &Title){
+    if(t_DisplayName != Title){
+        t_DisplayName = Title;
+        emit DisplayNameChanged();
+    }
+}
+
+
 void FileFolderModel::setFileType(QString FileType){
     if(FileType != t_FileType){
         if(!t_FileType.contains("\\"))
