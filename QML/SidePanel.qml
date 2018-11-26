@@ -35,7 +35,8 @@ Popup {
                     id: hamburgerBtn
                     width: normalizedWidth
                     height: normalizedWidth
-                    iconPath: "/local/Resources/icons-menu.svg"
+                    icon.source: "/local/Resources/icons-menu.svg"
+                    icon.color: mainWindow.fontColor
                     onClicked: (!isPined && isExpanded) ? reverseExpandMenu() : expandMenu()
                 }
 

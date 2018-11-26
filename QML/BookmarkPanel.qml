@@ -41,7 +41,8 @@ Popup{
                     height: parent.height
                     width: height
                     anchors.right: parent.right
-                    iconPath: "/local/Resources/icons-close.svg"
+                    icon.name: "application-exit"//"/local/Resources/icons-close.svg"
+                    icon.color: mainWindow.fontColor
                     onClicked: {
                         isOpened = false
                         bookmarkPanel.close()

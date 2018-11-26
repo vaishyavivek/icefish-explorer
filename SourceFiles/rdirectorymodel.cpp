@@ -80,18 +80,19 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
             emit IconPathChanged(rds.getThemeIcon(directoryToSwitchTo, 64));
 
             QDir localDirectory(directoryToSwitchTo);
+            localDirectory.setFilter(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
+
+            getIsBookmarked(&localDirectory);
+            getIsHiddenItemsShown(&localDirectory);
+
             applyCurrentDirectorySettings(&localDirectory);
             QFileInfoList infoList = localDirectory.entryInfoList();
 
             //clear current list to update it
             fileFolderList.clear();
 
-            QThread *iconCacheThread = new QThread();
-
             foreach (QFileInfo file, infoList) {
-                if((!file.fileName().startsWith("$"))
-                        && (!(file.fileName() == ".rfmDirectorySetting"))
-                        && (!(file.fileName() == ".RevProgIFace"))){
+                if((!file.fileName().startsWith("$"))){
 
                     FileFolderModel *newModel =  new FileFolderModel(file.fileName(), file.filePath(),
                                                                      file.birthTime().toString("ddd MMMM d yyyy | hh:mm:ss"),
@@ -100,28 +101,12 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
                     newModel->setFileSize(file.size());
                     newModel->setIsHidden(file.isHidden());
                     newModel->setIsPreviewAvailable(isPreviewAvailable);
-                    newModel->setActionsMenu(getActionMenuFor(file.filePath()));
-
-                    RDesktopServices *rds = new RDesktopServices();
-                    rds->moveToThread(iconCacheThread);
-                    connect(iconCacheThread, &QThread::finished, rds, &RDesktopServices::deleteLater);
-
-                    connect(newModel, &FileFolderModel::generateIcon, rds, &RDesktopServices::getThemeIcon);
-                    connect(newModel, &FileFolderModel::generateIcon, rds, &RDesktopServices::constructCachedPreview);
-
-                    connect(rds, &RDesktopServices::provideCachedIcon, newModel, &FileFolderModel::setIconPath);
-                    connect(rds, &RDesktopServices::provideCachedPreview , newModel, &FileFolderModel::setPreviewPath);
-
-                    connect(rds, &RDesktopServices::provideFileType, newModel, &FileFolderModel::setFileType);
-
-                    connect(this, &RDirectoryModel::triggerIconCacheThreads, newModel, &FileFolderModel::initIconCacheThread);
+                    //newModel->setActionsMenu(getActionMenuFor(file.filePath()));
 
                     fileFolderList.append(newModel);
                 }
             }
             emit FileFolderListChanged();
-            iconCacheThread->start();
-            emit triggerIconCacheThreads();
             return 0;//no error
         }
         else if(file.isFile()){
@@ -138,17 +123,17 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
 void RDirectoryModel::applyCurrentDirectorySettings(QDir *localDirectory){
 
     //set default settings
-    localDirectory->setFilter(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
+    //localDirectory->setFilter(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
 
     if(!wildSearchKey.isEmpty())
         localDirectory->setNameFilters(QStringList() << ("*" + wildSearchKey + "*"));
 
     localDirectory->setSorting(QDir::DirsFirst | QDir::Name);
 
-    isHiddenItemsShown = false;
+    //isHiddenItemsShown = false;
     isPreviewAvailable = false;
     iconScale = 48;
-    isBookmarked = false;
+    //isBookmarked = false;
     sortingRole = "Name";
     sortingOrder = "Ascending";
     sortingPreference = "DirectoryFirst";
@@ -160,13 +145,13 @@ void RDirectoryModel::applyCurrentDirectorySettings(QDir *localDirectory){
 
         do {
             info = stream.readLine();
-            if(info.startsWith("HiddenFilesShown")){
+            /*if(info.startsWith("HiddenFilesShown")){
                 info = info.section('=', 1);
                 if(info.startsWith("1")){
                     localDirectory->setFilter(localDirectory->filter() | QDir::Hidden);
                     isHiddenItemsShown = true;
                 }
-            }
+            }*/
             if(info.startsWith("PreviewAvailable")){
                 info = info.section('=', 1);
                 isPreviewAvailable = info.startsWith("1");
@@ -208,14 +193,14 @@ void RDirectoryModel::applyCurrentDirectorySettings(QDir *localDirectory){
                 info = info.section('=', 1);
                 iconScale = info.toInt();
             }
-            else if(info.startsWith("Bookmarked")){
+            /*else if(info.startsWith("Bookmarked")){
                 info = info.section('=', 1);
                 isBookmarked = info.startsWith("1");
-            }
+            }*/
         }while (!info.isNull());
     }
 
-    emit IsBookmarkedChanged();
+    //emit IsBookmarkedChanged();
     emit IsHiddenItemsShownChanged();
     emit IsPreviewAvailableChanged();
     emit SortingRoleChanged();
@@ -226,19 +211,44 @@ void RDirectoryModel::applyCurrentDirectorySettings(QDir *localDirectory){
 }
 
 
+
+void RDirectoryModel::getIsBookmarked(QDir *localDirectory){
+    isBookmarked = settings.value(localDirectory->path() + "/isBookmarked").toBool();
+    emit IsBookmarkedChanged();
+}
+
 void RDirectoryModel::setIsBookmarked(const bool IsBookmarked){
     isBookmarked = IsBookmarked;
-    updateSettingsForCurrentDirectory("Bookmarked", isBookmarked ? "1" : "0");
+    settings.setValue(addressBoxData + "/isBookmarked", IsBookmarked);
     emit WriteBookmarkThreaded(addressBoxData, isBookmarked);
     emit IsBookmarkedChanged();
 }
 
+
+
+void RDirectoryModel::getIsHiddenItemsShown(QDir *localDirectory){
+
+    int globalHidden = settings.value("global/isHiddenItemsShown").toInt();
+
+    isHiddenItemsShown = settings.value(localDirectory->path() + "/isHiddenItemsShown").toBool();
+
+    isHiddenItemsShown = (globalHidden == 1 || (globalHidden == 0 && isHiddenItemsShown));
+
+    if(isHiddenItemsShown)
+        localDirectory->setFilter(localDirectory->filter() | QDir::Hidden);
+
+    emit IsHiddenItemsShownChanged();
+}
+
 void RDirectoryModel::setIsHiddenItemsShown(const bool IsHiddenItemsShown){
     isHiddenItemsShown = IsHiddenItemsShown;
-    updateSettingsForCurrentDirectory("HiddenFilesShown", isHiddenItemsShown ? "1" : "0");
+    settings.setValue(addressBoxData + "/isHiddenItemsShown", IsHiddenItemsShown);
     emit IsHiddenItemsShownChanged();
     reloadCurrentDirectory();
 }
+
+
+
 
 void RDirectoryModel::setIsPreviewAvailable(const bool IsPreviewAvailable){
     isPreviewAvailable = IsPreviewAvailable;

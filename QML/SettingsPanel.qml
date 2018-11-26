@@ -42,7 +42,8 @@ Popup{
                     height: parent.height
                     width: height
                     anchors.right: parent.right
-                    iconPath: "/local/Resources/icons-close.svg"
+                    icon.name: "application-exit"//"/local/Resources/icons-close.svg"
+                    icon.color: mainWindow.fontColor
                     onClicked: {
                         isOpened = false
                         settingsPanel.close()
@@ -166,8 +167,8 @@ Popup{
                     anchors.leftMargin: 10
                     anchors.bottom: parent.bottom
                     model: ["Default", "Allow", "Don't Allow"]
-                    currentIndex: rDesktopService.getSettingsValue("HiddenFilesShown")
-                    onCurrentIndexChanged: rDesktopService.applySettingsValue("HiddenFilesShown", currentIndex)
+                    currentIndex: rFileSystem.GlobalIsHiddenItemsShown
+                    onCurrentIndexChanged: rFileSystem.GlobalIsHiddenItemsShown = currentIndex
                 }
             }
             Rectangle{

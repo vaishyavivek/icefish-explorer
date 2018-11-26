@@ -179,6 +179,17 @@ void RFileSystemModel::deleteTab(int index){
     emit TabHeaderListChanged();
 }
 
+
+int RFileSystemModel::GlobalIsHiddenItemsShown() const{
+    return settings.value("global/isHiddenItemsShown").toInt();
+}
+
+void RFileSystemModel::setGlobalIsHiddenItemsShown(const int GlobalIsHiddenItemsShown){
+    settings.setValue("global/isHiddenItemsShown", GlobalIsHiddenItemsShown);
+}
+
+
+
 RFileSystemModel::~RFileSystemModel(){
     deleteLater();
 }

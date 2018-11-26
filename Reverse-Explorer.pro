@@ -21,7 +21,8 @@ SOURCES += \
     SourceFiles/rdesktopservices.cpp \
     SourceFiles/bookmarkinfomodel.cpp \
     SourceFiles/notificationmodel.cpp \
-    SourceFiles/propertiesinfomodel.cpp
+    SourceFiles/propertiesinfomodel.cpp \
+    SourceFiles/actionmenuprovider.cpp
 
 RESOURCES += qml.qrc \
     iconlibrary.qrc
@@ -48,6 +49,8 @@ HEADERS += \
     HeaderFiles/notificationmodel.h \
     HeaderFiles/navigationhistorymodel.h \
     HeaderFiles/desktopfilemodel.h \
-    HeaderFiles/propertiesinfomodel.h
+    HeaderFiles/propertiesinfomodel.h \
+    HeaderFiles/mimeiconprovider.h \
+    HeaderFiles/actionmenuprovider.h
 
 DISTFILES +=

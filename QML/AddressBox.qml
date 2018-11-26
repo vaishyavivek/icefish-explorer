@@ -182,7 +182,8 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: parent.height*0.25
         anchors.verticalCenter: parent.verticalCenter
-        iconPath: "/local/Resources/icons-search.svg"
+        icon.source: "/local/Resources/icons-search.svg"
+        icon.color: mainWindow.fontColor
         onClicked: {
             if(!addressBox.currentView)
                 addressBox.switchToListView()

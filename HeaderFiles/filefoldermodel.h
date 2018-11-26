@@ -108,7 +108,11 @@ public:
     void setIconScale(int IconScale){ iconScale = IconScale;}
 
     QList<QObject*> ActionsMenu() const{ return actionsMenu;}
-    void setActionsMenu(const QList<QObject*> ActionsMenu){ actionsMenu.append(ActionsMenu);}
+    void setActionsMenu(const QList<QObject*> ActionsMenu){
+        actionsMenu = ActionsMenu;
+        emit ActionsMenuCountChanged();
+        emit ActionsMenuChanged();
+    }
 
     int ActionsMenuCount() const{ return actionsMenu.length();}
 

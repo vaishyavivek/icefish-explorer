@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QThread>
 #include <QFile>
+#include <QSettings>
 
 #include "notificationmodel.h"
 
@@ -20,6 +21,9 @@ class RFileSystemModel : public QObject
     Q_PROPERTY(int DiskDataListCount READ DiskDataListCount NOTIFY DiskDataListCountChanged)
 
     Q_PROPERTY(QList<QObject*> BookmarkDataList READ BookmarkDataList NOTIFY BookmarkDataListChanged)
+
+    Q_PROPERTY(int GlobalIsHiddenItemsShown READ GlobalIsHiddenItemsShown WRITE setGlobalIsHiddenItemsShown NOTIFY GlobalIsHiddenItemsShownChanged)
+
 
 public:
     explicit RFileSystemModel(QObject *parent = nullptr);
@@ -40,9 +44,15 @@ public:
 
     QList<QObject*> BookmarkDataList() const{ return bookmarkDataList;}
 
+    int GlobalIsHiddenItemsShown() const;
+    void setGlobalIsHiddenItemsShown(const int GlobalIsHiddenItemsShown);
+
     ~RFileSystemModel();
 
 public slots:
+    //void setGlabalIsHiddenItemsShown(int value);
+
+
     void writeBookmarkAsync(QString filePath, bool addOrRemove);
     void updateStoredBookmarkList();
 
@@ -58,6 +68,8 @@ signals:
     void DiskDataListCountChanged();
     void BookmarkDataListChanged();
 
+    void GlobalIsHiddenItemsShownChanged();
+
 private:
     void GetAttachedDiskList();
 
@@ -70,6 +82,7 @@ private:
     QList<QObject*> bookmarkDataList;
 
     NotificationModel *nm;
+    QSettings settings;
 };
 
 #endif // RFILESYSTEMMODEL_H

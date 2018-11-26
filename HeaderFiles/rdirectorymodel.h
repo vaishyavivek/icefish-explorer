@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QTextStream>
 #include <QMimeDatabase>
+#include <QSettings>
 
 #include "notificationmodel.h"
 #include "HeaderFiles/rdesktopservices.h"
@@ -99,6 +100,7 @@ public slots:
     bool createNewFolder(QString folderName);
     bool createNewFile(QString fileName, QString fileType);
 
+    QList<QObject*> getActionMenuFor(QString filePath);
     void performAction(QString filePath, QString action, QString optionalParam = "");
     //bool runDesktopService
 
@@ -143,10 +145,23 @@ signals:
     void changeFileFolderView(int newView);
 
 private:
+    void getIsBookmarked(QDir *localDirectory);
+
+    void getIsHiddenItemsShown(QDir *localDirectory);
+
+    /*void getIsPreviewAvailable(QDir *localDirectory);
+
+    void getSortingRole(QDir *localDirectory);
+
+    void getSortingOrder(QDir *localDirectory);
+
+    void getSortingPreference(QDir *localDirectory);
+
+    void getIconScale(QDir *localDirectory);*/
+
+
     int updateCurrentDirectoryInternal(QString directoryToSwitchTo);
     void applyCurrentDirectorySettings(QDir *localDirectory);
-
-    QList<QObject*> getActionMenuFor(QString filePath);
 
     void setAddressBoxData(QString changedAddress = "");
 
@@ -186,6 +201,7 @@ private:
     QList<QObject*> addressBoxDataListView;
 
     RDesktopServices rds;
+    QSettings settings;
 };
 
 #endif // RDIRECTORYMODEL_H

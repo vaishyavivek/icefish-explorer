@@ -96,7 +96,8 @@ ApplicationWindow{
                                     height: parent.height/2
                                     width: height
                                     anchors.verticalCenter: parent.verticalCenter
-                                    iconPath: "file:///home/eobardthawne/.icons/Papirus/32/emblems/emblem-noread.svg"
+                                    icon.source: "/local/Resources/icons-close.svg"//"file:///home/eobardthawne/.icons/Papirus/32/emblems/emblem-noread.svg"
+                                    icon.color: mainWindow.fontColor
                                     hoverText: "Close"
                                     onClicked: deleteTab(index)
                                 }
@@ -136,7 +137,8 @@ ApplicationWindow{
                         id: addNewTabBtn
                         height: parent.height
                         width: height
-                        iconPath: "file:///home/eobardthawne/.icons/Papirus/32/emblems/emblem-new.svg"
+                        icon.name: "list-add"//"file:///home/eobardthawne/.icons/Papirus/32/emblems/emblem-new.svg"
+                        icon.color: mainWindow.fontColor
                         hoverText: "New Tab"
                         onClicked: {
                             if(rFileSystem.TabHeaderListCount === tabParentLayout.tabLimit - 1){

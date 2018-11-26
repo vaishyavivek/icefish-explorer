@@ -12,7 +12,8 @@ Button {
     hoverEnabled: true
     padding: 0
 
-    contentItem: Rectangle{
+
+    /*contentItem: Rectangle{
         width: rButton.width
         height: rButton.height
         color: "transparent"
@@ -24,12 +25,12 @@ Button {
             anchors.centerIn: parent
         }
 
-        /*ColorOverlay{
+        ColorOverlay{
             anchors.fill: image
             source: rButton.iconPath
             color: mainWindow.fontColor
-        }*/
-    }
+        }
+    }*/
 
     background: Rectangle {
         id: backgroundRect

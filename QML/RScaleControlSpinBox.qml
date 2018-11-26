@@ -8,14 +8,14 @@ SpinBox {
 
     from: 0
     to: items.length - 1
-    value: 3 // "Medium"
+    value: 2 // "Medium"
     hoverEnabled: true
 
-    property var items: ["Tiny", "Very Small", "Small", "Medium", "Large", "Extra Large", "Huge"]
+    property var items: ["Tiny", "Small", "Optimum", "Medium", "Big", "Large", "Huge"]
     property var itemsInt: [16, 32, 48, 64, 80, 96, 112]
 
     validator: RegExpValidator {
-        regExp: new RegExp("(Tiny|Very Small|Small|Medium|Large|Extra Large|Huge)", "i")
+        regExp: new RegExp("(Tiny|Small|Optimum|Medium|Big|Large|Huge)", "i")
     }
 
     textFromValue: function(value) {
@@ -39,6 +39,7 @@ SpinBox {
     }
 
     contentItem: Text{
+
         text: scaleControl.textFromValue(scaleControl.value, scaleControl.locale)
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter

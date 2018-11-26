@@ -23,7 +23,7 @@ Rectangle{
                 id: backBtn
                 height: parent.height
                 width: height
-                iconPath: "/local/Resources/icons-move-back.svg"
+                icon.source: "/local/Resources/icons-move-back.svg"
                 hoverText: "Move Backward"
                 enabled: false
                 onClicked: navigateBackward()
@@ -38,7 +38,7 @@ Rectangle{
                 id: forwardBtn
                 height: parent.height
                 width: height
-                iconPath: "/local/Resources/icons-move-forward.svg"
+                icon.source: "/local/Resources/icons-move-forward.svg"
                 hoverText: "Move Forward"
                 enabled: false
                 onClicked: {
@@ -56,7 +56,7 @@ Rectangle{
                 id: reloadBtn
                 height: parent.height
                 width: height
-                iconPath: "/local/Resources/icons-reload.svg"
+                icon.source: "/local/Resources/icons-reload.svg"
                 hoverText: "Reload"
                 onClicked: qtModel.reloadCurrentDirectory()
                 Connections{
@@ -111,7 +111,8 @@ Rectangle{
                         id: newFileBtn
                         height: parent.height
                         width: height
-                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:x-office-document", 64)
+                        icon.name: "x-office-document"//"file://" + rDesktopService.getThemeIcon("std-name:x-office-document", 64)
+                        icon.color: "transparent"
                         hoverText: "New File"
                         Image {
                             z: 2
@@ -122,6 +123,7 @@ Rectangle{
                             anchors.right: parent.right
                             anchors.rightMargin: 2
                         }
+
                         onClicked: newFileDialogBox.open()
 
                         NewFileDialogBox{
@@ -138,7 +140,8 @@ Rectangle{
                         id: newFolderBtn
                         height: parent.height
                         width: height
-                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder", 64)
+                        icon.name: "folder"//"file://" + rDesktopService.getThemeIcon("std-name:folder", 64)
+                        icon.color: "transparent"
                         hoverText: "New Folder"
                         Image {
                             z: 2
@@ -181,7 +184,8 @@ Rectangle{
                         id: deselectAll
                         height: parent.height
                         width: height
-                        iconPath: "/local/Resources/icons-back-arrow.svg"
+                        icon.source: "/local/Resources/icons-back-arrow.svg"
+                        icon.color: mainWindow.fontColor
                         onClicked: selectAll.checked = false
                     }
                 }
@@ -200,7 +204,8 @@ Rectangle{
                     property bool isBookmarked: qtModel.IsBookmarked
                     height: parent.height
                     width: height
-                    iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder-bookmark", 64)
+                    icon.name: "folder-bookmark"//"file://" + rDesktopService.getThemeIcon("std-name:folder-bookmark", 64)
+                    icon.color: "transparent"
                     hoverText: "Bookmark this place"
                     onClicked: qtModel.IsBookmarked = !isBookmarked
 
@@ -222,7 +227,8 @@ Rectangle{
                     property bool nowVisible: qtModel.IsHiddenItemsShown
                     height: parent.height
                     width: height
-                    iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder", 64)
+                    icon.name: "folder"//"file://" + rDesktopService.getThemeIcon("std-name:folder", 64)
+                    icon.color: "transparent"
                     hoverText: (nowVisible ? "Hide Hidden Items" : "Show Hidden Items")
                     onClicked: qtModel.IsHiddenItemsShown = !nowVisible
 
@@ -244,7 +250,8 @@ Rectangle{
                     property bool nowPreviewing: qtModel.IsPreviewAvailable
                     height: parent.height
                     width: height
-                    iconPath: "file://" + rDesktopService.getThemeIcon("std-name:image-x-generic", 64)
+                    icon.name: "image-x-generic"//"file://" + rDesktopService.getThemeIcon("std-name:image-x-generic", 64)
+                    icon.color: "transparent"
                     hoverText: (nowPreviewing ? "Stop Previewing items" : "Enable Image Preview")
                     onClicked: qtModel.IsPreviewAvailable = !nowPreviewing
 
@@ -332,6 +339,7 @@ Rectangle{
                     Row{
                         anchors.fill: parent
                         anchors.margins: 5
+                        anchors.leftMargin: 10
                         spacing: 10
 
                         RCheckBox{
@@ -347,19 +355,19 @@ Rectangle{
                         }
 
                         Rectangle{
-                            id: icon
+                            id: iconRect
                             height: parent.height*0.9
                             width: scaleFactor
                             color: "transparent"
                             Image {
                                 id: iconImage
                                 anchors.centerIn: parent
-                                source: model.modelData.IsPreviewAvailable ? model.modelData.PreviewPath : model.modelData.IconPath
+                                source: "image://mime/"+ model.modelData.Path
                                 sourceSize.width: parent.width*0.9
                                 sourceSize.height: parent.height*0.9
-                                //cache: false
-                                //asynchronous: true
+                                asynchronous: true
                             }
+
                             ColorOverlay{
                                 anchors.fill: iconImage
                                 source: iconImage
@@ -375,7 +383,7 @@ Rectangle{
 
                         Rectangle{
                             id: displayName
-                            width: (parent.width - check.width - icon.width)*0.5
+                            width: (parent.width - check.width - iconRect.width)*0.5
                             height: parent.height
                             color: "transparent"
                             clip: true
@@ -401,7 +409,7 @@ Rectangle{
 
                         Rectangle{
                             id: size
-                            width: (parent.width - check.width - icon.width)*0.2
+                            width: (parent.width - check.width - iconRect.width)*0.2
                             height: parent.height
                             color: "transparent"
                             Text {
@@ -420,7 +428,7 @@ Rectangle{
 
                         Rectangle{
                             id: dateTime
-                            width: (parent.width - check.width - icon.width)*0.3
+                            width: (parent.width - check.width - iconRect.width)*0.3
                             height: parent.height
                             color: "transparent"
                             Text {
@@ -459,7 +467,8 @@ Rectangle{
                                 id: renameBtn
                                 width: parent.width/3
                                 height: width
-                                iconPath: "file:///home/eobardthawne/.icons/Papirus/32/apps/krename.svg"
+                                icon.source: "file:///home/eobardthawne/.icons/Papirus/32/apps/krename.svg"
+                                icon.color: "transparent"
                                 hoverText: "Rename"
                                 onClicked: {
                                     nameInput.readOnly = false
@@ -472,7 +481,8 @@ Rectangle{
                                 id: deleteBtn
                                 width: parent.width/3
                                 height: width
-                                iconPath: "file://" + rDesktopService.getThemeIcon("std-name:user-trash", 32)
+                                icon.name: "user-trash"//"file://" + rDesktopService.getThemeIcon("std-name:user-trash", 32)
+                                icon.color: "transparent"
                                 hoverText: "Delete"
                                 onClicked: qtModel.deleteFile(index)
                             }
@@ -480,9 +490,14 @@ Rectangle{
                                 id: propertiesBtn
                                 width: parent.width/3
                                 height: width
-                                iconPath: "/local/Resources/icons-switch.svg"
+                                icon.source: "/local/Resources/icons-switch.svg"
+                                icon.color: mainWindow.fontColor
                                 hoverText: "More Actions"
-                                onClicked: actionMenu.open()
+                                onClicked: {
+                                    model.modelData.ActionsMenu = qtModel.getActionMenuFor(model.modelData.Path)
+                                    actionMenu.open()
+                                    console.log("reached")
+                                }
 
                                 RMenu{
                                     id: actionMenu
@@ -508,9 +523,17 @@ Rectangle{
                         onDoubleClicked: updateModel(model.modelData.Path, index)
                     }
 
+                    Rectangle{
+                        id: animatingRect
+                        anchors.fill: parent
+                        opacity: 0.3
+                        color: "transparent"
+                    }
+
+
                     PropertyAnimation{
                         id: mouseEnteredAnimation
-                        target: fileFolderListviewDelegate
+                        target: animatingRect
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: "#9dcfe2"
@@ -518,7 +541,7 @@ Rectangle{
                     }
                     PropertyAnimation{
                         id: mouseExitedAnimation
-                        target: fileFolderListviewDelegate
+                        target: animatingRect
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: "transparent"
@@ -534,7 +557,13 @@ Rectangle{
                     width: fileFolderListView.width
                     height: scaleFactor
                     color: "skyblue"
-                    opacity: 0.5
+                    opacity: 0.4
+                    Rectangle{
+                        width: 5
+                        height: parent.height
+                        color: "blue"
+
+                    }
                 }
 
                 ScrollIndicator.vertical: ScrollIndicator{}
