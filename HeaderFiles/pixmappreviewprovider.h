@@ -1,5 +1,5 @@
-#ifndef MIMEICONEPROVIDER_H
-#define MIMEICONPROVIDER_H
+#ifndef PIXMAPPREVIEWPROVIDER_H
+#define PIXMAPPREVIEWPROVIDER_H
 
 #include <QQuickImageProvider>
 #include <QPixmap>
@@ -7,10 +7,9 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 
-class MimeIconProvider: public QQuickImageProvider{
-    //Q_OBJECT
+class PixmapPreviewProvider: public QQuickImageProvider{
 public:
-    MimeIconProvider()
+    PixmapPreviewProvider()
         :QQuickImageProvider(QQuickImageProvider::Pixmap){}
 
     QPixmap requestPixmap(const QString &filePath, QSize *size, const QSize &requestedSize) override{
@@ -19,11 +18,14 @@ public:
 
         QMimeDatabase mimeDb;
         QMimeType mime = mimeDb.mimeTypeForFile(filePath);
-        QString iconName = mime.iconName();
-        QIcon icon = QIcon::fromTheme(iconName);
+
+        if(mime.iconName().contains("image"))
+            return  QPixmap(filePath).scaled(requestedSize, Qt::KeepAspectRatio);
+
+        QIcon icon = QIcon::fromTheme(mime.iconName());
         QPixmap pixmap = icon.pixmap(requestedSize);
         return pixmap;
     }
 };
 
-#endif // MIMEICONPROVIDER_H
+#endif // PIXMAPPREVIEWPROVIDER_H

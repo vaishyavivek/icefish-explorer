@@ -20,19 +20,13 @@
 #include <QDebug>
 
 FileFolderModel::FileFolderModel(QObject *parent)
-    :QObject(parent){
-    iconScale = 32;
-}
+    :QObject(parent){}
 
-FileFolderModel::FileFolderModel(const QString &DisplayName, const QString &Path, const QString &Date_Time_Created, const QString &Date_Time_Modified, QObject *parent)
-    :QObject(parent), t_DisplayName(DisplayName),
-      t_Path(Path), t_DateTimeCreated(Date_Time_Created),
-      t_DateTimeModified(Date_Time_Modified){
-    iconPath = "/local/Resources/not-found.svg";
-}
-
-void FileFolderModel::initIconCacheThread(){
-    emit generateIcon(t_Path, 32);
+QString FileFolderModel::DisplayName() const{
+    if(t_DisplayName.isEmpty())
+        return fileInfo.fileName();
+    else
+        return t_DisplayName;
 }
 
 void FileFolderModel::setDisplayName(const QString &DisplayName){
@@ -40,7 +34,6 @@ void FileFolderModel::setDisplayName(const QString &DisplayName){
     if(t_DisplayName.isEmpty())
         t_DisplayName = DisplayName;
     else if(!DisplayName.isNull() && DisplayName != t_DisplayName && t_Path.length() > 0){
-        //qDebug() <<
         if(file.rename(t_Path.left(t_Path.lastIndexOf('/') + 1) + DisplayName)){
             t_DisplayName = DisplayName;
             t_Path = t_Path.left(t_Path.lastIndexOf('/') + 1) + DisplayName;
@@ -66,71 +59,55 @@ void FileFolderModel::setFileType(QString FileType){
             FileType = FileType.replace(FileType.indexOf('-'), 1, "\\");
         t_FileType = FileType;
         emit FileTypeChanged();
-        emit FileSizeChanged();
     }
 }
 
 
 QString FileFolderModel::FileSize() const{
     if(t_FileType.contains("directory", Qt::CaseInsensitive)){
-        QDir directory(t_Path);
+        QDir directory(fileInfo.filePath());
         return QString::number(directory.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot).length()) + " Files/Folders";
     }
     else
-        return t_FileSize;
+        return getFileSize(fileInfo.size());
 }
 
 
-void FileFolderModel::setFileSize(double FileSize){
+QString FileFolderModel::getFileSize(double FileSize) const{
+    QString fileSize;
     if(FileSize != 0.0){
         if(FileSize < 1024){
-            t_FileSize = QString::number(FileSize);
-            if(t_FileSize.contains("."))
-                t_FileSize = t_FileSize.left(t_FileSize.indexOf(".") + 3);
+            fileSize = QString::number(FileSize);
+            if(fileSize.contains("."))
+                fileSize = fileSize.left(fileSize.indexOf(".") + 3);
 
-            t_FileSize += " Bytes";
+            fileSize += " Bytes";
         }
         else if(FileSize < 1048576){
-            t_FileSize = QString::number(FileSize/1024);
-            if(t_FileSize.contains("."))
-                t_FileSize = t_FileSize.left(t_FileSize.indexOf(".") + 3);
+            fileSize = QString::number(FileSize/1024);
+            if(fileSize.contains("."))
+                fileSize = fileSize.left(fileSize.indexOf(".") + 3);
 
-            t_FileSize += " KBytes";
+            fileSize += " KBytes";
         }
         else if(FileSize < 1073741824){
-            t_FileSize = QString::number(FileSize/(1048576));
-            if(t_FileSize.contains("."))
-                t_FileSize = t_FileSize.left(t_FileSize.indexOf(".") + 3);
+            fileSize = QString::number(FileSize/(1048576));
+            if(fileSize.contains("."))
+                fileSize = fileSize.left(fileSize.indexOf(".") + 3);
 
-            t_FileSize += " MBytes";
+            fileSize += " MBytes";
         }
         else if(FileSize > 1073741824){
-            t_FileSize = QString::number(FileSize/(1073741824));
-            if(t_FileSize.contains("."))
-                t_FileSize = t_FileSize.left(t_FileSize.indexOf(".") + 3);
+            fileSize = QString::number(FileSize/(1073741824));
+            if(fileSize.contains("."))
+                fileSize = fileSize.left(fileSize.indexOf(".") + 3);
 
-            t_FileSize += " GBytes";
+            fileSize += " GBytes";
         }
         else
-            t_FileSize = "Unknown Size";
+            fileSize = "Unknown Size";
     }
-    else{
-        t_FileSize = "Can't Estimate";
-    }
-}
-
-void FileFolderModel::setIconPath(const QString IconPath){
-    if(iconPath != IconPath){
-        iconPath = "file://" + IconPath;
-        emit IconPathChanged();
-        emit IsPreviewAvailableChanged();
-    }
-}
-
-void FileFolderModel::setPreviewPath(const QString &PreviewPath){
-    if(previewPath != PreviewPath){
-        previewPath = "file://" + PreviewPath;
-        emit PreviewPathChanged();
-        emit IsPreviewAvailableChanged();
-    }
+    else
+        fileSize = "Can't Estimate";
+    return fileSize;
 }

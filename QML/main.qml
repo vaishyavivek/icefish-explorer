@@ -69,7 +69,7 @@ ApplicationWindow{
                                     color: "transparent"
 
                                     Image {
-                                        source: model.modelData.IconPath
+                                        source: "image://mime/" + model.modelData.Path
                                         sourceSize.width: parent.width*0.75
                                         sourceSize.height: parent.height*0.75
                                         anchors.centerIn: parent
@@ -96,7 +96,7 @@ ApplicationWindow{
                                     height: parent.height/2
                                     width: height
                                     anchors.verticalCenter: parent.verticalCenter
-                                    icon.source: "/local/Resources/icons-close.svg"//"file:///home/eobardthawne/.icons/Papirus/32/emblems/emblem-noread.svg"
+                                    icon.source: "/local/Resources/icons-close.svg"
                                     icon.color: mainWindow.fontColor
                                     hoverText: "Close"
                                     onClicked: deleteTab(index)

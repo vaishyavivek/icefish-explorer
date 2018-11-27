@@ -23,7 +23,7 @@ class RFileSystemModel : public QObject
     Q_PROPERTY(QList<QObject*> BookmarkDataList READ BookmarkDataList NOTIFY BookmarkDataListChanged)
 
     Q_PROPERTY(int GlobalIsHiddenItemsShown READ GlobalIsHiddenItemsShown WRITE setGlobalIsHiddenItemsShown NOTIFY GlobalIsHiddenItemsShownChanged)
-
+    Q_PROPERTY(int GlobalIsPreviewAvailable READ GlobalIsPreviewAvailable WRITE setGlobalIsPreviewAvailable NOTIFY GlobalIsPreviewAvailableChanged)
 
 public:
     explicit RFileSystemModel(QObject *parent = nullptr);
@@ -47,6 +47,9 @@ public:
     int GlobalIsHiddenItemsShown() const;
     void setGlobalIsHiddenItemsShown(const int GlobalIsHiddenItemsShown);
 
+    int GlobalIsPreviewAvailable() const;
+    void setGlobalIsPreviewAvailable(const int GlobalIsPreviewAvailable);
+
     ~RFileSystemModel();
 
 public slots:
@@ -69,6 +72,7 @@ signals:
     void BookmarkDataListChanged();
 
     void GlobalIsHiddenItemsShownChanged();
+    void GlobalIsPreviewAvailableChanged();
 
 private:
     void GetAttachedDiskList();

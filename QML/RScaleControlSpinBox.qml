@@ -8,14 +8,14 @@ SpinBox {
 
     from: 0
     to: items.length - 1
-    value: 2 // "Medium"
+    value: 1
     hoverEnabled: true
 
-    property var items: ["Tiny", "Small", "Optimum", "Medium", "Big", "Large", "Huge"]
-    property var itemsInt: [16, 32, 48, 64, 80, 96, 112]
+    property var items: ["Tiny", "Small", "Optimum", "Big", "Large"]
+    property var itemsInt: [16, 32, 48, 64, 80]
 
     validator: RegExpValidator {
-        regExp: new RegExp("(Tiny|Small|Optimum|Medium|Big|Large|Huge)", "i")
+        regExp: new RegExp("(Tiny|Small|Optimum|Big|Large)", "i")
     }
 
     textFromValue: function(value) {

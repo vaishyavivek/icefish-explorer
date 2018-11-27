@@ -76,14 +76,13 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
         //emit WriteHistoryThreaded(directoryToSwitchTo);
         if(file.isDir()){
             emit TitleChanged(directoryToSwitchTo.mid(directoryToSwitchTo.lastIndexOf('/') + 1));
-            //RDesktopServices rds;
-            emit IconPathChanged(rds.getThemeIcon(directoryToSwitchTo, 64));
 
             QDir localDirectory(directoryToSwitchTo);
             localDirectory.setFilter(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
 
             getIsBookmarked(&localDirectory);
             getIsHiddenItemsShown(&localDirectory);
+            getIsPreviewAvailable(&localDirectory);
 
             applyCurrentDirectorySettings(&localDirectory);
             QFileInfoList infoList = localDirectory.entryInfoList();
@@ -94,15 +93,8 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
             foreach (QFileInfo file, infoList) {
                 if((!file.fileName().startsWith("$"))){
 
-                    FileFolderModel *newModel =  new FileFolderModel(file.fileName(), file.filePath(),
-                                                                     file.birthTime().toString("ddd MMMM d yyyy | hh:mm:ss"),
-                                                                     file.lastModified().toString("ddd MMMM d yyyy | hh:mm:ss"));
-
-                    newModel->setFileSize(file.size());
-                    newModel->setIsHidden(file.isHidden());
-                    newModel->setIsPreviewAvailable(isPreviewAvailable);
-                    //newModel->setActionsMenu(getActionMenuFor(file.filePath()));
-
+                    FileFolderModel *newModel = new FileFolderModel(file);
+                    newModel->setFileType(mimeDb.mimeTypeForFile(file.filePath()).iconName());
                     fileFolderList.append(newModel);
                 }
             }
@@ -122,18 +114,12 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
 
 void RDirectoryModel::applyCurrentDirectorySettings(QDir *localDirectory){
 
-    //set default settings
-    //localDirectory->setFilter(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
-
     if(!wildSearchKey.isEmpty())
         localDirectory->setNameFilters(QStringList() << ("*" + wildSearchKey + "*"));
 
     localDirectory->setSorting(QDir::DirsFirst | QDir::Name);
 
-    //isHiddenItemsShown = false;
-    isPreviewAvailable = false;
-    iconScale = 48;
-    //isBookmarked = false;
+    iconScale = 32;
     sortingRole = "Name";
     sortingOrder = "Ascending";
     sortingPreference = "DirectoryFirst";
@@ -145,18 +131,7 @@ void RDirectoryModel::applyCurrentDirectorySettings(QDir *localDirectory){
 
         do {
             info = stream.readLine();
-            /*if(info.startsWith("HiddenFilesShown")){
-                info = info.section('=', 1);
-                if(info.startsWith("1")){
-                    localDirectory->setFilter(localDirectory->filter() | QDir::Hidden);
-                    isHiddenItemsShown = true;
-                }
-            }*/
-            if(info.startsWith("PreviewAvailable")){
-                info = info.section('=', 1);
-                isPreviewAvailable = info.startsWith("1");
-            }
-            else if(info.startsWith("SortingRole")){
+            if(info.startsWith("SortingRole")){
                 info = info.section('=', 1);
                 sortingRole = info;
                 if(info.compare("Type"))
@@ -193,21 +168,13 @@ void RDirectoryModel::applyCurrentDirectorySettings(QDir *localDirectory){
                 info = info.section('=', 1);
                 iconScale = info.toInt();
             }
-            /*else if(info.startsWith("Bookmarked")){
-                info = info.section('=', 1);
-                isBookmarked = info.startsWith("1");
-            }*/
         }while (!info.isNull());
     }
 
-    //emit IsBookmarkedChanged();
-    emit IsHiddenItemsShownChanged();
-    emit IsPreviewAvailableChanged();
     emit SortingRoleChanged();
     emit SortingOrderChanged();
     emit SortingPreferenceChanged();
     emit IconScaleChanged();
-
 }
 
 
@@ -251,10 +218,24 @@ void RDirectoryModel::setIsHiddenItemsShown(const bool IsHiddenItemsShown){
 
 
 void RDirectoryModel::setIsPreviewAvailable(const bool IsPreviewAvailable){
-    isPreviewAvailable = IsPreviewAvailable;
-    updateSettingsForCurrentDirectory("PreviewAvailable", isPreviewAvailable ? "1" : "0");
+    if(settings.value("global/isPreviewAvailable").toInt() == 0){
+        isPreviewAvailable = IsPreviewAvailable;
+        settings.setValue(addressBoxData + "/isPreviewAvailabel", IsPreviewAvailable);
+        emit IsPreviewAvailableChanged();
+    }
+}
+
+void RDirectoryModel::getIsPreviewAvailable(QDir *localDirectory){
+    int globalPreview = settings.value("global/isPreviewAvailable").toInt();
+
+    isPreviewAvailable = settings.value(localDirectory->path() + "/isPreviewAvailable").toBool();
+
+    isPreviewAvailable = (globalPreview == 1 || (globalPreview == 0 && isPreviewAvailable));
+
     emit IsPreviewAvailableChanged();
 }
+
+
 
 
 void RDirectoryModel::setSortingRole(const QString &SortingRole){

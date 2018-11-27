@@ -328,6 +328,78 @@ Rectangle{
                 keyNavigationEnabled: true
                 model: qtModel.FileFolderList
 
+                header: Rectangle{
+                    width: parent.width
+                    height: scaleFactor
+                    z: 2
+
+                    Row{
+                        anchors.fill: parent
+                        anchors.leftMargin: 10
+                        spacing: 10
+
+                        Rectangle{
+                            id: space
+                            height: parent.height*0.5
+                            width: height + scaleFactor
+                        }
+                        Rectangle{
+                            width: (parent.width - space.width)*0.35
+                            height: parent.height
+                            color: "transparent"
+                            clip: true
+                            Text{
+                                text: "File Name"
+                                font.family: "Sans Serif"
+                                color: mainWindow.fontColor
+                                font.pointSize: Math.max(scaleFactor*0.16, 8)
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                        }
+                        Rectangle{
+                            width: (parent.width - space.width)*0.12
+                            height: parent.height
+                            color: "transparent"
+                            clip: true
+                            Text{
+                                text: "Last Modified"
+                                font.family: "Sans Serif"
+                                color: mainWindow.fontColor
+                                font.pointSize: Math.max(scaleFactor*0.16, 8)
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                        }
+                        Rectangle{
+                            width: (parent.width - space.width)*0.12
+                            height: parent.height
+                            color: "transparent"
+                            clip: true
+                            Text{
+                                text: "Size"
+                                font.family: "Sans Serif"
+                                color: mainWindow.fontColor
+                                font.pointSize: Math.max(scaleFactor*0.16, 8)
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                        }
+                        Rectangle{
+                            width: (parent.width - space.width)*0.2
+                            height: parent.height
+                            color: "transparent"
+                            clip: true
+                            Text{
+                                text: "Type"
+                                font.family: "Sans Serif"
+                                color: mainWindow.fontColor
+                                font.pointSize: Math.max(scaleFactor*0.16, 8)
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                        }
+                    }
+                }
+
+                headerPositioning: ListView.OverlayHeader
+
                 delegate: Rectangle{
                     id: fileFolderListviewDelegate
                     property variant filePath: model.modelData.Path
@@ -338,7 +410,6 @@ Rectangle{
 
                     Row{
                         anchors.fill: parent
-                        anchors.margins: 5
                         anchors.leftMargin: 10
                         spacing: 10
 
@@ -362,7 +433,7 @@ Rectangle{
                             Image {
                                 id: iconImage
                                 anchors.centerIn: parent
-                                source: "image://mime/"+ model.modelData.Path
+                                source: (imagePreviewBtn.nowPreviewing ? "image://preview/" : "image://mime/") + model.modelData.Path
                                 sourceSize.width: parent.width*0.9
                                 sourceSize.height: parent.height*0.9
                                 asynchronous: true
@@ -373,17 +444,11 @@ Rectangle{
                                 source: iconImage
                                 color: model.modelData.IsHidden ? "#81abc7" : "transparent"
                             }
-
-                            Connections{
-                                target: imagePreviewBtn
-                                ignoreUnknownSignals: true
-                                onNowPreviewingChanged: model.modelData.IsPreviewAvailable = imagePreviewBtn.nowPreviewing
-                            }
                         }
 
                         Rectangle{
                             id: displayName
-                            width: (parent.width - check.width - iconRect.width)*0.5
+                            width: (parent.width - check.width - iconRect.width)*0.35
                             height: parent.height
                             color: "transparent"
                             clip: true
@@ -408,8 +473,27 @@ Rectangle{
                         }
 
                         Rectangle{
+                            id: dateTime
+                            width: (parent.width - check.width - iconRect.width)*0.12
+                            height: parent.height
+                            color: "transparent"
+                            Text {
+                                width: parent.width
+                                height: parent.height
+                                text: model.modelData.Date_Time_Modified
+                                color: mainWindow.fontColor
+                                font.family: "Sans Serif"
+                                font.pointSize: Math.max(scaleFactor*0.16, 8)
+                                anchors.verticalCenter: parent.verticalCenter
+                                clip: true
+                                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                        }
+
+                        Rectangle{
                             id: size
-                            width: (parent.width - check.width - iconRect.width)*0.2
+                            width: (parent.width - check.width - iconRect.width)*0.12
                             height: parent.height
                             color: "transparent"
                             Text {
@@ -427,14 +511,14 @@ Rectangle{
                         }
 
                         Rectangle{
-                            id: dateTime
-                            width: (parent.width - check.width - iconRect.width)*0.3
+                            id: type
+                            width: (parent.width - check.width - iconRect.width)*0.2
                             height: parent.height
                             color: "transparent"
                             Text {
                                 width: parent.width
                                 height: parent.height
-                                text: model.modelData.Date_Time_Modified
+                                text: model.modelData.FileType
                                 color: mainWindow.fontColor
                                 font.family: "Sans Serif"
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
@@ -444,29 +528,22 @@ Rectangle{
                                 verticalAlignment: Text.AlignVCenter
                             }
                         }
-
                     }
-
 
                     Rectangle{
                         id: perItemActionMenu
                         visible: (fileFolderListView.currentIndex === index && !selectAll.checked)
-                        height: scaleFactor*0.8 + 4
-                        width: scaleFactor*2.4 + 4
+                        height: parent.height
+                        width: height*3 + 10
+                        color: "transparent"
                         anchors.right: parent.right
-                        anchors.rightMargin: 20
-                        anchors.verticalCenter: parent.verticalCenter
-                        opacity: 0.75
 
                         Row{
                             anchors.fill: parent
-                            anchors.margins: 2
-                            anchors.verticalCenter: parent.verticalCenter
-                            opacity: 1
                             RImageButton{
                                 id: renameBtn
-                                width: parent.width/3
-                                height: width
+                                height: parent.height
+                                width: height
                                 icon.source: "file:///home/eobardthawne/.icons/Papirus/32/apps/krename.svg"
                                 icon.color: "transparent"
                                 hoverText: "Rename"
@@ -479,24 +556,23 @@ Rectangle{
                             }
                             RImageButton{
                                 id: deleteBtn
-                                width: parent.width/3
-                                height: width
-                                icon.name: "user-trash"//"file://" + rDesktopService.getThemeIcon("std-name:user-trash", 32)
+                                height: parent.height
+                                width: height
+                                icon.name: "user-trash"
                                 icon.color: "transparent"
                                 hoverText: "Delete"
                                 onClicked: qtModel.deleteFile(index)
                             }
                             RImageButton{
                                 id: propertiesBtn
-                                width: parent.width/3
-                                height: width
+                                height: parent.height
+                                width: height
                                 icon.source: "/local/Resources/icons-switch.svg"
                                 icon.color: mainWindow.fontColor
                                 hoverText: "More Actions"
                                 onClicked: {
                                     model.modelData.ActionsMenu = qtModel.getActionMenuFor(model.modelData.Path)
                                     actionMenu.open()
-                                    console.log("reached")
                                 }
 
                                 RMenu{
@@ -511,6 +587,7 @@ Rectangle{
                             }
                         }
                     }
+
 
                     MouseArea{
                         anchors.fill: parent

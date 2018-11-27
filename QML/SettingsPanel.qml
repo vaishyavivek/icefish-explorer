@@ -136,8 +136,8 @@ Popup{
                     anchors.leftMargin: 10
                     anchors.bottom: parent.bottom
                     model: ["Default", "Enable", "Disble"]
-                    currentIndex: rDesktopService.getSettingsValue("PreviewAvailable")
-                    onCurrentIndexChanged: rDesktopService.applySettingsValue("PreviewAvailable", currentIndex)
+                    currentIndex: rFileSystem.GlobalIsPreviewAvailable
+                    onCurrentIndexChanged: rFileSystem.GlobalIsPreviewAvailable = currentIndex
                 }
             }
             Rectangle{

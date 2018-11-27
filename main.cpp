@@ -7,6 +7,7 @@
 #include "HeaderFiles/rfilesystemmodel.h"
 #include "HeaderFiles/rdesktopservices.h"
 #include "HeaderFiles/mimeiconprovider.h"
+#include "HeaderFiles/pixmappreviewprovider.h"
 
 int main(int argc, char *argv[])
 {
@@ -31,6 +32,7 @@ int main(int argc, char *argv[])
     ctxt->setContextProperty("rDesktopService", &rds);
 
     engine->addImageProvider("mime", new MimeIconProvider());
+    engine->addImageProvider("preview", new PixmapPreviewProvider());
 
     engine->load(QUrl(QStringLiteral("qrc:/QML/main.qml")));
 
@@ -49,4 +51,7 @@ int main(int argc, char *argv[])
  ************* 6- adding path to theme the app----------50% done
  * 7- recents
  * 8- gridview
+ * 9- google-drive integration
+ * 10- dropbox integration
+ * 11- on-the-fly encreption for cloud data
 */

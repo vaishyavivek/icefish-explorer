@@ -106,7 +106,6 @@ public slots:
 
 signals:
     void TitleChanged(QString newTitle);
-    void IconPathChanged(QString newPath);
     void notify(Error);
     void WriteBookmarkThreaded(QString filePath, bool addOrRemove);
 
@@ -149,9 +148,9 @@ private:
 
     void getIsHiddenItemsShown(QDir *localDirectory);
 
-    /*void getIsPreviewAvailable(QDir *localDirectory);
+    void getIsPreviewAvailable(QDir *localDirectory);
 
-    void getSortingRole(QDir *localDirectory);
+    /*void getSortingRole(QDir *localDirectory);
 
     void getSortingOrder(QDir *localDirectory);
 

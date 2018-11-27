@@ -125,11 +125,10 @@ void RFileSystemModel::updateStoredBookmarkList(){
 }
 
 void RFileSystemModel::createNewTab(QString Path){
-    FileFolderModel *ffm = new FileFolderModel();
+    FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
     RDirectoryModel *newTab = new RDirectoryModel();
 
     connect(newTab, &RDirectoryModel::TitleChanged, ffm, &FileFolderModel::changeTabTitle);
-    connect(newTab, &RDirectoryModel::IconPathChanged, ffm, &FileFolderModel::setIconPath);
     connect(newTab, &RDirectoryModel::notify, nm, &NotificationModel::Notify);
 
     newTab->updateCurrentDirectory(Path);
@@ -189,6 +188,13 @@ void RFileSystemModel::setGlobalIsHiddenItemsShown(const int GlobalIsHiddenItems
 }
 
 
+int RFileSystemModel::GlobalIsPreviewAvailable() const{
+    return settings.value("global/isPreviewAvailable").toInt();
+}
+
+void RFileSystemModel::setGlobalIsPreviewAvailable(const int GlobalIsPreviewAvailable){
+    settings.setValue("global/isPreviewAvailable", GlobalIsPreviewAvailable);
+}
 
 RFileSystemModel::~RFileSystemModel(){
     deleteLater();

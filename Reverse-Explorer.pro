@@ -51,6 +51,7 @@ HEADERS += \
     HeaderFiles/desktopfilemodel.h \
     HeaderFiles/propertiesinfomodel.h \
     HeaderFiles/mimeiconprovider.h \
-    HeaderFiles/actionmenuprovider.h
+    HeaderFiles/actionmenuprovider.h \
+    HeaderFiles/pixmappreviewprovider.h
 
 DISTFILES +=
