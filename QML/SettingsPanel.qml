@@ -177,6 +177,37 @@ Popup{
                 color: "lightgrey"
                 opacity: 0.5
             }
+
+            Rectangle{
+                id: iconScale
+                width: parent.width
+                height: 50
+                color: "transparent"
+                Text {
+                    text: qsTr("Show Hidden Items")
+                    font.pointSize: 10
+                    anchors.left: parent.left
+                    color: mainWindow.fontColor
+                    anchors.leftMargin: 10
+                }
+                RComboBox{
+                    id: iconScaleCb
+                    width: parent.width*0.5
+                    height: 30
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.bottom: parent.bottom
+                    model: ["Tiny", "Small (Default)", "Medium", "Big", "Large"]
+                    currentIndex: rFileSystem.GlobalIconScale
+                    onCurrentIndexChanged: rFileSystem.GlobalIconScale = currentIndex
+                }
+            }
+            Rectangle{
+                height: 2
+                width: parent.width
+                color: "lightgrey"
+                opacity: 0.5
+            }
         }
     }
 

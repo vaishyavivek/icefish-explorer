@@ -24,6 +24,7 @@ class RFileSystemModel : public QObject
 
     Q_PROPERTY(int GlobalIsHiddenItemsShown READ GlobalIsHiddenItemsShown WRITE setGlobalIsHiddenItemsShown NOTIFY GlobalIsHiddenItemsShownChanged)
     Q_PROPERTY(int GlobalIsPreviewAvailable READ GlobalIsPreviewAvailable WRITE setGlobalIsPreviewAvailable NOTIFY GlobalIsPreviewAvailableChanged)
+    Q_PROPERTY(int GlobalIconScale READ GlobalIconScale WRITE setGlobalIconScale NOTIFY GlobalIconScaleChanged)
 
 public:
     explicit RFileSystemModel(QObject *parent = nullptr);
@@ -50,6 +51,9 @@ public:
     int GlobalIsPreviewAvailable() const;
     void setGlobalIsPreviewAvailable(const int GlobalIsPreviewAvailable);
 
+    int GlobalIconScale() const;
+    void setGlobalIconScale(const int GlobalIconScale);
+
     ~RFileSystemModel();
 
 public slots:
@@ -73,6 +77,7 @@ signals:
 
     void GlobalIsHiddenItemsShownChanged();
     void GlobalIsPreviewAvailableChanged();
+    void GlobalIconScaleChanged();
 
 private:
     void GetAttachedDiskList();

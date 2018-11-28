@@ -11,7 +11,7 @@ SpinBox {
     value: 1
     hoverEnabled: true
 
-    property var items: ["Tiny", "Small", "Optimum", "Big", "Large"]
+    property var items: ["Tiny", "Small", "Medium", "Big", "Large"]
     property var itemsInt: [16, 32, 48, 64, 80]
 
     validator: RegExpValidator {

@@ -46,7 +46,8 @@ Popup {
                     height: width
                     visible: isExpanded
                     anchors.right: parent.right
-                    iconPath: isPined ? "/local/Resources/icons-pin.png" : "/local/Resources/icons-unpin.svg"
+                    icon.source: isPined ? "/local/Resources/icons-pin.png" : "/local/Resources/icons-unpin.svg"
+                    icon.color: mainWindow.fontColor
                     onClicked: {
                         if(isPined){
                             isExpanded = false
@@ -238,7 +239,7 @@ Popup {
                         id: settingsBtn
                         width: parent.width
                         height: normalizedWidth
-                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:settings", 64)
+                        iconPath: "/local/Resources/icons-settings.svg"
                         text: "Global Settings"
                         checked: settingsPanel.isOpened
 
@@ -290,6 +291,7 @@ Popup {
 
     function updateCurrentDirectory(Path){
         rFileSystem.updateCurrentDirectoryOnCurrentView(Path, tabHeader.currentIndex)
-        reverseExpandMenu()
+        if(!isPined)
+            reverseExpandMenu()
     }
 }

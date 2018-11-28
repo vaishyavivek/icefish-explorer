@@ -7,7 +7,7 @@ NotificationModel::NotificationModel(QObject *parent)
 void NotificationModel::Notify(Error code){
     if(code == Error::FileAlreadyExist){
         header = "That name is already occupied";
-        comment = "Please chose the suggested name or something else";
+        comment = "Please chose the suggested name or something else.";
     }
     else if(code == Error::NoPermission){
         header = "Permission Insufficient";
@@ -15,7 +15,7 @@ void NotificationModel::Notify(Error code){
     }
     else if(code == Error::PathDoesntExist){
         header = "Unknown Path";
-        comment = "File path specified is unable to be located";
+        comment = "File path specified was not located.";
     }
 
     emit HeaderChanged();

@@ -45,10 +45,10 @@ int main(int argc, char *argv[])
 /* TODO LIST
  ************* 1- desktop services************done
  ************* 2- properties ----------designed----------linking left
- ************* 3- linking with global properties-----------designed-----------linkign left
+ ************* 3- linking with global properties************done
  * 4- allowing file operations
  * 5- adding dbus support
- ************* 6- adding path to theme the app----------50% done
+ ************* 6- adding path to theme the app************done
  * 7- recents
  * 8- gridview
  * 9- google-drive integration

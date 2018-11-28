@@ -196,6 +196,18 @@ void RFileSystemModel::setGlobalIsPreviewAvailable(const int GlobalIsPreviewAvai
     settings.setValue("global/isPreviewAvailable", GlobalIsPreviewAvailable);
 }
 
+
+int RFileSystemModel::GlobalIconScale() const{
+    //by default icons will be scaled to 'small'
+    QVariant temp = settings.value("global/iconScale");
+    return (temp.isNull() ? 1 : temp.toInt()/16 - 1);
+}
+
+void RFileSystemModel::setGlobalIconScale(const int GlobalIconScale){
+    settings.setValue("global/iconScale", (GlobalIconScale + 1)*16);
+}
+
 RFileSystemModel::~RFileSystemModel(){
     deleteLater();
 }
+

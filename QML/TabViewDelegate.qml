@@ -273,7 +273,7 @@ Rectangle{
                     height: parent.height*0.75
                     width: parent.height*3.5
                     anchors.verticalCenter: parent.verticalCenter
-                    text: sortPopup.text
+                    text: sortPopup.currentSelection
                     checkable: false
                     hoverText: "Sort By"
                     onClicked: {
@@ -281,14 +281,11 @@ Rectangle{
                         sortPopup.isOpened = !sortPopup.isOpened
                     }
 
-                    ItemSortingRolesPanel{
+                    SortingPanel{
                         id: sortPopup
                         width: sortBtn.width
                         oldY: sortBtn.y
                         newY: sortBtn.y + sortBtn.height
-                        sortingRole: qtModel.SortingRole
-                        sortingOrder: qtModel.SortingOrder
-                        sortingPreference: qtModel.SortingPreference
                     }
                 }
 
@@ -299,8 +296,7 @@ Rectangle{
                     anchors.verticalCenter: parent.verticalCenter
                     hoverText: "Icon Scale"
                     onValueModified: qtModel.IconScale = getValue()
-                    background: tabViewDelegate.color
-                    value: setValue(scaleFactor)
+                    value: setValue(qtModel.IconScale)
                 }
             }
         }

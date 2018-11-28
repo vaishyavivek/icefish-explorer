@@ -80,11 +80,17 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
             QDir localDirectory(directoryToSwitchTo);
             localDirectory.setFilter(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
 
+            if(!wildSearchKey.isEmpty())
+                localDirectory.setNameFilters(QStringList() << ("*" + wildSearchKey + "*"));
+
             getIsBookmarked(&localDirectory);
             getIsHiddenItemsShown(&localDirectory);
             getIsPreviewAvailable(&localDirectory);
+            getSortingRole(&localDirectory);
+            getSortingOrder(&localDirectory);
+            getSortingPreference(&localDirectory);
+            getIconScale(&localDirectory);
 
-            applyCurrentDirectorySettings(&localDirectory);
             QFileInfoList infoList = localDirectory.entryInfoList();
 
             //clear current list to update it
@@ -111,71 +117,6 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
         return 1;//file doesn't exist
 }
 
-
-void RDirectoryModel::applyCurrentDirectorySettings(QDir *localDirectory){
-
-    if(!wildSearchKey.isEmpty())
-        localDirectory->setNameFilters(QStringList() << ("*" + wildSearchKey + "*"));
-
-    localDirectory->setSorting(QDir::DirsFirst | QDir::Name);
-
-    iconScale = 32;
-    sortingRole = "Name";
-    sortingOrder = "Ascending";
-    sortingPreference = "DirectoryFirst";
-
-    QFile dirInfo(localDirectory->path() + "/.rfmDirectorySetting");
-    if(dirInfo.open(QIODevice::ReadOnly)){
-        QTextStream stream(&dirInfo);
-        QString info;
-
-        do {
-            info = stream.readLine();
-            if(info.startsWith("SortingRole")){
-                info = info.section('=', 1);
-                sortingRole = info;
-                if(info.compare("Type"))
-                    localDirectory->setSorting(QDir::Type);
-                else if(info.compare("Size"))
-                    localDirectory->setSorting(QDir::Size);
-                else if(info.compare("Time"))
-                    localDirectory->setSorting(QDir::Time);
-            }
-            else if(info.startsWith("SortingOrder")){
-                info = info.section('=', 1);
-                if(info.compare("Descending")){
-                    sortingOrder = info;
-                    localDirectory->setSorting(localDirectory->sorting() | QDir::Reversed);
-                }
-            }
-            else if(info.startsWith("SortingPreference")){
-                info = info.section('=', 1);
-                if(info.compare("FileFirst")){
-                    sortingPreference = "FileFirst";
-                    localDirectory->setSorting(localDirectory->sorting() | QDir::DirsLast);
-                }
-                else
-                    localDirectory->setSorting(localDirectory->sorting() | QDir::DirsFirst);
-            }
-            else if(info.startsWith("CurrentView")){
-                info = info.section('=', 1);
-                if(info.startsWith("00"))
-                    emit changeFileFolderView(0);
-                else if(info.startsWith("01"))
-                    emit changeFileFolderView(1);
-            }
-            else if(info.startsWith("ScaleFactor")){
-                info = info.section('=', 1);
-                iconScale = info.toInt();
-            }
-        }while (!info.isNull());
-    }
-
-    emit SortingRoleChanged();
-    emit SortingOrderChanged();
-    emit SortingPreferenceChanged();
-    emit IconScaleChanged();
-}
 
 
 
@@ -220,7 +161,7 @@ void RDirectoryModel::setIsHiddenItemsShown(const bool IsHiddenItemsShown){
 void RDirectoryModel::setIsPreviewAvailable(const bool IsPreviewAvailable){
     if(settings.value("global/isPreviewAvailable").toInt() == 0){
         isPreviewAvailable = IsPreviewAvailable;
-        settings.setValue(addressBoxData + "/isPreviewAvailabel", IsPreviewAvailable);
+        settings.setValue(addressBoxData + "/isPreviewAvailable", IsPreviewAvailable);
         emit IsPreviewAvailableChanged();
     }
 }
@@ -238,25 +179,78 @@ void RDirectoryModel::getIsPreviewAvailable(QDir *localDirectory){
 
 
 
-void RDirectoryModel::setSortingRole(const QString &SortingRole){
+
+void RDirectoryModel::setSortingRole(const int &SortingRole){
     sortingRole = SortingRole;
-    updateSettingsForCurrentDirectory("SortingRole", SortingRole);
+    settings.setValue(addressBoxData + "/sortingRole", SortingRole);
 }
 
-void RDirectoryModel::setSortingOrder(const QString &SortingOrder){
+void RDirectoryModel::getSortingRole(QDir *localDirectory){
+    sortingRole = settings.value(localDirectory->path() + "/sortingRole").toInt();
+
+    switch (sortingRole) {
+    case 1:
+        localDirectory->setSorting(QDir::Type);
+        break;
+    case 2:
+        localDirectory->setSorting(QDir::Size);
+        break;
+    case 3:
+        localDirectory->setSorting(QDir::Time);
+        break;
+    default:
+        localDirectory->setSorting(QDir::Name);
+    }
+    emit SortingRoleChanged();
+}
+
+
+
+void RDirectoryModel::setSortingOrder(const int &SortingOrder){
     sortingOrder = SortingOrder;
-    updateSettingsForCurrentDirectory("SortingOrder", SortingOrder);
+    settings.setValue(addressBoxData + "/sortingOrder", SortingOrder);
 }
 
-void RDirectoryModel::setSortingPreference(const QString &SortingPreference){
-    sortingPreference = SortingPreference;
-    updateSettingsForCurrentDirectory("SortingPreference", sortingPreference);
+void RDirectoryModel::getSortingOrder(QDir *localDirectory){
+    sortingOrder = settings.value(localDirectory->path() + "/sortingOrder").toInt();
+
+    if(sortingOrder == 1)
+        localDirectory->setSorting(localDirectory->sorting() | QDir::Reversed);
+    emit SortingOrderChanged();
 }
+
+
+
+void RDirectoryModel::setSortingPreference(const int &SortingPreference){
+    sortingPreference = SortingPreference;
+    settings.setValue(addressBoxData + "/sortingPreference", SortingPreference);
+}
+
+void RDirectoryModel::getSortingPreference(QDir *localDirectory){
+    sortingPreference = settings.value(localDirectory->path() + "/sortingPreference").toInt();
+
+    if(sortingPreference == 1)
+        localDirectory->setSorting(localDirectory->sorting() | QDir::DirsLast);
+    else
+        localDirectory->setSorting(localDirectory->sorting() | QDir::DirsFirst);
+    emit SortingPreferenceChanged();
+}
+
 
 
 void RDirectoryModel::setIconScale(const int IconScale){
     iconScale = IconScale;
-    updateSettingsForCurrentDirectory("ScaleFactor", QString::number(iconScale));
+    settings.setValue(addressBoxData + "/iconScale", IconScale);
+    emit IconScaleChanged();
+}
+
+void RDirectoryModel::getIconScale(QDir *localDirectory){
+    iconScale = settings.value("global/iconScale").toInt();
+
+    if(iconScale == 32){
+        QVariant var = settings.value(localDirectory->path() + "/iconScale");
+        iconScale = (var.isNull() ? 32 : var.toInt());
+    }
     emit IconScaleChanged();
 }
 
@@ -448,36 +442,6 @@ void RDirectoryModel::updateAddressBoxShortcutMenuList(QString jumpAddress){
     }
 }
 
-
-void RDirectoryModel::updateSettingsForCurrentDirectory(QString fileOperation, QString newValue){
-    QString currentDirectory = addressBoxData;
-    QFile settingFile(currentDirectory + "/.rfmDirectorySetting");
-
-    if(settingFile.open(QIODevice::ReadOnly)){
-        QByteArray wholeSetting = settingFile.readAll();
-
-        int indexOfSettingValue = wholeSetting.indexOf(fileOperation);
-        int nextNewline = wholeSetting.indexOf('\n', indexOfSettingValue);
-        nextNewline -= wholeSetting.indexOf('=', indexOfSettingValue);
-
-        if(indexOfSettingValue > 0)
-            wholeSetting.replace(indexOfSettingValue + fileOperation.length() + 1,
-                                 nextNewline, newValue.toUtf8() + '\n');
-        else
-            wholeSetting.append(fileOperation + "=" + newValue + "\n");
-
-        settingFile.close();
-        if(settingFile.open(QIODevice::WriteOnly | QIODevice::Truncate)){
-            settingFile.write(wholeSetting);
-            settingFile.close();
-        }
-    }
-    else if(settingFile.open(QIODevice::WriteOnly)) {
-        settingFile.write("[Settings]\n");
-        settingFile.write((fileOperation + "=" + newValue + "\n").toUtf8());
-        settingFile.close();
-    }
-}
 
 
 void RDirectoryModel::deleteFile(int index){

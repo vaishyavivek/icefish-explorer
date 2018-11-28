@@ -24,9 +24,9 @@ class RDirectoryModel : public QObject
     Q_PROPERTY(bool IsHiddenItemsShown READ IsHiddenItemsShown WRITE setIsHiddenItemsShown NOTIFY IsHiddenItemsShownChanged)
     Q_PROPERTY(bool IsPreviewAvailable READ IsPreviewAvailable WRITE setIsPreviewAvailable NOTIFY IsPreviewAvailableChanged)
 
-    Q_PROPERTY(QString SortingRole READ SortingRole WRITE setSortingRole NOTIFY SortingRoleChanged)
-    Q_PROPERTY(QString SortingOrder READ SortingOrder WRITE setSortingOrder NOTIFY SortingOrderChanged)
-    Q_PROPERTY(QString SortingPreference READ SortingPreference WRITE setSortingPreference NOTIFY SortingPreferenceChanged)
+    Q_PROPERTY(int SortingRole READ SortingRole WRITE setSortingRole NOTIFY SortingRoleChanged)
+    Q_PROPERTY(int SortingOrder READ SortingOrder WRITE setSortingOrder NOTIFY SortingOrderChanged)
+    Q_PROPERTY(int SortingPreference READ SortingPreference WRITE setSortingPreference NOTIFY SortingPreferenceChanged)
 
     Q_PROPERTY(int IconScale READ IconScale WRITE setIconScale NOTIFY IconScaleChanged)
 
@@ -65,14 +65,14 @@ public:
     bool IsPreviewAvailable() const{ return isPreviewAvailable;}
     void setIsPreviewAvailable(const bool IsPreviewAvailable);
 
-    QString SortingRole() const{ return sortingRole;}
-    void setSortingRole(const QString &SortingRole);
+    int SortingRole() const{ return sortingRole;}
+    void setSortingRole(const int &SortingRole);
 
-    QString SortingOrder() const{ return sortingOrder;}
-    void setSortingOrder(const QString &SortingOrder);
+    int SortingOrder() const{ return sortingOrder;}
+    void setSortingOrder(const int &SortingOrder);
 
-    QString SortingPreference() const{ return sortingPreference;}
-    void setSortingPreference(const QString &SortingPreference);
+    int SortingPreference() const{ return sortingPreference;}
+    void setSortingPreference(const int &SortingPreference);
 
     int IconScale() const{ return iconScale;}
     void setIconScale(const int IconScale);
@@ -150,30 +150,27 @@ private:
 
     void getIsPreviewAvailable(QDir *localDirectory);
 
-    /*void getSortingRole(QDir *localDirectory);
+    void getIconScale(QDir *localDirectory);
+
+    void getSortingRole(QDir *localDirectory);
 
     void getSortingOrder(QDir *localDirectory);
 
     void getSortingPreference(QDir *localDirectory);
 
-    void getIconScale(QDir *localDirectory);*/
-
 
     int updateCurrentDirectoryInternal(QString directoryToSwitchTo);
-    void applyCurrentDirectorySettings(QDir *localDirectory);
 
     void setAddressBoxData(QString changedAddress = "");
-
-    void updateSettingsForCurrentDirectory(QString fileOperation, QString newValue);
 
     QList<QObject*> fileFolderList;
 
     bool isBookmarked;
     bool isHiddenItemsShown;
     bool isPreviewAvailable;
-    QString sortingRole;
-    QString sortingOrder;
-    QString sortingPreference;
+    int sortingRole;
+    int sortingOrder;
+    int sortingPreference;
     int iconScale;
 
     PropertiesInfoModel *properties;
