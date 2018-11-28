@@ -21,8 +21,11 @@ public:
         QMimeType mime = mimeDb.mimeTypeForFile(filePath);
         QString iconName = mime.iconName();
         QIcon icon = QIcon::fromTheme(iconName);
-        QPixmap pixmap = icon.pixmap(requestedSize);
-        return pixmap;
+        if(!icon.isNull()){
+            QPixmap pixmap = icon.pixmap(requestedSize);
+            return pixmap;
+        }
+        return QPixmap("/local/Resources/icons-folder.svg");
     }
 };
 
