@@ -327,6 +327,7 @@ Rectangle{
                 header: Rectangle{
                     width: parent.width
                     height: scaleFactor
+                    color: "transparent"
                     z: 2
 
                     Row{
@@ -338,6 +339,7 @@ Rectangle{
                             id: space
                             height: parent.height*0.5
                             width: height + scaleFactor
+                            color: "transparent"
                         }
                         Rectangle{
                             width: (parent.width - space.width)*0.35
