@@ -327,7 +327,7 @@ Rectangle{
                 header: Rectangle{
                     width: parent.width
                     height: scaleFactor
-                    color: "transparent"
+                    color: mainWindow.color
                     z: 2
 
                     Row{

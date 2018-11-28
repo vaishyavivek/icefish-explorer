@@ -108,6 +108,7 @@ signals:
     void TitleChanged(QString newTitle);
     void notify(Error);
     void WriteBookmarkThreaded(QString filePath, bool addOrRemove);
+    void WriteHistoryTabbed(QString fileVisited);
 
     void FileFolderListChanged();
     void activeIndexInCurrentModelChanged();

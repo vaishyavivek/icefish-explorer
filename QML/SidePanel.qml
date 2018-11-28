@@ -226,6 +226,19 @@ Popup {
                         height: normalizedWidth
                         iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder-activities", 64)
                         text: "Your Recently Visited Places"
+                        checked: recentsPanel.isOpened
+
+                        RecentsPanel{
+                            id: recentsPanel
+                            x: sidePanel.width
+                            y: sidePanelParentRect.y - recentsBtn.y - 2
+                            widthWhenExpanded: mainWindow.width*0.35
+                            height: mainWindow.height - 35
+                        }
+                        onClicked: {
+                            recentsPanel.isOpened ? recentsPanel.close() : recentsPanel.open()
+                            recentsPanel.isOpened = !recentsPanel.isOpened
+                        }
                     }
                     RImageExpandingButton{
                         id: trashBtn

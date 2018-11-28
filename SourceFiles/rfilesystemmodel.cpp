@@ -5,6 +5,7 @@
 #include "HeaderFiles/filefoldermodel.h"
 #include "HeaderFiles/bookmarkinfomodel.h"
 #include "HeaderFiles/rdirectorymodel.h"
+#include "HeaderFiles/recentsinfomodel.h"
 
 RFileSystemModel::RFileSystemModel(QObject *parent)
     : QObject(parent){
@@ -19,7 +20,14 @@ RFileSystemModel::RFileSystemModel(QObject *parent)
     bookmarkKeeperThread.start();
 
     nm = new NotificationModel();
-    //GetStoredBookmarkList();
+
+    HistoryKeeper *hisObj = new HistoryKeeper();
+    hisObj->moveToThread(&historyKeeperThread);
+
+    connect(&historyKeeperThread, &QThread::finished, hisObj, &QObject::deleteLater);
+    connect(this, &RFileSystemModel::writeHistoryThreaded, hisObj, &HistoryKeeper::WriteHistoryAsync);
+
+    historyKeeperThread.start();
 }
 
 void RFileSystemModel::writeBookmarkAsync(QString filePath, bool addOrRemove){
@@ -101,6 +109,58 @@ void RFileSystemModel::GetAttachedDiskList(){
 }
 
 
+void RFileSystemModel::prepareHistoryInfoList(){
+
+    recentsList.clear();
+    QFile historyFile(QDir::homePath() + "/.RevProgIFace/FileHistory.rde");
+    if(historyFile.open(QIODevice::ReadOnly)){
+        QString buffer = historyFile.readAll();
+        QStringList historyList = buffer.split('\n', QString::SkipEmptyParts);
+        QMimeType mime;
+        foreach (buffer, historyList) {
+            QStringList dataList = buffer.split('|', QString::SkipEmptyParts);
+            RecentsInfoModel *model = new RecentsInfoModel();
+            model->setDateAccessed(dataList.at(1));
+            model->setTimeAccessed(dataList.at(2));
+            model->setActualPath(dataList.at(3));
+
+            //set the filename, if it is only '/' then mark it as root
+            buffer = dataList.at(3);
+            buffer = buffer.mid(buffer.lastIndexOf('/') + 1);
+            model->setDisplayName(buffer.isEmpty() ? "Root" : buffer);
+
+            recentsList.prepend(model);
+        }
+    }
+    emit RecentsListChanged();
+}
+
+void RFileSystemModel::prepareMostVisitedPlacesList(){
+
+    mostVisitedPlacesList.clear();
+    QFile historyFile(QDir::homePath() + "/.RevProgIFace/MostVisitedPlaces.rde");
+    if(historyFile.open(QIODevice::ReadOnly)){
+        QString buffer = historyFile.readAll();
+        QStringList historyList = buffer.split('\n', QString::SkipEmptyParts);
+        QMimeType mime;
+        foreach (buffer, historyList) {
+            QStringList dataList = buffer.split('|', QString::SkipEmptyParts);
+            RecentsInfoModel *model = new RecentsInfoModel();
+            model->setDateAccessed(dataList.at(1));
+            model->setTimeAccessed(dataList.at(2));
+            model->setActualPath(dataList.at(3));
+
+            buffer = dataList.at(3);
+            buffer = buffer.mid(buffer.lastIndexOf('/') + 1);
+            model->setDisplayName(buffer.isEmpty() ? "Root" : buffer);
+
+            mostVisitedPlacesList.append(model);
+        }
+        emit MostVisitedPlacesListChanged();
+    }
+}
+
+
 void RFileSystemModel::updateStoredBookmarkList(){
     bookmarkDataList.clear();
     QFile bookmarkFile(QDir::homePath() + "/.cache/reverse-files/bookmarks.rde");
@@ -140,6 +200,7 @@ void RFileSystemModel::createNewTab(QString Path){
     emit TabHeaderListChanged();
 
     connect(newTab, &RDirectoryModel::WriteBookmarkThreaded, this, &RFileSystemModel::writeBookmarkAsync);
+    connect(newTab, &RDirectoryModel::WriteHistoryTabbed, this, &RFileSystemModel::writeHistoryThreaded);
 }
 
 QObject* RFileSystemModel::getTabData(){
@@ -152,6 +213,7 @@ QObject* RFileSystemModel::getTabData(int index){
     else
         return nullptr;
 }
+
 
 void RFileSystemModel::updateCurrentDirectoryOnCurrentView(QString stdName, int activeIndex){
     if(!stdName.contains("/")){

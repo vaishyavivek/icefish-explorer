@@ -20,5 +20,6 @@
         <file>QML/WildSearchPanel.qml</file>
         <file>QML/PropertiesPanel.qml</file>
         <file>QML/SortingPanel.qml</file>
+        <file>QML/RecentsPanel.qml</file>
     </qresource>
 </RCC>

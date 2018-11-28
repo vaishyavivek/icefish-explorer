@@ -22,7 +22,8 @@ SOURCES += \
     SourceFiles/bookmarkinfomodel.cpp \
     SourceFiles/notificationmodel.cpp \
     SourceFiles/propertiesinfomodel.cpp \
-    SourceFiles/actionmenuprovider.cpp
+    SourceFiles/actionmenuprovider.cpp \
+    SourceFiles/recentsinfomodel.cpp
 
 RESOURCES += qml.qrc \
     iconlibrary.qrc
@@ -52,6 +53,7 @@ HEADERS += \
     HeaderFiles/propertiesinfomodel.h \
     HeaderFiles/mimeiconprovider.h \
     HeaderFiles/actionmenuprovider.h \
-    HeaderFiles/pixmappreviewprovider.h
+    HeaderFiles/pixmappreviewprovider.h \
+    HeaderFiles/recentsinfomodel.h
 
 DISTFILES +=

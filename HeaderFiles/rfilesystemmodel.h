@@ -22,6 +22,9 @@ class RFileSystemModel : public QObject
 
     Q_PROPERTY(QList<QObject*> BookmarkDataList READ BookmarkDataList NOTIFY BookmarkDataListChanged)
 
+    Q_PROPERTY(QList<QObject*> RecentsList READ RecentsList NOTIFY RecentsListChanged)
+    Q_PROPERTY(QList<QObject*> MostVisitedPlacesList READ MostVisitedPlacesList NOTIFY MostVisitedPlacesListChanged)
+
     Q_PROPERTY(int GlobalIsHiddenItemsShown READ GlobalIsHiddenItemsShown WRITE setGlobalIsHiddenItemsShown NOTIFY GlobalIsHiddenItemsShownChanged)
     Q_PROPERTY(int GlobalIsPreviewAvailable READ GlobalIsPreviewAvailable WRITE setGlobalIsPreviewAvailable NOTIFY GlobalIsPreviewAvailableChanged)
     Q_PROPERTY(int GlobalIconScale READ GlobalIconScale WRITE setGlobalIconScale NOTIFY GlobalIconScaleChanged)
@@ -45,6 +48,9 @@ public:
 
     QList<QObject*> BookmarkDataList() const{ return bookmarkDataList;}
 
+    QList<QObject*> RecentsList() const{ return recentsList;}
+    QList<QObject*> MostVisitedPlacesList() const{ return mostVisitedPlacesList;}
+
     int GlobalIsHiddenItemsShown() const;
     void setGlobalIsHiddenItemsShown(const int GlobalIsHiddenItemsShown);
 
@@ -62,6 +68,8 @@ public slots:
 
     void writeBookmarkAsync(QString filePath, bool addOrRemove);
     void updateStoredBookmarkList();
+    void prepareHistoryInfoList();
+    void prepareMostVisitedPlacesList();
 
 signals:
     void NModelChanged();
@@ -74,10 +82,14 @@ signals:
     void DiskDataListChanged();
     void DiskDataListCountChanged();
     void BookmarkDataListChanged();
+    void RecentsListChanged();
+    void MostVisitedPlacesListChanged();
 
     void GlobalIsHiddenItemsShownChanged();
     void GlobalIsPreviewAvailableChanged();
     void GlobalIconScaleChanged();
+
+    void writeHistoryThreaded(QString fileAccessed);
 
 private:
     void GetAttachedDiskList();
@@ -89,6 +101,10 @@ private:
 
     QThread bookmarkKeeperThread;
     QList<QObject*> bookmarkDataList;
+
+    QThread historyKeeperThread;
+    QList<QObject*> recentsList;
+    QList<QObject*> mostVisitedPlacesList;
 
     NotificationModel *nm;
     QSettings settings;

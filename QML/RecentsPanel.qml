@@ -2,7 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 
 Popup{
-    id: bookmarkPanel
+    id: recentsPanel
     padding: 0
     property int widthWhenExpanded
     property bool isOpened: false
@@ -11,7 +11,7 @@ Popup{
     closePolicy: Popup.NoAutoClose
 
     Rectangle{
-        id: bookmarkPanelParentRect
+        id: recentsPanelParentRect
         width: parent.width
         height: parent.height
         border.width: 1
@@ -30,7 +30,7 @@ Popup{
                     width: parent.width - closeBtn.width
                     anchors.leftMargin: 5
                     Text {
-                        text: "  Bookmarks"
+                        text: "  Recents"
                         anchors.verticalCenter: parent.verticalCenter
                         font.pointSize: 12
                         color: mainWindow.fontColor
@@ -41,11 +41,11 @@ Popup{
                     height: parent.height
                     width: height
                     anchors.right: parent.right
-                    icon.name: "application-exit"//"/local/Resources/icons-close.svg"
+                    icon.name: "application-exit"
                     icon.color: mainWindow.fontColor
                     onClicked: {
                         isOpened = false
-                        bookmarkPanel.close()
+                        recentsPanel.close()
                     }
                 }
             }
@@ -59,14 +59,14 @@ Popup{
             }
 
             ListView{
-                id: bookmarkList
+                id: recentsList
                 width: parent.width
                 height: parent.height - headerBar.height - 4
-                model: rFileSystem.BookmarkDataList
+                model: rFileSystem.RecentsList
 
                 delegate: Rectangle{
-                    id: bookmarkListDelegate
-                    width: bookmarkList.width
+                    id: recentsListDelegate
+                    width: recentsList.width
                     height: 25
                     color: "transparent"
                     Row{
@@ -78,7 +78,7 @@ Popup{
                             color: "transparent"
                             Image {
                                 anchors.centerIn: parent
-                                source: model.modelData.IconPath
+                                source: "image://mime" + model.modelData.ActualPath
                                 sourceSize.width: parent.width*0.9
                                 sourceSize.height: parent.height*0.9
                             }
@@ -106,8 +106,8 @@ Popup{
                             icon.source: "/local/Resources/icons-close.svg"
                             icon.color: mainWindow.fontColor
                             onClicked: {
-                                bookmarkListDelegate.visible = false
-                                rFileSystem.writeBookmarkAsync(model.modelData.ActualPath, false)
+                                recentsListDelegate.visible = false
+                                //rFileSystem.writeBookmarkAsync(model.modelData.ActualPath, false)
                             }
                         }
                     }
@@ -118,16 +118,16 @@ Popup{
                         z: -1
                         onEntered: mouseEnteredAnimation.start()
                         onExited: mouseExitedAnimation.start()
-                        onClicked: bookmarkList.currentIndex = index
+                        onClicked: recentsList.currentIndex = index
                         onDoubleClicked: {
                             updateCurrentDirectory(model.modelData.ActualPath)
-                            bookmarkPanel.close()
+                            recentsPanel.close()
                         }
                     }
 
                     PropertyAnimation{
                         id: mouseEnteredAnimation
-                        target: bookmarkListDelegate
+                        target: recentsListDelegate
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: "#9dcfe2"
@@ -135,7 +135,7 @@ Popup{
                     }
                     PropertyAnimation{
                         id: mouseExitedAnimation
-                        target: bookmarkListDelegate
+                        target: recentsListDelegate
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: "transparent"
@@ -145,7 +145,7 @@ Popup{
 
                 highlightFollowsCurrentItem: true
                 highlight: Rectangle{
-                    width: bookmarkList.width
+                    width: recentsList.width
                     height: 25
                     color: "skyblue"
                     opacity: 0.5
@@ -158,7 +158,7 @@ Popup{
     enter: Transition{
         NumberAnimation{
             property: "width"
-            to: bookmarkPanel.widthWhenExpanded
+            to: recentsPanel.widthWhenExpanded
             duration: 500
         }
     }
@@ -171,5 +171,5 @@ Popup{
         }
     }
 
-    onOpened: rFileSystem.updateStoredBookmarkList()
+    onOpened: rFileSystem.prepareHistoryInfoList()
 }

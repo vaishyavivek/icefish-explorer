@@ -73,7 +73,8 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
     QFileInfo file = QFileInfo(directoryToSwitchTo);
 
     if(file.exists()){
-        //emit WriteHistoryThreaded(directoryToSwitchTo);
+        emit WriteHistoryTabbed(directoryToSwitchTo);
+
         if(file.isDir()){
             emit TitleChanged(directoryToSwitchTo.mid(directoryToSwitchTo.lastIndexOf('/') + 1));
 
