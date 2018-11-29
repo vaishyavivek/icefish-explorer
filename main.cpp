@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
  * 4- allowing file operations
  * 5- adding dbus support
  ************* 6- adding path to theme the app************done
- * 7- recents
+ ************* 7- recents****************done
  * 8- gridview
  * 9- google-drive integration
  * 10- dropbox integration
