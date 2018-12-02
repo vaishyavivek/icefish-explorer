@@ -9,11 +9,11 @@ ApplicationWindow{
     minimumWidth: 900
     minimumHeight: 600
 
-    property bool appTheme: (rDesktopService.getSettingsValue("Theme") === "Light")
-    property string fontColor: (appTheme ? "black" : "white")
-    property string backgroundColor: (appTheme ? "white" : "#312d2d")
+    //property bool appTheme: (rDesktopService.getSettingsValue("Theme") === "Light")
+    //property string fontColor: (appTheme ? "black" : "white")
+    //property string backgroundColor: (appTheme ? "white" : "#312d2d")
 
-    color: (appTheme ? "white" : "#312d2d")
+    color: rFileSystem.BackgroundColor//(appTheme ? "white" : "#312d2d")
 
     Row{
         anchors.fill: parent
@@ -85,7 +85,7 @@ ApplicationWindow{
                                         text: model.modelData.DisplayName
                                         font.pointSize: 12
                                         verticalAlignment: Text.AlignVCenter
-                                        color: fontColor
+                                        color: rFileSystem.IconColor
                                         width: parent.width
                                         height: parent.height
                                         clip: true
@@ -97,7 +97,7 @@ ApplicationWindow{
                                     width: height
                                     anchors.verticalCenter: parent.verticalCenter
                                     icon.source: "/local/Resources/icons-close.svg"
-                                    icon.color: mainWindow.fontColor
+                                    icon.color: rFileSystem.IconColor
                                     hoverText: "Close"
                                     onClicked: deleteTab(index)
                                 }
@@ -138,7 +138,7 @@ ApplicationWindow{
                         height: parent.height
                         width: height
                         icon.name: "list-add"//"file:///home/eobardthawne/.icons/Papirus/32/emblems/emblem-new.svg"
-                        icon.color: mainWindow.fontColor
+                        icon.color: rFileSystem.IconColor
                         hoverText: "New Tab"
                         onClicked: {
                             if(rFileSystem.TabHeaderListCount === tabParentLayout.tabLimit - 1){

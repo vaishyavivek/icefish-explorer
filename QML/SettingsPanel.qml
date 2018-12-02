@@ -32,7 +32,7 @@ Popup{
                     Text {
                         text: "  Global Settings"
                         font.bold: true
-                        color: mainWindow.fontColor
+                        color: rFileSystem.IconColor
                         anchors.verticalCenter: parent.verticalCenter
                         font.pointSize: 12
                     }
@@ -43,7 +43,7 @@ Popup{
                     width: height
                     anchors.right: parent.right
                     icon.name: "application-exit"//"/local/Resources/icons-close.svg"
-                    icon.color: mainWindow.fontColor
+                    icon.color: rFileSystem.IconColor
                     onClicked: {
                         isOpened = false
                         settingsPanel.close()
@@ -68,22 +68,25 @@ Popup{
                     text: qsTr("Application Theme")
                     font.pointSize: 10
                     anchors.left: parent.left
-                    color: mainWindow.fontColor
+                    color: rFileSystem.IconColor
                     anchors.leftMargin: 10
                 }
                 RComboBox{
                     id: themeCb
+                    property var iconColorList: ["black", "white"]
+                    property var backgroundColorList: ["white", "#312d2d"]
+
                     width: parent.width*0.5
                     height: 30
                     anchors.left: parent.left
                     anchors.leftMargin: 10
                     anchors.bottom: parent.bottom
                     model: ["Light", "Dark"]
-                    currentIndex: ((rDesktopService.getSettingsValue("Theme") === "Light") ? 0 : 1)
+                    currentIndex: rFileSystem.AppTheme
                     onCurrentTextChanged: {
-                        rDesktopService.applySettingsValue("Theme", currentText)
-                        mainWindow.color = (currentText === "Light") ? "white" : "#312d2d"
-                        mainWindow.fontColor = (currentText === "Light") ? "black" : "white"
+                        rFileSystem.AppTheme = currentIndex
+                        rFileSystem.IconColor = iconColorList[currentIndex]
+                        rFileSystem.BackgroundColor = backgroundColorList[currentIndex]
                     }
                 }
             }
@@ -101,6 +104,7 @@ Popup{
                 color: "transparent"
                 Text {
                     text: "Keep these values to default to allow each directory \nto have its seperate settings."
+                    color: rFileSystem.IconColor
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     anchors.verticalCenterOffset: 0
                     anchors.left: parent.left
@@ -125,7 +129,7 @@ Popup{
                     text: qsTr("Image Preview")
                     font.pointSize: 10
                     anchors.left: parent.left
-                    color: mainWindow.fontColor
+                    color: rFileSystem.IconColor
                     anchors.leftMargin: 10
                 }
                 RComboBox{
@@ -156,7 +160,7 @@ Popup{
                     text: qsTr("Show Hidden Items")
                     font.pointSize: 10
                     anchors.left: parent.left
-                    color: mainWindow.fontColor
+                    color: rFileSystem.IconColor
                     anchors.leftMargin: 10
                 }
                 RComboBox{
@@ -187,7 +191,7 @@ Popup{
                     text: qsTr("Show Hidden Items")
                     font.pointSize: 10
                     anchors.left: parent.left
-                    color: mainWindow.fontColor
+                    color: rFileSystem.IconColor
                     anchors.leftMargin: 10
                 }
                 RComboBox{
@@ -227,8 +231,3 @@ Popup{
         }
     }
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

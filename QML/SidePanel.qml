@@ -20,7 +20,7 @@ Popup {
         id: sidePanelParentRect
         width: parent.width
         height: parent.height
-        color: mainWindow.color
+        color: rFileSystem.BackgroundColor
 
         Column{
             anchors.fill: parent
@@ -36,7 +36,7 @@ Popup {
                     width: normalizedWidth
                     height: normalizedWidth
                     icon.source: "/local/Resources/icons-menu.svg"
-                    icon.color: mainWindow.fontColor
+                    icon.color: rFileSystem.IconColor
                     onClicked: (!isPined && isExpanded) ? reverseExpandMenu() : expandMenu()
                 }
 
@@ -47,7 +47,7 @@ Popup {
                     visible: isExpanded
                     anchors.right: parent.right
                     icon.source: isPined ? "/local/Resources/icons-pin.png" : "/local/Resources/icons-unpin.svg"
-                    icon.color: mainWindow.fontColor
+                    icon.color: rFileSystem.IconColor
                     onClicked: {
                         if(isPined){
                             isExpanded = false
@@ -189,6 +189,16 @@ Popup {
                                 }
                                 ButtonGroup.group: radioGroup
                             }
+
+                            /*RImageButton{
+                                id: showMoreBtn
+                                height: parent.height
+                                width: height
+                                anchors.right: parent.right
+                                icon.source: "/local/Resources/submenu.svg"
+                                icon.color: rFileSystem.IconColor
+
+                            }*/
                         }
                     }
 

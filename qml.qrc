@@ -3,7 +3,6 @@
         <file>QML/main.qml</file>
         <file>QML/SidePanel.qml</file>
         <file>QML/TabViewDelegate.qml</file>
-        <file>QML/AddressBox.qml</file>
         <file>QML/RCheckBox.qml</file>
         <file>QML/ShortcutMenu.qml</file>
         <file>QML/RImageButton.qml</file>
@@ -21,5 +20,6 @@
         <file>QML/PropertiesPanel.qml</file>
         <file>QML/SortingPanel.qml</file>
         <file>QML/RecentsPanel.qml</file>
+        <file>QML/AddressBox.qml</file>
     </qresource>
 </RCC>

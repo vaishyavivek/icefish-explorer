@@ -25,9 +25,14 @@ class RFileSystemModel : public QObject
     Q_PROPERTY(QList<QObject*> RecentsList READ RecentsList NOTIFY RecentsListChanged)
     Q_PROPERTY(QList<QObject*> MostVisitedPlacesList READ MostVisitedPlacesList NOTIFY MostVisitedPlacesListChanged)
 
+    Q_PROPERTY(int AppTheme READ AppTheme WRITE setAppTheme NOTIFY AppThemeChanged)
+    Q_PROPERTY(QString BackgroundColor READ BackgroundColor WRITE setBackgroundColor NOTIFY BackgroundColorChanged)
+    Q_PROPERTY(QString IconColor READ IconColor WRITE setIconColor NOTIFY IconColorChanged)
+
     Q_PROPERTY(int GlobalIsHiddenItemsShown READ GlobalIsHiddenItemsShown WRITE setGlobalIsHiddenItemsShown NOTIFY GlobalIsHiddenItemsShownChanged)
     Q_PROPERTY(int GlobalIsPreviewAvailable READ GlobalIsPreviewAvailable WRITE setGlobalIsPreviewAvailable NOTIFY GlobalIsPreviewAvailableChanged)
     Q_PROPERTY(int GlobalIconScale READ GlobalIconScale WRITE setGlobalIconScale NOTIFY GlobalIconScaleChanged)
+
 
 public:
     explicit RFileSystemModel(QObject *parent = nullptr);
@@ -50,6 +55,15 @@ public:
 
     QList<QObject*> RecentsList() const{ return recentsList;}
     QList<QObject*> MostVisitedPlacesList() const{ return mostVisitedPlacesList;}
+
+    int AppTheme() const;
+    void setAppTheme(const int AppTheme);
+
+    QString BackgroundColor() const;
+    void setBackgroundColor(const QString &BackgroundColor);
+
+    QString IconColor() const;
+    void setIconColor(const QString &IconColor);
 
     int GlobalIsHiddenItemsShown() const;
     void setGlobalIsHiddenItemsShown(const int GlobalIsHiddenItemsShown);
@@ -85,6 +99,10 @@ signals:
     void RecentsListChanged();
     void MostVisitedPlacesListChanged();
 
+    void AppThemeChanged();
+    void BackgroundColorChanged();
+    void IconColorChanged();
+
     void GlobalIsHiddenItemsShownChanged();
     void GlobalIsPreviewAvailableChanged();
     void GlobalIconScaleChanged();
@@ -107,6 +125,9 @@ private:
     QList<QObject*> mostVisitedPlacesList;
 
     NotificationModel *nm;
+
+    QString backgroundColor;
+    QString iconColor;
     QSettings settings;
 };
 

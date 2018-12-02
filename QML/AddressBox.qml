@@ -2,177 +2,99 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 
 Item {
-    id: addressBoxParentItem
-    property string highlightColor: "lightblue"
-    property bool currentView: true
+    id: addressBox
 
-    Loader{
-        id: addressBoxLoader
+    TextField{
+        id: textField
         width: parent.width
         height: parent.height
-        anchors.verticalCenter: parent.verticalCenter
-        asynchronous: true
+        text: qtModel.AddressBoxData
+        onAccepted: qtModel.updateCurrentDirectory(text)
+    }
 
-        sourceComponent: listViewParentComp
+    ListView{
+        id: listview
+        width: 0
+        height: parent.height
+        model: qtModel.AddressBoxDataListView
+        orientation: Qt.Horizontal
+        layoutDirection: ListView.LeftToRight
 
-        Component{
-            id: textInputFieldParentComp
-            TextField{
-                id: textInputField
-                width: addressBoxLoader.width
-                height: addressBoxLoader.height
-                focus: true
-                placeholderText: "Enter address or make a search..."
-                text: qtModel.AddressBoxData
-                //background: mainWindow.color
-                //color: mainWindow.fontColor
+        delegate: ItemDelegate{
+            id: listviewDelegate
+            //color: "transparent"
+            height: parent.height
+            width: 38
+            Row{
+                anchors.fill: parent
+                spacing: 2
+                Button{
+                    id: shortcutMenuBtn
+                    padding: 0
+                    width: 15
+                    height: parent.height
+                    hoverEnabled: true
+                    icon.source: "/local/Resources/icons-shortcut-menu.svg"
+                    text: model.modelData.Path
+                    display: AbstractButton.IconOnly
+                    icon.color: hovered ? "lightblue" : rFileSystem.IconColor
 
-                onAccepted: {
-                    qtModel.updateCurrentDirectory(text)
-                    switchToListView()
-                }
-                Keys.onPressed: {
-                    if(event.key === Qt.Key_Escape)
-                        switchToListView()
-                }
-            }
-        }
+                    background: Rectangle {
+                        width: shortcutMenuBtn.width - 2
+                        height: shortcutMenuBtn.height - 2
+                        anchors.centerIn: parent
+                        opacity: enabled ? 1 : 0.4
+                        color: "transparent"
+                    }
 
-        Component{
-            id: listViewParentComp
-            ListView{
-                id: listView
-                width: 0
-                height: addressBoxLoader.height
-                clip: true
-                model: qtModel.AddressBoxDataListView
-
-                orientation: ListView.Horizontal
-                layoutDirection: ListView.LeftToRight
-                delegate: Rectangle{
-                    id: listViewDelegate
-                    color: "transparent"
-                    width: 38
-                    height: listView.height
-                    Row{
-                        anchors.fill: parent
-                        anchors.rightMargin: 5
-                        spacing: 3
-                        Rectangle{
-                            id: shortcutMenuBtn
-                            width: 15
-                            height: parent.height
-                            color: "transparent"
-                            Text {
-                                id: shortcutMenuBtnImageText
-                                text: "<"
-                                font.bold: true
-                                font.pointSize: 12
-                                color: mainWindow.fontColor
-                                anchors.centerIn: parent
-                            }
-                            MouseArea{
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onEntered: mouseEnteredAnimationShortcutMenu.start()
-                                onExited: mouseExitedAnimationShortcutMenu.start()
-                                onClicked: {
-                                    qtModel.updateAddressBoxShortcutMenuList(model.modelData.Path)
-                                    var shortcutMenuPopupComp = Qt.createComponent("ShortcutMenu.qml")
-                                    var shortcutMenuPopupObj = shortcutMenuPopupComp.createObject(shortcutMenuBtn, {"x": parent.x, "y": parent.height})
-                                }
-                            }
-                            PropertyAnimation{
-                                id: mouseEnteredAnimationShortcutMenu
-                                target: shortcutMenuBtnImageText
-                                property: "color"
-                                to: "lightblue"
-                                duration: 250
-                            }
-                            PropertyAnimation{
-                                id: mouseExitedAnimationShortcutMenu
-                                target: shortcutMenuBtnImageText
-                                property: "color"
-                                to: "black"
-                                duration: 250
-                            }
-
-                        }
-                        Rectangle{
-                            id: nameParentRect
-                            width: parent.width - 15
-                            height: parent.height
-                            color: "transparent"
-                            Text {
-                                id: name
-                                text: model.modelData.DisplayName
-                                font.pointSize: 10
-                                font.family: "Sans Serif"
-                                color: mainWindow.fontColor
-                                anchors.centerIn: parent
-                                Component.onCompleted: {
-                                    listViewDelegate.width = name.paintedWidth + 25
-                                    if(listView.width < addressBox.width)
-                                        listView.width += listViewDelegate.width
-                                    listView.contentWidth += listViewDelegate.width
-                                }
-                            }
-                            MouseArea{
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onEntered: mouseEnteredAnimationName.start()
-                                onExited: mouseExitedAnimationName.start()
-                                onClicked: qtModel.updateCurrentDirectory(model.modelData.Path)
-                            }
-
-                            PropertyAnimation{
-                                id: mouseEnteredAnimationName
-                                target: nameParentRect
-                                property: "color"
-                                to: "lightblue"
-                                duration: 250
-                            }
-                            PropertyAnimation{
-                                id: mouseExitedAnimationName
-                                target: nameParentRect
-                                property: "color"
-                                to: "transparent"
-                                duration: 250
-                            }
-                        }
+                    onClicked: {
+                        qtModel.updateAddressBoxShortcutMenuList(text)
+                        var shortcutMenuPopupComp = Qt.createComponent("ShortcutMenu.qml")
+                        var shortcutMenuPopupObj = shortcutMenuPopupComp.createObject(shortcutMenuBtn, {"x": shortcutMenuBtn.x, "y": shortcutMenuBtn.height})
                     }
                 }
-                onModelChanged: contentWidth = 0
-                onCountChanged: {
-                    if(contentWidth > width)
-                        contentX = contentWidth - width
+                Button{
+                    id: sectionMenuBtn
+                    width: parent.width - 15
+                    height: parent.height
+                    text: model.modelData.DisplayName
+                    enabled: true
+                    hoverEnabled: true
+
+                    contentItem: Rectangle{
+                        color: "transparent"
+                        Text {
+                            id: name
+                            anchors.centerIn: parent
+                            text: sectionMenuBtn.text
+                            color: sectionMenuBtn.hovered ? "lightblue" : rFileSystem.IconColor
+                        }
+                        Component.onCompleted: {
+                            listviewDelegate.width = name.paintedWidth + 25
+                            if(listview.width < addressBox.width)
+                                listview.width += listviewDelegate.width
+                            listview.contentWidth += listviewDelegate.width
+                        }
+                    }
+
+                    background: Rectangle {
+                        width: sectionMenuBtn .width - 2
+                        height: sectionMenuBtn.height - 2
+                        anchors.centerIn: parent
+                        opacity: enabled ? 1 : 0.4
+                        color: "transparent"
+                    }
+
+                    onClicked: qtModel.updateCurrentDirectory(model.modelData.Path)
                 }
             }
         }
-    }
 
-    Connections{
-        target: qtModel
-        ignoreUnknownSignals: true
-        onAskAddressBoxToSwitchToListViewMode: {
-            currentView = newValue
-            if(newValue)
-                switchToListView()
-            else
-                switchToTextBox()
+        onModelChanged: {
+            contentWidth = 0
+            textField.visible = false
+            listview.visible = true
         }
-    }
-
-    function switchToListView(){
-        addressBoxLoader.sourceComponent = listViewParentComp
-        switchBetweenBtn.hoverText = "Imput Method: JumpList"
-        currentView = true
-    }
-
-    function switchToTextView(){
-        addressBoxLoader.sourceComponent = textInputFieldParentComp
-        switchBetweenBtn.hoverText = "Imput Method: Text"
-        currentView = false
     }
 
     RImageButton{
@@ -183,12 +105,16 @@ Item {
         anchors.rightMargin: parent.height*0.25
         anchors.verticalCenter: parent.verticalCenter
         icon.source: "/local/Resources/icons-search.svg"
-        icon.color: mainWindow.fontColor
+        icon.color: rFileSystem.IconColor
         onClicked: {
-            if(!addressBox.currentView)
-                addressBox.switchToListView()
-            else
-                addressBox.switchToTextView()
+            if(listview.visible){
+                textField.visible = true
+                listview.visible = false
+            }
+            else{
+                textField.visible = false
+                listview.visible = true
+            }
         }
     }
 }

@@ -15,15 +15,17 @@ Rectangle{
 
     Column{
         anchors.fill: parent
-        spacing: 5
+        //spacing: 5
         Row{
             width: parent.width
             height: 35
+
             RImageButton{
                 id: backBtn
                 height: parent.height
                 width: height
                 icon.source: "/local/Resources/icons-move-back.svg"
+                icon.color: enabled ? rFileSystem.IconColor : "#4d26282a"
                 hoverText: "Move Backward"
                 enabled: false
                 onClicked: navigateBackward()
@@ -39,6 +41,7 @@ Rectangle{
                 height: parent.height
                 width: height
                 icon.source: "/local/Resources/icons-move-forward.svg"
+                icon.color: enabled ? rFileSystem.IconColor : "#4d26282a"
                 hoverText: "Move Forward"
                 enabled: false
                 onClicked: {
@@ -57,6 +60,7 @@ Rectangle{
                 height: parent.height
                 width: height
                 icon.source: "/local/Resources/icons-reload.svg"
+                icon.color: enabled ? rFileSystem.IconColor : "#4d26282a"
                 hoverText: "Reload"
                 onClicked: qtModel.reloadCurrentDirectory()
                 Connections{
@@ -70,6 +74,7 @@ Rectangle{
                 id: addressBox
                 width: parent.width - parent.height*3
                 height: parent.height
+                clip: true
             }
         }
 
@@ -327,7 +332,7 @@ Rectangle{
                 header: Rectangle{
                     width: parent.width
                     height: scaleFactor
-                    color: mainWindow.color
+                    color: rFileSystem.BackgroundColor
                     z: 2
 
                     Row{
@@ -349,7 +354,7 @@ Rectangle{
                             Text{
                                 text: "File Name"
                                 font.family: "Sans Serif"
-                                color: mainWindow.fontColor
+                                color: rFileSystem.IconColor
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
                             }
@@ -362,7 +367,7 @@ Rectangle{
                             Text{
                                 text: "Last Modified"
                                 font.family: "Sans Serif"
-                                color: mainWindow.fontColor
+                                color: rFileSystem.BackgroundColor
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
                             }
@@ -375,7 +380,7 @@ Rectangle{
                             Text{
                                 text: "Size"
                                 font.family: "Sans Serif"
-                                color: mainWindow.fontColor
+                                color: rFileSystem.IconColor
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
                             }
@@ -388,7 +393,7 @@ Rectangle{
                             Text{
                                 text: "Type"
                                 font.family: "Sans Serif"
-                                color: mainWindow.fontColor
+                                color: rFileSystem.IconColor
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
                             }
@@ -454,7 +459,7 @@ Rectangle{
                                 id: nameInput
                                 text: model.modelData.DisplayName
                                 font.family: "Sans Serif"
-                                color: mainWindow.fontColor
+                                color: rFileSystem.IconColor
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
 
@@ -479,7 +484,7 @@ Rectangle{
                                 width: parent.width
                                 height: parent.height
                                 text: model.modelData.Date_Time_Modified
-                                color: mainWindow.fontColor
+                                color: rFileSystem.IconColor
                                 font.family: "Sans Serif"
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
@@ -498,7 +503,7 @@ Rectangle{
                                 width: parent.width
                                 height: parent.height
                                 text: model.modelData.FileSize
-                                color: mainWindow.fontColor
+                                color: rFileSystem.IconColor
                                 font.family: "Sans Serif"
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
@@ -517,7 +522,7 @@ Rectangle{
                                 width: parent.width
                                 height: parent.height
                                 text: model.modelData.FileType
-                                color: mainWindow.fontColor
+                                color: rFileSystem.IconColor
                                 font.family: "Sans Serif"
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
@@ -566,7 +571,7 @@ Rectangle{
                                 height: parent.height
                                 width: height
                                 icon.source: "/local/Resources/icons-switch.svg"
-                                icon.color: mainWindow.fontColor
+                                icon.color: rFileSystem.IconColor
                                 hoverText: "More Actions"
                                 onClicked: {
                                     model.modelData.ActionsMenu = qtModel.getActionMenuFor(model.modelData.Path)

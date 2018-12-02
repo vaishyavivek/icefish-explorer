@@ -28,6 +28,9 @@ RFileSystemModel::RFileSystemModel(QObject *parent)
     connect(this, &RFileSystemModel::writeHistoryThreaded, hisObj, &HistoryKeeper::WriteHistoryAsync);
 
     historyKeeperThread.start();
+
+    backgroundColor = settings.value("global/backgroundColor").toString();
+    iconColor = settings.value("global/iconColor").toString();
 }
 
 void RFileSystemModel::writeBookmarkAsync(QString filePath, bool addOrRemove){
@@ -238,6 +241,39 @@ void RFileSystemModel::deleteTab(int index){
 
     emit TabHeaderListCountChanged();
     emit TabHeaderListChanged();
+}
+
+
+int RFileSystemModel::AppTheme() const{
+    return settings.value("global/appTheme").toInt();
+}
+
+void RFileSystemModel::setAppTheme(const int AppTheme){
+    settings.setValue("global/appTheme", AppTheme);
+}
+
+QString RFileSystemModel::BackgroundColor() const{
+    return backgroundColor;
+}
+
+void RFileSystemModel::setBackgroundColor(const QString &BackgroundColor){
+    if(backgroundColor != BackgroundColor){
+        backgroundColor = BackgroundColor;
+        settings.setValue("global/backgroundColor", BackgroundColor);
+        emit BackgroundColorChanged();
+    }
+}
+
+QString RFileSystemModel::IconColor() const{
+    return iconColor;
+}
+
+void RFileSystemModel::setIconColor(const QString &IconColor){
+    if(iconColor != IconColor){
+        iconColor = IconColor;
+        settings.setValue("global/iconColor", iconColor);
+        emit IconColorChanged();
+    }
 }
 
 

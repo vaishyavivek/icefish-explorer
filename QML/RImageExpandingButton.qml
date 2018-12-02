@@ -35,6 +35,7 @@ Button {
                 height: parent.height
                 color: "transparent"
                 Text {
+                    color: rFileSystem.IconColor
                     text: rButton.text
                     font: rButton.font
                     verticalAlignment: Text.AlignVCenter

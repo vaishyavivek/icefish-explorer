@@ -23,5 +23,6 @@
         <file>Resources/icons-folder.svg</file>
         <file>Resources/icons-file.svg</file>
         <file>Resources/icons-settings.svg</file>
+        <file>Resources/icons-shortcut-menu.svg</file>
     </qresource>
 </RCC>

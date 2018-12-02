@@ -54,6 +54,7 @@ HEADERS += \
     HeaderFiles/mimeiconprovider.h \
     HeaderFiles/actionmenuprovider.h \
     HeaderFiles/pixmappreviewprovider.h \
-    HeaderFiles/recentsinfomodel.h
+    HeaderFiles/recentsinfomodel.h \
+    HeaderFiles/addressboxmodel.h
 
 DISTFILES +=

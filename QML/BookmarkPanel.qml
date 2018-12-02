@@ -15,7 +15,7 @@ Popup{
         width: parent.width
         height: parent.height
         border.width: 1
-        color: mainWindow.color
+        color: rFileSystem.BackgroundColor
         Column{
             anchors.fill: parent
             spacing: 5
@@ -33,7 +33,7 @@ Popup{
                         text: "  Bookmarks"
                         anchors.verticalCenter: parent.verticalCenter
                         font.pointSize: 12
-                        color: mainWindow.fontColor
+                        color: rFileSystem.IconColor
                     }
                 }
                 RImageButton{
@@ -42,7 +42,7 @@ Popup{
                     width: height
                     anchors.right: parent.right
                     icon.name: "application-exit"//"/local/Resources/icons-close.svg"
-                    icon.color: mainWindow.fontColor
+                    icon.color: rFileSystem.IconColor
                     onClicked: {
                         isOpened = false
                         bookmarkPanel.close()
@@ -93,7 +93,7 @@ Popup{
                                 height: parent.height
                                 text: model.modelData.DisplayName
                                 font.family: "Sans Serif"
-                                color: mainWindow.fontColor
+                                color: rFileSystem.IconColor
                                 anchors.verticalCenter: parent.verticalCenter
                                 clip: true
                                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -104,7 +104,7 @@ Popup{
                             height: parent.height
                             width: height
                             icon.source: "/local/Resources/icons-close.svg"
-                            icon.color: mainWindow.fontColor
+                            icon.color: rFileSystem.IconColor
                             onClicked: {
                                 bookmarkListDelegate.visible = false
                                 rFileSystem.writeBookmarkAsync(model.modelData.ActualPath, false)

@@ -2,6 +2,7 @@
 #include "HeaderFiles/filefoldermodel.h"
 #include "HeaderFiles/menumodel.h"
 #include "HeaderFiles/navigationhistorymodel.h"
+#include "HeaderFiles/addressboxmodel.h"
 
 #include <QDebug>
 #include <QDateTime>
@@ -302,29 +303,13 @@ QList<QObject*> RDirectoryModel::getActionMenuFor(QString filePath){
  */
 
 void RDirectoryModel::setAddressBoxData(QString changedAddress){
-    //for trash
-    if(changedAddress == "rfm://trash"){
-        addressBoxData = "Trash:/";
 
-        addressBoxDataListView.clear();
-        FileFolderModel *trashModel = new FileFolderModel();
-        trashModel->setDisplayName("Trash");
-        trashModel->setPath("");
-        addressBoxDataListView.append(trashModel);
-
-        emit askAddressBoxToSwitchToListViewMode(true);
-    }
-    else if(changedAddress != ""){
-
-        if(changedAddress != addressBoxData)
-            addressBoxData = changedAddress;
-
-        isHome = changedAddress.startsWith(QDir::homePath());
-        emit IsHomeChanged();
+    if(!changedAddress.isEmpty() && changedAddress.compare(addressBoxData) != 0){
+        addressBoxData = changedAddress;
 
         addressBoxDataListView.clear();
 
-        FileFolderModel *rootModel = new FileFolderModel();
+        AddressBoxModel *rootModel = new AddressBoxModel();
         rootModel->setDisplayName("Root");
         rootModel->setPath("/");
         addressBoxDataListView.append(rootModel);
@@ -335,7 +320,7 @@ void RDirectoryModel::setAddressBoxData(QString changedAddress){
         QString refToPreviousData = "/";
 
         while (changedAddress.indexOf("/") > 1) {
-            FileFolderModel *newModel = new FileFolderModel();
+            AddressBoxModel *newModel = new AddressBoxModel();
 
             QString nextSection = changedAddress.left(changedAddress.indexOf("/"));
             newModel->setDisplayName(nextSection);
@@ -347,16 +332,10 @@ void RDirectoryModel::setAddressBoxData(QString changedAddress){
             changedAddress = changedAddress.section("/", 1);
         }
 
-        emit askAddressBoxToSwitchToListViewMode(true);
+        //emit askAddressBoxToSwitchToListViewMode(true);
+        emit AddressBoxDataChanged();
+        emit AddressBoxDataListViewChanged();
     }
-    else{
-        addressBoxData = "";
-        addressBoxDataListView.clear();
-        emit askAddressBoxToSwitchToListViewMode(false);
-    }
-
-    emit AddressBoxDataChanged();
-    emit AddressBoxDataListViewChanged();
 }
 
 
