@@ -73,15 +73,15 @@ Popup{
                 }
                 RComboBox{
                     id: themeCb
-                    property var iconColorList: ["black", "white"]
-                    property var backgroundColorList: ["white", "#312d2d"]
+                    property var iconColorList: ["black", "white", "darkred", "darkslateblue", "fuchsia", "antiquewhite"]
+                    property var backgroundColorList: ["white", "#312d2d", "cornsilk", "azure", "lightpink", "cornflowerblue"]
 
                     width: parent.width*0.5
                     height: 30
                     anchors.left: parent.left
                     anchors.leftMargin: 10
                     anchors.bottom: parent.bottom
-                    model: ["Light", "Dark"]
+                    model: ["Light", "Dark", "Cream", "Marine", "Fuchsia", "Corn Flower"]
                     currentIndex: rFileSystem.AppTheme
                     onCurrentTextChanged: {
                         rFileSystem.AppTheme = currentIndex
