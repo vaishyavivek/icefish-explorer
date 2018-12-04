@@ -413,7 +413,7 @@ void RDirectoryModel::updateAddressBoxShortcutMenuList(QString jumpAddress){
     if(shortcutMenu.exists()){
         addressBoxShortcutMenuList.clear();
         foreach (QFileInfo anotherFile, shortcutMenu.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-            FileFolderModel *newModel = new FileFolderModel();
+            AddressBoxModel *newModel = new AddressBoxModel();
             newModel->setDisplayName(anotherFile.fileName());
             newModel->setPath(anotherFile.filePath());
             addressBoxShortcutMenuList.append(newModel);

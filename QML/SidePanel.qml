@@ -143,7 +143,7 @@ Popup {
                     ListView{
                         id: diskListView
                         width: parent.width
-                        height: rFileSystem.DiskDataListCount*normalizedWidth
+                        height: count*normalizedWidth
                         spacing: 2
                         clip: true
                         model: rFileSystem.DiskDataList
@@ -189,16 +189,6 @@ Popup {
                                 }
                                 ButtonGroup.group: radioGroup
                             }
-
-                            /*RImageButton{
-                                id: showMoreBtn
-                                height: parent.height
-                                width: height
-                                anchors.right: parent.right
-                                icon.source: "/local/Resources/submenu.svg"
-                                icon.color: rFileSystem.IconColor
-
-                            }*/
                         }
                     }
 

@@ -75,6 +75,7 @@ Popup{
                     id: themeCb
                     property var iconColorList: ["black", "white", "darkred", "darkslateblue", "fuchsia", "antiquewhite"]
                     property var backgroundColorList: ["white", "#312d2d", "cornsilk", "azure", "lightpink", "cornflowerblue"]
+                    property var highlightColorList: ["powderblue", "darkgray", "goldenrod", "lightblue", "mistyrose", "slateblue"]
 
                     width: parent.width*0.5
                     height: 30
@@ -87,6 +88,7 @@ Popup{
                         rFileSystem.AppTheme = currentIndex
                         rFileSystem.IconColor = iconColorList[currentIndex]
                         rFileSystem.BackgroundColor = backgroundColorList[currentIndex]
+                        rFileSystem.HighlightColor = highlightColorList[currentIndex]
                     }
                 }
             }

@@ -112,7 +112,7 @@ void RFileSystemModel::GetAttachedDiskList(){
 }
 
 
-void RFileSystemModel::prepareHistoryInfoList(){
+void RFileSystemModel::prepareRecentsList(){
 
     recentsList.clear();
     QFile historyFile(QDir::homePath() + "/.RevProgIFace/FileHistory.rde");
@@ -187,6 +187,7 @@ void RFileSystemModel::updateStoredBookmarkList(){
     emit BookmarkDataListChanged();
 }
 
+
 void RFileSystemModel::createNewTab(QString Path){
     FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
     RDirectoryModel *newTab = new RDirectoryModel();
@@ -199,7 +200,6 @@ void RFileSystemModel::createNewTab(QString Path){
     tabDataList.append(newTab);
     tabHeaderList.append(ffm);
 
-    emit TabHeaderListCountChanged();
     emit TabHeaderListChanged();
 
     connect(newTab, &RDirectoryModel::WriteBookmarkThreaded, this, &RFileSystemModel::writeBookmarkAsync);
@@ -239,7 +239,6 @@ void RFileSystemModel::deleteTab(int index){
     if(tabHeaderList.length() == 0)
         delete this;
 
-    emit TabHeaderListCountChanged();
     emit TabHeaderListChanged();
 }
 
@@ -273,6 +272,18 @@ void RFileSystemModel::setIconColor(const QString &IconColor){
         iconColor = IconColor;
         settings.setValue("global/iconColor", iconColor);
         emit IconColorChanged();
+    }
+}
+
+QString RFileSystemModel::HighlightColor() const{
+    return highlightColor;
+}
+
+void RFileSystemModel::setHighlightColor(const QString &HighlightColor){
+    if(highlightColor != HighlightColor){
+        highlightColor = HighlightColor;
+        settings.setValue("global/highlightColor", highlightColor);
+        emit HighlightColorChanged();
     }
 }
 

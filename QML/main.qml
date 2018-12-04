@@ -9,11 +9,7 @@ ApplicationWindow{
     minimumWidth: 900
     minimumHeight: 600
 
-    //property bool appTheme: (rDesktopService.getSettingsValue("Theme") === "Light")
-    //property string fontColor: (appTheme ? "black" : "white")
-    //property string backgroundColor: (appTheme ? "white" : "#312d2d")
-
-    color: rFileSystem.BackgroundColor//(appTheme ? "white" : "#312d2d")
+    color: rFileSystem.BackgroundColor
 
     Row{
         anchors.fill: parent
@@ -44,7 +40,7 @@ ApplicationWindow{
                     anchors.fill: parent
                     ListView{
                         id: tabHeader
-                        property int perDelegateWidth: width/rFileSystem.TabHeaderListCount
+                        property int perDelegateWidth: width/count
                         width: parent.width - addNewTabBtn.width
                         height: parent.height
                         model: rFileSystem.TabHeaderList
@@ -120,15 +116,23 @@ ApplicationWindow{
                                 id: mouseEnteredAnimation
                                 target: tabHeaderDelegate
                                 property: "color"
-                                to: "lightblue"
+                                to: rFileSystem.HighlightColor
                                 duration: 500
                             }
                             PropertyAnimation{
                                 id: mouseExitedAnimation
                                 target: tabHeaderDelegate
                                 property: "color"
-                                to: "transparent"
+                                to: (tabHeader.currentIndex == index) ? "transparent" : "lightgrey"
                                 duration: 500
+                            }
+                        }
+
+
+                        onCountChanged: {
+                            if(count < tabParentLayout.tabLimit && !addNewTabBtn.visible){
+                                addNewTabBtn.visible = true
+                                addNewTabBtn.width = addNewTabBtn.height
                             }
                         }
                     }
@@ -141,7 +145,7 @@ ApplicationWindow{
                         icon.color: rFileSystem.IconColor
                         hoverText: "New Tab"
                         onClicked: {
-                            if(rFileSystem.TabHeaderListCount === tabParentLayout.tabLimit - 1){
+                            if(tabHeader.count === tabParentLayout.tabLimit - 1){
                                 addNewTabBtn.visible = false
                                 addNewTabBtn.width = 0
                             }
@@ -174,8 +178,8 @@ ApplicationWindow{
         tab.active = true
         rFileSystem.createNewTab()
         tab.item.qtModel = rFileSystem.getTabData()
-        mainTabControl.currentIndex = rFileSystem.TabHeaderListCount - 1
-        tabHeader.currentIndex = rFileSystem.TabHeaderListCount - 1
+        mainTabControl.currentIndex = tabHeader.count - 1
+        tabHeader.currentIndex = tabHeader.count - 1
     }
 
     function deleteTab(index){

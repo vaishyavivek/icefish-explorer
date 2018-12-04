@@ -172,5 +172,5 @@ Popup{
         }
     }
 
-    onOpened: rFileSystem.prepareHistoryInfoList()
+    onOpened: rFileSystem.prepareRecentsList()
 }

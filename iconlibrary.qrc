@@ -8,7 +8,6 @@
         <file>Resources/not-found.svg</file>
         <file>Resources/submenu.svg</file>
         <file>Resources/icons-add.svg</file>
-        <file>Resources/icons-preview.svg</file>
         <file>Resources/icons-pin.png</file>
         <file>Resources/icons-unpin.svg</file>
         <file>Resources/icons-close.svg</file>
@@ -24,5 +23,13 @@
         <file>Resources/icons-file.svg</file>
         <file>Resources/icons-settings.svg</file>
         <file>Resources/icons-shortcut-menu.svg</file>
+        <file>Resources/icons-rename.svg</file>
+        <file>Resources/icons-trash.svg</file>
+        <file>Resources/icons-bookmark-checked.svg</file>
+        <file>Resources/icons-bookmark-unchecked.svg</file>
+        <file>Resources/icons-hidden-unchecked.svg</file>
+        <file>Resources/icons-hidden-checked.svg</file>
+        <file>Resources/icons-image-preview-checked.svg</file>
+        <file>Resources/icons-image-preview-unchecked.svg</file>
     </qresource>
 </RCC>

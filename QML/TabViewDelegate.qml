@@ -120,13 +120,20 @@ Rectangle{
                         icon.color: "transparent"
                         hoverText: "New File"
                         Image {
-                            z: 2
+                            id: newFileBtnAddImage
+                            visible: false
                             source: "/local/Resources/icons-add.svg"
                             sourceSize.width: parent.width*0.4
                             sourceSize.height: parent.height*0.4
                             anchors.bottom: parent.bottom
                             anchors.right: parent.right
                             anchors.rightMargin: 2
+                        }
+                        ColorOverlay{
+                            z: 2
+                            anchors.fill: newFileBtnAddImage
+                            source: newFileBtnAddImage
+                            color: rFileSystem.IconColor
                         }
 
                         onClicked: newFileDialogBox.open()
@@ -149,7 +156,8 @@ Rectangle{
                         icon.color: "transparent"
                         hoverText: "New Folder"
                         Image {
-                            z: 2
+                            id: newFolderBtnAddImage
+                            visible: false
                             source: "/local/Resources/icons-add.svg"
                             sourceSize.width: parent.width*0.4
                             sourceSize.height: parent.height*0.4
@@ -157,6 +165,13 @@ Rectangle{
                             anchors.right: parent.right
                             anchors.rightMargin: 2
                         }
+                        ColorOverlay{
+                            z: 2
+                            anchors.fill: newFolderBtnAddImage
+                            source: newFolderBtnAddImage
+                            color: rFileSystem.IconColor
+                        }
+
                         onClicked: newFolderDialogBox.open()
 
                         NewFolderDialogBox{
@@ -209,21 +224,26 @@ Rectangle{
                     property bool isBookmarked: qtModel.IsBookmarked
                     height: parent.height
                     width: height
-                    icon.name: "folder-bookmark"//"file://" + rDesktopService.getThemeIcon("std-name:folder-bookmark", 64)
+                    icon.name: "folder"
                     icon.color: "transparent"
-                    hoverText: "Bookmark this place"
+                    hoverText: (isBookmarked ? "Remove Bookmark" : "Bookmark this place")
                     onClicked: qtModel.IsBookmarked = !isBookmarked
 
                     Image {
                         id: bookmarkIndicator
-                        z: 2
-                        visible: favoriteBtn.isBookmarked
-                        source: "/local/Resources/icons-check.svg"
-                        sourceSize.width: parent.width*0.5
+                        visible: false
+                        source: "/local/Resources/icons-bookmark-" + (favoriteBtn.isBookmarked ? "checked" : "unchecked") + ".svg"
+                        sourceSize.width: parent.width*0.3
                         sourceSize.height: parent.height*0.5
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
                         anchors.rightMargin: 2
+                    }
+                    ColorOverlay{
+                        z: 2
+                        anchors.fill: bookmarkIndicator
+                        source: bookmarkIndicator
+                        color: rFileSystem.IconColor
                     }
                 }
 
@@ -232,21 +252,26 @@ Rectangle{
                     property bool nowVisible: qtModel.IsHiddenItemsShown
                     height: parent.height
                     width: height
-                    icon.name: "folder"//"file://" + rDesktopService.getThemeIcon("std-name:folder", 64)
+                    icon.name: "folder"
                     icon.color: "transparent"
                     hoverText: (nowVisible ? "Hide Hidden Items" : "Show Hidden Items")
                     onClicked: qtModel.IsHiddenItemsShown = !nowVisible
 
                     Image {
                         id: visibleIndicator
-                        z: 2
-                        visible: showHiddenBtn.nowVisible
-                        source: "/local/Resources/icons-preview.svg"
+                        visible: false
+                        source: "/local/Resources/icons-hidden-" + (showHiddenBtn.nowVisible ? "checked" : "unchecked") + ".svg"
                         sourceSize.width: parent.width*0.5
-                        sourceSize.height: parent.height*0.5
+                        sourceSize.height: parent.height*0.4
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
                         anchors.rightMargin: 2
+                    }
+                    ColorOverlay{
+                        z: 2
+                        anchors.fill: visibleIndicator
+                        source: visibleIndicator
+                        color: rFileSystem.IconColor
                     }
                 }
 
@@ -255,21 +280,26 @@ Rectangle{
                     property bool nowPreviewing: qtModel.IsPreviewAvailable
                     height: parent.height
                     width: height
-                    icon.name: "image-x-generic"//"file://" + rDesktopService.getThemeIcon("std-name:image-x-generic", 64)
+                    icon.name: "image-x-generic"
                     icon.color: "transparent"
                     hoverText: (nowPreviewing ? "Stop Previewing items" : "Enable Image Preview")
                     onClicked: qtModel.IsPreviewAvailable = !nowPreviewing
 
                     Image {
                         id: previewIndicator
-                        z: 2
-                        visible: imagePreviewBtn.nowPreviewing
-                        source: "/local/Resources/icons-preview.svg"
+                        visible: false
+                        source: "/local/Resources/icons-image-preview-" + (imagePreviewBtn.nowPreviewing ? "checked" : "unchecked") + ".svg"
                         sourceSize.width: parent.width*0.5
-                        sourceSize.height: parent.height*0.5
+                        sourceSize.height: parent.height*0.4
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
                         anchors.rightMargin: 2
+                    }
+                    ColorOverlay{
+                        z: 2
+                        anchors.fill: previewIndicator
+                        source: previewIndicator
+                        color: rFileSystem.IconColor
                     }
                 }
 
@@ -547,8 +577,8 @@ Rectangle{
                                 id: renameBtn
                                 height: parent.height
                                 width: height
-                                icon.source: "file:///home/eobardthawne/.icons/Papirus/32/apps/krename.svg"
-                                icon.color: "transparent"
+                                icon.source: "/local/Resources/icons-rename.svg"
+                                icon.color: rFileSystem.IconColor
                                 hoverText: "Rename"
                                 onClicked: {
                                     nameInput.readOnly = false
@@ -561,13 +591,13 @@ Rectangle{
                                 id: deleteBtn
                                 height: parent.height
                                 width: height
-                                icon.name: "user-trash"
-                                icon.color: "transparent"
+                                icon.source: "/local/Resources/icons-trash.svg"
+                                icon.color: rFileSystem.IconColor
                                 hoverText: "Delete"
                                 onClicked: qtModel.deleteFile(index)
                             }
                             RImageButton{
-                                id: propertiesBtn
+                                id: actionBtn
                                 height: parent.height
                                 width: height
                                 icon.source: "/local/Resources/icons-switch.svg"
@@ -616,7 +646,7 @@ Rectangle{
                         target: animatingRect
                         property: "color"
                         easing.type: Easing.OutInQuad
-                        to: "#9dcfe2"
+                        to: rFileSystem.HighlightColor
                         duration: 100
                     }
                     PropertyAnimation{
@@ -636,7 +666,7 @@ Rectangle{
                 highlight: Rectangle{
                     width: fileFolderListView.width
                     height: scaleFactor
-                    color: "skyblue"
+                    color: rFileSystem.HighlightColor
                     opacity: 0.4
                     Rectangle{
                         width: 5

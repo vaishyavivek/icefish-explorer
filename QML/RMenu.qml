@@ -6,21 +6,19 @@ ToolTip{
     property bool isOpened: false
     property string filePath
     property variant menuList
-    padding: 0
+    padding: 2
 
     ListView{
         id: menuListView
         anchors.fill: parent
-        anchors.margins: 1
         clip: true
         model: menuList
-        spacing: 1
 
         delegate: Rectangle{
             id: menuListDelegate
             width: menuListView.width
             height: 25
-            color: "transparent"
+            color: rFileSystem.BackgroundColor
             Loader{
                 anchors.centerIn: parent
                 width: parent.width - 2
@@ -38,6 +36,7 @@ ToolTip{
                         width: parent.width
                         height: parent.height
                         text: "      " + model.modelData.ServiceName
+                        color: rFileSystem.IconColor
                         font.family: "Sans Serif"
                         font.pointSize: Math.max(scaleFactor*0.16, 8)
                         verticalAlignment: Text.AlignVCenter
@@ -61,11 +60,13 @@ ToolTip{
                     width: menuListDelegate.width
                     height: menuListDelegate.height
                     color: "transparent"
+
                     Text {
                         id: displayText
                         width: parent.width
                         height: parent.height
                         text: "<    " + model.modelData.ServiceName
+                        color: rFileSystem.IconColor
                         font.family: "Sans Serif"
                         font.pointSize: Math.max(scaleFactor*0.16, 8)
                         verticalAlignment: Text.AlignVCenter
@@ -75,24 +76,22 @@ ToolTip{
                         property bool isOpened: false
                         property string action: model.modelData.Action
                         property variant subMenuModel: model.modelData.Submenu
+                        padding: 2
                         width: 200
-                        height: (model.modelData.SubmenuCount)*26
+                        height: (model.modelData.SubmenuCount)*25 + 2
                         x: parent.x - 202
                         y: parent.y
-                        padding: 0
                         ListView{
                             id: submenuListView
                             anchors.fill: parent
-                            anchors.margins: 1
                             clip: true
                             model: submenuPopup.subMenuModel
-                            spacing: 1
 
                             delegate: Rectangle{
                                 id: submenuListDelegate
                                 width: submenuListView.width
                                 height: 25
-                                color: "transparent"
+                                color: rFileSystem.BackgroundColor
 
                                 Row{
                                     anchors.fill: parent
@@ -109,6 +108,7 @@ ToolTip{
                                         width: parent.width - image.width
                                         height: parent.height
                                         text: model.modelData.ServiceName
+                                        color: rFileSystem.IconColor
                                         font.family: "Sans Serif"
                                         font.pointSize: Math.max(scaleFactor*0.16, 8)
                                         verticalAlignment: Text.AlignVCenter
@@ -131,16 +131,16 @@ ToolTip{
                                     target: submenuListDelegate
                                     property: "color"
                                     easing.type: Easing.OutInQuad
-                                    to: "#9dcfe2"
-                                    duration: 250
+                                    to: rFileSystem.HighlightColor
+                                    duration: 0
                                 }
                                 PropertyAnimation{
                                     id: submouseExitedAnimation
                                     target: submenuListDelegate
                                     property: "color"
                                     easing.type: Easing.OutInQuad
-                                    to: "transparent"
-                                    duration: 250
+                                    to: rFileSystem.BackgroundColor
+                                    duration: 0
                                 }
                             }
                         }
@@ -161,16 +161,16 @@ ToolTip{
                 target: menuListDelegate
                 property: "color"
                 easing.type: Easing.OutInQuad
-                to: "#9dcfe2"
-                duration: 250
+                to: rFileSystem.HighlightColor
+                duration: 100
             }
             PropertyAnimation{
                 id: mouseExitedAnimation
                 target: menuListDelegate
                 property: "color"
                 easing.type: Easing.OutInQuad
-                to: "transparent"
-                duration: 250
+                to: rFileSystem.BackgroundColor
+                duration: 100
             }
         }
     }

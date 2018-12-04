@@ -25,12 +25,13 @@ Popup{
     Rectangle{
         id: shortcutMenuListViewParentRect
         height: qtModel.AddressBoxShortcutMenuListCount*fontSize*1.7
-        color: "white"
-        border.color: "black"
+        color: rFileSystem.BackgroundColor
+        border.color: rFileSystem.IconColor
         border.width: 1
-        radius: 5
+        //radius: 5
         ListView{
             id: shortcutMenuListView
+            anchors.margins: 2
             height: parent.height
             clip: true
             highlightFollowsCurrentItem: true
@@ -44,6 +45,7 @@ Popup{
                 Text{
                     id: optionText
                     text: model.modelData.DisplayName
+                    color: rFileSystem.IconColor
                     anchors.verticalCenter: parent.verticalCenter
                     font.pointSize: fontSize
                     anchors.left: parent.left
