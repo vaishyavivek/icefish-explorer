@@ -45,7 +45,7 @@ Button {
         id: mouseEnteredAnimation
         target: backgroundRect
         property: "color"
-        to: "lightblue"
+        to: rFileSystem.HighlightColor
         duration: 500
     }
 
@@ -66,10 +66,10 @@ Button {
             contentItem: Text {
                 text: tooltip.text
                 font: tooltip.font
-                color: "white"
+                color: rFileSystem.BackgroundColor
             }
             background: Rectangle {
-                color: "black"
+                color: rFileSystem.IconColor
             }
         }
 

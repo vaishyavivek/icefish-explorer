@@ -22,7 +22,6 @@ Item {
 
         delegate: ItemDelegate{
             id: listviewDelegate
-            //color: "transparent"
             height: parent.height
             width: 38
             Row{
@@ -37,7 +36,7 @@ Item {
                     icon.source: "/local/Resources/icons-shortcut-menu.svg"
                     text: model.modelData.Path
                     display: AbstractButton.IconOnly
-                    icon.color: hovered ? "lightblue" : rFileSystem.IconColor
+                    icon.color: hovered ? rFileSystem.HighlightColor : rFileSystem.IconColor
 
                     background: Rectangle {
                         width: shortcutMenuBtn.width - 2
@@ -67,7 +66,7 @@ Item {
                             id: name
                             anchors.centerIn: parent
                             text: sectionMenuBtn.text
-                            color: sectionMenuBtn.hovered ? "lightblue" : rFileSystem.IconColor
+                            color: sectionMenuBtn.hovered ? rFileSystem.HighlightColor : rFileSystem.IconColor
                         }
                         Component.onCompleted: {
                             listviewDelegate.width = name.paintedWidth + 25

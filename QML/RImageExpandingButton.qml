@@ -58,7 +58,7 @@ Button {
             width: parent.width
             height: 1
             anchors.bottom: parent.bottom
-            color: highlightColor
+            color: rFileSystem.BackgroundColor
         }
     }
 
@@ -66,7 +66,7 @@ Button {
         id: mouseEnteredAnimation
         target: backgroundRect
         property: "color"
-        to: "lightblue"
+        to: rFileSystem.HighlightColor
         duration: 500
     }
 

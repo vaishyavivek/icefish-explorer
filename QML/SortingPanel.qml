@@ -15,7 +15,7 @@ Popup{
     Rectangle{
         width: parent.width
         height: parent.height
-        color: mainWindow.color
+        color: rFileSystem.BackgroundColor
         Column{
             anchors.bottomMargin: 5
             anchors.topMargin: 5
@@ -31,11 +31,13 @@ Popup{
                 header: Rectangle{
                     width: parent.width
                     height: 21
+                    color: "transparent"
                     Text {
                         width: parent.width
                         height: parent.height
                         anchors.leftMargin: 5
                         text: qsTr("Sorting Roles")
+                        color: rFileSystem.IconColor
                         font.pointSize: 10
                         verticalAlignment: Text.AlignVCenter
                     }
@@ -45,7 +47,7 @@ Popup{
                     property string role: model.role
                     width: parent.width
                     height: 28
-                    color: (sortingRole.currentIndex == index) ? "lightblue" : "transparent"
+                    color: (sortingRole.currentIndex == index) ? rFileSystem.HighlightColor : "transparent"
 
                     Rectangle{
                         anchors.fill: parent
@@ -57,6 +59,7 @@ Popup{
                         width: parent.width
                         height: parent.height
                         text: role
+                        color: rFileSystem.IconColor
                         font.family: "Sans Serif"
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
@@ -80,11 +83,13 @@ Popup{
                 id: sortingOrderHeader
                 width: parent.width
                 height: 11
+                color: "transparent"
                 Text {
                     width: parent.width
                     height: parent.height
                     anchors.leftMargin: 5
                     text: qsTr("Sorting Order")
+                    color: rFileSystem.IconColor
                     font.pointSize: 10
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -101,7 +106,7 @@ Popup{
                     property string order: model.order
                     width: sortingOrder.width/2
                     height: 28
-                    color: (sortingOrder.currentIndex == index) ? "lightblue" : "transparent"
+                    color: (sortingOrder.currentIndex == index) ? rFileSystem.HighlightColor : "transparent"
 
                     Rectangle{
                         anchors.fill: parent
@@ -138,11 +143,13 @@ Popup{
                 id: sortingPreferenceHeader
                 width: parent.width
                 height: 11
+                color: "transparent"
                 Text {
                     width: parent.width
                     height: parent.height
                     anchors.leftMargin: 5
                     text: qsTr("Sorting Preference")
+                    color: rFileSystem.IconColor
                     font.pointSize: 10
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -158,7 +165,7 @@ Popup{
                 delegate: Rectangle{
                     width: sortingPreference.width/2
                     height: 28
-                    color: (sortingPreference.currentIndex == index) ? "lightblue" : "transparent"
+                    color: (sortingPreference.currentIndex == index) ? rFileSystem.HighlightColor : "transparent"
 
                     Rectangle{
                         anchors.fill: parent

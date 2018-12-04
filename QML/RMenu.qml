@@ -132,7 +132,7 @@ ToolTip{
                                     property: "color"
                                     easing.type: Easing.OutInQuad
                                     to: rFileSystem.HighlightColor
-                                    duration: 0
+                                    duration: 100
                                 }
                                 PropertyAnimation{
                                     id: submouseExitedAnimation
@@ -140,7 +140,7 @@ ToolTip{
                                     property: "color"
                                     easing.type: Easing.OutInQuad
                                     to: rFileSystem.BackgroundColor
-                                    duration: 0
+                                    duration: 100
                                 }
                             }
                         }

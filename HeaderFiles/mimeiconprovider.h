@@ -20,12 +20,17 @@ public:
         QMimeDatabase mimeDb;
         QMimeType mime = mimeDb.mimeTypeForFile(filePath);
         QString iconName = mime.iconName();
-        QIcon icon = QIcon::fromTheme(iconName);
-        if(!icon.isNull()){
-            QPixmap pixmap = icon.pixmap(requestedSize);
-            return pixmap;
+
+        if(!QIcon::hasThemeIcon(iconName)){
+            if(iconName.contains("directory"))
+                return QPixmap("/local/Resources/icons-folder.svg");
+            else
+                return QPixmap("/local/Resources/icons-file.svg");
         }
-        return QPixmap("/local/Resources/icons-folder.svg");
+
+        QIcon icon = QIcon::fromTheme(iconName);
+        QPixmap pixmap = icon.pixmap(requestedSize);
+        return pixmap;
     }
 };
 

@@ -10,6 +10,8 @@ SpinBox {
     to: items.length - 1
     value: 1
     hoverEnabled: true
+    padding: 2
+    background: rFileSystem.BackgroundColor
 
     property var items: ["Tiny", "Small", "Medium", "Big", "Large"]
     property var itemsInt: [16, 32, 48, 64, 80]
@@ -39,7 +41,7 @@ SpinBox {
     }
 
     contentItem: Text{
-
+        color: rFileSystem.IconColor
         text: scaleControl.textFromValue(scaleControl.value, scaleControl.locale)
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
@@ -52,11 +54,11 @@ SpinBox {
         implicitWidth: scaleControl.width/3 - 5
         implicitHeight: scaleControl.height
         color: scaleControl.up.pressed ? "lightblue" : "transparent"
-        border.color: enabled ? "skyblue" : "lightblue"
+        border.color: enabled ? rFileSystem.IconColor : "black"
         Text {
             text: "+"
             font.pointSize: scaleControl.height*0.75
-            color: scaleControl.up.pressed ? "skyblue" : "lightblue"
+            color: scaleControl.up.pressed ? "skyblue" : rFileSystem.IconColor
             anchors.fill: parent
             fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
@@ -70,11 +72,11 @@ SpinBox {
         implicitWidth: scaleControl.width/3 - 5
         implicitHeight: scaleControl.height
         color: scaleControl.down.pressed ? "lightblue" : "transparent"
-        border.color: enabled ? "skyblue" : "lightblue"
+        border.color: enabled ? rFileSystem.IconColor : "black"
         Text {
             text: "-"
             font.pointSize: scaleControl.height*0.75
-            color: scaleControl.down.pressed ? "skyblue" : "lightblue"
+            color: scaleControl.down.pressed ? "skyblue" : rFileSystem.IconColor
             anchors.fill: parent
             fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
@@ -91,10 +93,10 @@ SpinBox {
         contentItem: Text {
             text: tooltip.text
             font: tooltip.font
-            color: "white"
+            color: rFileSystem.BackgroundColor
         }
         background: Rectangle {
-            color: "black"
+            color: rFileSystem.IconColor
         }
     }
 }

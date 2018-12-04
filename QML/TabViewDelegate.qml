@@ -116,7 +116,7 @@ Rectangle{
                         id: newFileBtn
                         height: parent.height
                         width: height
-                        icon.name: "x-office-document"//"file://" + rDesktopService.getThemeIcon("std-name:x-office-document", 64)
+                        icon.name: "x-office-document"
                         icon.color: "transparent"
                         hoverText: "New File"
                         Image {
@@ -144,7 +144,7 @@ Rectangle{
                             currentPath: qtModel.AddressBoxData
                             width: 250
                             height: 155
-                            //background: tabViewDelegate.color
+                            y: newFileBtn.height
                         }
                     }
 
@@ -152,7 +152,7 @@ Rectangle{
                         id: newFolderBtn
                         height: parent.height
                         width: height
-                        icon.name: "folder"//"file://" + rDesktopService.getThemeIcon("std-name:folder", 64)
+                        icon.name: "folder"
                         icon.color: "transparent"
                         hoverText: "New Folder"
                         Image {
@@ -180,7 +180,7 @@ Rectangle{
                             currentPath: qtModel.AddressBoxData
                             width: 250
                             height: 155
-                            //background: tabViewDelegate.color
+                            y: newFolderBtn.height
                         }
                     }
                 }
@@ -671,8 +671,7 @@ Rectangle{
                     Rectangle{
                         width: 5
                         height: parent.height
-                        color: "blue"
-
+                        color: rFileSystem.IconColor
                     }
                 }
 

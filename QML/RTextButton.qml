@@ -3,7 +3,6 @@ import QtQuick.Controls 2.1
 
 Button {
     id: rTextButton
-    readonly property string highlightColor: "lightblue"
     property string hoverText: ""
     property bool toolTipEnabled: hoverText.length > 0
 
@@ -16,13 +15,14 @@ Button {
         Rectangle{
             anchors.fill: parent
             opacity: 0.4
-            color: "#c4d7dd"
+            color: rFileSystem.BackgroundColor
         }
 
         Text {
             width: parent.width
             height: parent.height
             text: rTextButton.text
+            color: rFileSystem.IconColor
             font.family: "Sans Serif"
             clip: true
             verticalAlignment: Text.AlignVCenter
@@ -44,7 +44,7 @@ Button {
         id: mouseEnteredAnimation
         target: backgroundRect
         property: "color"
-        to: "lightblue"
+        to: rFileSystem.HighlightColor
         duration: 500
     }
 
@@ -65,10 +65,10 @@ Button {
         contentItem: Text {
             text: tooltip.text
             font: tooltip.font
-            color: "white"
+            color: rFileSystem.BackgroundColor
         }
         background: Rectangle {
-            color: "black"
+            color: rFileSystem.IconColor
         }
     }
 
