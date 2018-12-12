@@ -28,6 +28,10 @@ Comes with default light theme with an optional dark theme (experimental).
 
 Get your Google Drive, Dropbox and Onedrive files in your local PC without actually downloading theme.
 
+**FreeDesktop.org compliant**
+
+Allows easy switching from other file-managers pre-existing on xdg-compliant platforms.
+
 **Cross Platform**
 
 One File Manager, one UI, constant across all your devices, Linux and Windows supported, macOS port is under development.
