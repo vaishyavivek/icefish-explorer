@@ -21,7 +21,7 @@
 #include <QDir>
 #include <QDateTime>
 #include <QFileInfo>
-#include "rdesktopservices.h"
+#include "src/rdesktopservices.h"
 
 
 class FileFolderModel : public QObject

@@ -19,6 +19,14 @@ Popup{
         Column{
             anchors.fill: parent
             spacing: 5
+
+            Rectangle{
+                height: 2
+                width: parent.width
+                color: "grey"
+                opacity: 0.5
+            }
+
             Rectangle{
                 id: headerBar
                 width: parent.width
@@ -26,18 +34,24 @@ Popup{
                 color: "transparent"
                 Rectangle{
                     id: titleRect
-                    height: parent.height
-                    width: parent.width - closeBtn.width
+                    anchors.left: parent.left
                     anchors.leftMargin: 5
+                    height: parent.height
+                    width: parent.width - closeBBtn.width
+                    color: "transparent"
                     Text {
-                        text: "  Bookmarks"
-                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.width
+                        height: parent.height
+                        text: "BOOKMARKS"
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
+                        verticalAlignment: Text.AlignVCenter
                         font.pointSize: 12
                         color: rFileSystem.IconColor
                     }
                 }
                 RImageButton{
-                    id: closebtn
+                    id: closeBBtn
                     height: parent.height
                     width: height
                     anchors.right: parent.right
@@ -55,7 +69,6 @@ Popup{
                 width: parent.width
                 color: "grey"
                 opacity: 0.5
-                clip: true
             }
 
             ListView{
@@ -71,6 +84,7 @@ Popup{
                     color: "transparent"
                     Row{
                         anchors.fill: parent
+                        anchors.leftMargin: 5
                         Rectangle{
                             id: icon
                             height: parent.height
@@ -130,7 +144,7 @@ Popup{
                         target: bookmarkListDelegate
                         property: "color"
                         easing.type: Easing.OutInQuad
-                        to: "#9dcfe2"
+                        to: rFileSystem.HighlightColor
                         duration: 250
                     }
                     PropertyAnimation{
@@ -144,11 +158,20 @@ Popup{
                 }
 
                 highlightFollowsCurrentItem: true
+                highlightMoveVelocity: -1
+                highlightMoveDuration: 400
+
                 highlight: Rectangle{
                     width: bookmarkList.width
                     height: 25
-                    color: "skyblue"
-                    opacity: 0.5
+                    color: rFileSystem.HighlightColor
+                    opacity: 0.4
+
+                    Rectangle{
+                        width: 5
+                        height: parent.height
+                        color: rFileSystem.IconColor
+                    }
                 }
                 ScrollIndicator.vertical: ScrollIndicator{}
             }

@@ -28,7 +28,7 @@ ComboBox {
 
         Image {
             id: image
-            source: "/local/Resources/icons-move-forward.svg"
+            source: "/local/assets/icons-move-forward.svg"
             sourceSize.width: parent.width
             sourceSize.height: parent.height
         }

@@ -9,6 +9,7 @@ enum class Error{
     FileAlreadyExist,
     PathDoesntExist,
     NoPermission,
+    RemovalFailed,
     Unknown
 };
 

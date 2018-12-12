@@ -1,4 +1,4 @@
-#include "HeaderFiles/propertiesinfomodel.h"
+#include "propertiesinfomodel.h"
 
 
 void SizeCalculator::calculate(QFileInfo file){

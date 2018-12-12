@@ -129,11 +129,11 @@ Popup{
 
                 model: ListModel{
                     ListElement{
-                        image: "/local/Resources/icons-sort-up.svg"
+                        image: "/local/assets/icons-sort-up.svg"
                         order: "Ascending"
                     }
                     ListElement{
-                        image: "/local/Resources/icons-sort-down.svg"
+                        image: "/local/assets/icons-sort-down.svg"
                         order: "Descending"
                     }
                 }
@@ -187,8 +187,8 @@ Popup{
                 }
 
                 model: ListModel{
-                    ListElement{ preference: "/local/Resources/icons-folder.svg"}
-                    ListElement{ preference: "/local/Resources/icons-file.svg"}
+                    ListElement{ preference: "/local/assets/icons-folder.svg"}
+                    ListElement{ preference: "/local/assets/icons-file.svg"}
                 }
             }
 

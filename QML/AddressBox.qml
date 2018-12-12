@@ -33,7 +33,7 @@ Item {
                     width: 15
                     height: parent.height
                     hoverEnabled: true
-                    icon.source: "/local/Resources/icons-shortcut-menu.svg"
+                    icon.source: "/local/assets/icons-shortcut-menu.svg"
                     text: model.modelData.Path
                     display: AbstractButton.IconOnly
                     icon.color: hovered ? rFileSystem.HighlightColor : rFileSystem.IconColor
@@ -103,7 +103,7 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: parent.height*0.25
         anchors.verticalCenter: parent.verticalCenter
-        icon.source: "/local/Resources/icons-search.svg"
+        icon.source: "/local/assets/icons-search.svg"
         icon.color: rFileSystem.IconColor
         onClicked: {
             if(listview.visible){

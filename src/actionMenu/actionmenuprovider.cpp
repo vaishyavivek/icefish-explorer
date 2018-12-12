@@ -1,4 +1,4 @@
-#include "HeaderFiles/actionmenuprovider.h"
+#include "actionmenuprovider.h"
 
 ActionMenuProvider::ActionMenuProvider(QObject *parent) : QObject(parent)
 {

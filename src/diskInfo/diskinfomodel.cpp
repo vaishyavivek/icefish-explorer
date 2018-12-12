@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with reverse-file-manager. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "HeaderFiles/diskinfomodel.h"
+#include "diskinfomodel.h"
 
 DiskInfoModel::DiskInfoModel(QObject *parent)
     :QObject(parent){}

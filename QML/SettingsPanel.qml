@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Controls 1.4
 
 Popup{
     id: settingsPanel
@@ -19,6 +20,14 @@ Popup{
         Column{
             anchors.fill: parent
             spacing: 5
+
+            Rectangle{
+                height: 2
+                width: parent.width
+                color: "grey"
+                opacity: 0.5
+            }
+
             Rectangle{
                 id: headerBar
                 width: parent.width
@@ -26,19 +35,24 @@ Popup{
                 color: "transparent"
                 Rectangle{
                     id: titleRect
+                    anchors.left: parent.left
+                    anchors.leftMargin: 5
                     height: parent.height
                     width: parent.width - closeSBtn.width
-                    anchors.leftMargin: 5
+                    color: "transparent"
                     Text {
-                        text: "  Global Settings"
-                        font.bold: true
-                        color: rFileSystem.IconColor
-                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.width
+                        height: parent.height
+                        text: "GLOBAL SETTINGS"
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
+                        verticalAlignment: Text.AlignVCenter
                         font.pointSize: 12
+                        color: rFileSystem.IconColor
                     }
                 }
                 RImageButton{
-                    id: closeSbtn
+                    id: closeSBtn
                     height: parent.height
                     width: height
                     anchors.right: parent.right
@@ -56,7 +70,6 @@ Popup{
                 width: parent.width
                 color: "grey"
                 opacity: 0.5
-                clip: true
             }
 
             Rectangle{
@@ -190,7 +203,7 @@ Popup{
                 height: 50
                 color: "transparent"
                 Text {
-                    text: qsTr("Show Hidden Items")
+                    text: qsTr("Icon Scaling")
                     font.pointSize: 10
                     anchors.left: parent.left
                     color: rFileSystem.IconColor
@@ -206,6 +219,39 @@ Popup{
                     model: ["Tiny", "Small (Default)", "Medium", "Big", "Large"]
                     currentIndex: rFileSystem.GlobalIconScale
                     onCurrentIndexChanged: rFileSystem.GlobalIconScale = currentIndex
+                }
+            }
+            Rectangle{
+                height: 2
+                width: parent.width
+                color: "lightgrey"
+                opacity: 0.5
+            }
+
+            Rectangle{
+                id: animationDuration
+                width: parent.width
+                height: 50
+                color: "transparent"
+                Text {
+                    text: qsTr("Animation Duration")
+                    font.pointSize: 10
+                    anchors.left: parent.left
+                    color: rFileSystem.IconColor
+                    anchors.leftMargin: 10
+                }
+                Slider{
+                    id: animationDurationSlider
+                    width: parent.width*0.5
+                    height: 30
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.bottom: parent.bottom
+                    minimumValue: 50
+                    maximumValue: 2000
+                    stepSize: 50
+                    value: rFileSystem.GlobalAnimationDuration
+                    onValueChanged: rFileSystem.GlobalAnimationDuration = value
                 }
             }
             Rectangle{

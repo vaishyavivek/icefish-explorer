@@ -19,6 +19,14 @@ Popup{
         Column{
             anchors.fill: parent
             spacing: 5
+
+            Rectangle{
+                height: 2
+                width: parent.width
+                color: "grey"
+                opacity: 0.5
+            }
+
             Rectangle{
                 id: headerBar
                 width: parent.width
@@ -26,22 +34,28 @@ Popup{
                 color: "transparent"
                 Rectangle{
                     id: titleRect
-                    height: parent.height
-                    width: parent.width - closeBtn.width
+                    anchors.left: parent.left
                     anchors.leftMargin: 5
+                    height: parent.height
+                    width: parent.width - closeRBtn.width
+                    color: "transparent"
                     Text {
-                        text: "  Recents"
-                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.width
+                        height: parent.height
+                        text: "RECENTS"
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
+                        verticalAlignment: Text.AlignVCenter
                         font.pointSize: 12
                         color: rFileSystem.IconColor
                     }
                 }
                 RImageButton{
-                    id: closebtn
+                    id: closeRBtn
                     height: parent.height
                     width: height
                     anchors.right: parent.right
-                    icon.name: "application-exit"
+                    icon.name: "application-exit"//"/local/Resources/icons-close.svg"
                     icon.color: rFileSystem.IconColor
                     onClicked: {
                         isOpened = false
@@ -55,7 +69,6 @@ Popup{
                 width: parent.width
                 color: "grey"
                 opacity: 0.5
-                clip: true
             }
 
             ListView{
@@ -65,13 +78,14 @@ Popup{
                 clip: true
                 model: rFileSystem.RecentsList
 
-                delegate: ItemDelegate{
+                delegate: Rectangle{
                     id: recentsListDelegate
                     width: recentsList.width
                     height: 25
-                //    color: "transparent"
+                    color: "transparent"
                     Row{
                         anchors.fill: parent
+                        anchors.leftMargin: 5
                         Rectangle{
                             id: icon
                             height: parent.height
@@ -79,7 +93,7 @@ Popup{
                             color: "transparent"
                             Image {
                                 anchors.centerIn: parent
-                                source: "image://mime" + model.modelData.ActualPath
+                                source: "image://mime/" + model.modelData.ActualPath
                                 sourceSize.width: parent.width*0.9
                                 sourceSize.height: parent.height*0.9
                             }
@@ -131,8 +145,8 @@ Popup{
                         target: recentsListDelegate
                         property: "color"
                         easing.type: Easing.OutInQuad
-                        to: "#9dcfe2"
-                        duration: 250
+                        to: rFileSystem.HighlightColor
+                        duration: 100
                     }
                     PropertyAnimation{
                         id: mouseExitedAnimation
@@ -140,16 +154,25 @@ Popup{
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: "transparent"
-                        duration: 250
+                        duration: 100
                     }
                 }
 
                 highlightFollowsCurrentItem: true
+                highlightMoveVelocity: -1
+                highlightMoveDuration: 400
+
                 highlight: Rectangle{
                     width: recentsList.width
                     height: 25
-                    color: "skyblue"
-                    opacity: 0.5
+                    color: rFileSystem.HighlightColor
+                    opacity: 0.4
+
+                    Rectangle{
+                        width: 5
+                        height: parent.height
+                        color: rFileSystem.IconColor
+                    }
                 }
                 ScrollIndicator.vertical: ScrollIndicator{}
             }

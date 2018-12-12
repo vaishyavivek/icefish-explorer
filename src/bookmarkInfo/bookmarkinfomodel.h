@@ -13,13 +13,32 @@
     You should have received a copy of the GNU General Public License
     along with reverse-file-manager. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef BOOKMARKINFOMODEL_H
-#define BOOKMARKINFOMODEL_H
-
 #include <QObject>
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
+
+#ifndef BOOKMARKKEEPER_H
+#define BOOKMARKKEEPER_H
+
+class BookmarkKeeper : public QObject{
+    Q_OBJECT
+public:
+    BookmarkKeeper(QObject *parent = nullptr);
+
+public slots:
+    void add(QString filePath);
+    void remove(QString filePath);
+
+private:
+    QString bookmarkFilePath;
+};
+
+#endif //BOOKMARKKEEPER_H
+
+
+#ifndef BOOKMARKINFOMODEL_H
+#define BOOKMARKINFOMODEL_H
 
 class BookmarkInfoModel : public QObject
 {
@@ -53,22 +72,3 @@ private:
 };
 
 #endif // BOOKMARKINFOMODEL_H
-
-#ifndef BOOKMARKKEEPER_H
-#define BOOKMARKKEEPER_H
-
-class BookmarkKeeper : public QObject{
-    Q_OBJECT
-public:
-    BookmarkKeeper(QObject *parent = nullptr);
-
-public slots:
-    void add(QString filePath);
-    void remove(QString filePath);
-    //void WriteBookmarkAsync(QString filePath);
-
-private:
-    QString bookmarkFilePath;
-};
-
-#endif //BOOKMARKKEEPER_H

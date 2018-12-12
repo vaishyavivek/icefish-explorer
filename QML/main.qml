@@ -92,7 +92,7 @@ ApplicationWindow{
                                     height: parent.height/2
                                     width: height
                                     anchors.verticalCenter: parent.verticalCenter
-                                    icon.source: "/local/Resources/icons-close.svg"
+                                    icon.source: "/local/assets/icons-close.svg"
                                     icon.color: rFileSystem.IconColor
                                     hoverText: "Close"
                                     onClicked: deleteTab(index)
@@ -117,14 +117,14 @@ ApplicationWindow{
                                 target: tabHeaderDelegate
                                 property: "color"
                                 to: rFileSystem.HighlightColor
-                                duration: 500
+                                duration: rFileSystem.GlobalAnimationDuration
                             }
                             PropertyAnimation{
                                 id: mouseExitedAnimation
                                 target: tabHeaderDelegate
                                 property: "color"
                                 to: (tabHeader.currentIndex == index) ? "transparent" : "lightgrey"
-                                duration: 500
+                                duration: rFileSystem.GlobalAnimationDuration
                             }
                         }
 

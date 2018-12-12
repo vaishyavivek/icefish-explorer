@@ -9,9 +9,9 @@
 #include <QMimeDatabase>
 #include <QSettings>
 
-#include "notificationmodel.h"
-#include "HeaderFiles/rdesktopservices.h"
-#include "HeaderFiles/propertiesinfomodel.h"
+#include "notification/notificationmodel.h"
+#include "rdesktopservices.h"
+#include "propertiesInfo/propertiesinfomodel.h"
 
 class RDirectoryModel : public QObject
 {

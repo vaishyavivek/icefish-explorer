@@ -35,7 +35,7 @@ Popup {
                     id: hamburgerBtn
                     width: normalizedWidth
                     height: normalizedWidth
-                    icon.source: "/local/Resources/icons-menu.svg"
+                    icon.source: "/local/assets/icons-menu.svg"
                     icon.color: rFileSystem.IconColor
                     onClicked: (!isPined && isExpanded) ? reverseExpandMenu() : expandMenu()
                 }
@@ -46,7 +46,7 @@ Popup {
                     height: width
                     visible: isExpanded
                     anchors.right: parent.right
-                    icon.source: isPined ? "/local/Resources/icons-pin.png" : "/local/Resources/icons-unpin.svg"
+                    icon.source: isPined ? "/local/assets/icons-pin.png" : "/local/assets/icons-unpin.svg"
                     icon.color: rFileSystem.IconColor
                     onClicked: {
                         if(isPined){
@@ -77,6 +77,7 @@ Popup {
                         id: homeBar
                         width: parent.width
                         height: normalizedWidth
+                        //icon.name: "user-home"
                         iconPath: "file://" + rDesktopService.getThemeIcon("std-name:user-home", 64)
                         text: "Home"
                         onClicked: updateCurrentDirectory("home")
@@ -87,6 +88,7 @@ Popup {
                         id: documentsBar
                         width: parent.width
                         height: normalizedWidth
+                        //icon.name: "folder-documents"
                         iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder-documents", 64)
                         text: "Your Documents"
                         onClicked: updateCurrentDirectory("Documents")
@@ -246,13 +248,35 @@ Popup {
                         height: normalizedWidth
                         iconPath: "file://" + rDesktopService.getThemeIcon("std-name:user-trash", 64)
                         text: "Trash"
+                        checked: trashPanel.isOpened
+
+                        TrashPanel{
+                            id: trashPanel
+                            x: sidePanel.width
+                            y: sidePanelParentRect.y - trashBtn.y - 2
+                            widthWhenExpanded: mainWindow.width*0.35
+                            height: mainWindow.height - 35
+                        }
+
+                        onClicked: {
+                            trashPanel.isOpened ? trashPanel.close() : trashPanel.open()
+                            trashPanel.isOpened = !trashPanel.isOpened
+                        }
+                    }
+
+                    Rectangle{
+                        height: 2
+                        width: parent.width
+                        color: "grey"
+                        opacity: 0.5
+                        clip: true
                     }
 
                     RImageExpandingButton{
                         id: settingsBtn
                         width: parent.width
                         height: normalizedWidth
-                        iconPath: "/local/Resources/icons-settings.svg"
+                        iconPath: "/local/assets/icons-settings.svg"
                         text: "Global Settings"
                         checked: settingsPanel.isOpened
 
@@ -262,7 +286,7 @@ Popup {
                             y: sidePanelParentRect.y - settingsBtn.y - 2
                             widthWhenExpanded: mainWindow.width*0.35
                             height: mainWindow.height - 35
-                            background: mainWindow.color
+                            background: rFileSystem.BackgroundColor
                         }
                         onClicked: {
                             settingsPanel.isOpened ? settingsPanel.close() : settingsPanel.open()
@@ -279,7 +303,7 @@ Popup {
         target: sidePanel
         property: "width"
         to: widthWhenExpanded
-        duration: 500
+        duration: rFileSystem.GlobalAnimationDuration
     }
 
     PropertyAnimation{
@@ -287,7 +311,7 @@ Popup {
         target: sidePanel
         property: "width"
         to: normalizedWidth
-        duration: 500
+        duration: rFileSystem.GlobalAnimationDuration
     }
 
     Component.onCompleted: sidePanel.open()

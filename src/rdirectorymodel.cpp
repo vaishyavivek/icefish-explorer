@@ -1,8 +1,8 @@
-#include "HeaderFiles/rdirectorymodel.h"
-#include "HeaderFiles/filefoldermodel.h"
-#include "HeaderFiles/menumodel.h"
-#include "HeaderFiles/navigationhistorymodel.h"
-#include "HeaderFiles/addressboxmodel.h"
+#include "rdirectorymodel.h"
+#include "fileFolder/filefoldermodel.h"
+#include "models/menumodel.h"
+#include "models/navigationhistorymodel.h"
+#include "models/addressboxmodel.h"
 
 #include <QDebug>
 #include <QDateTime>
@@ -11,6 +11,7 @@ RDirectoryModel::RDirectoryModel(QObject *parent) : QObject(parent){
     pointerToCurrentDirectoryInNavigationHistoryInfoList = -1;
     properties = new PropertiesInfoModel();
     isHome = false;
+    updateCurrentDirectory(QDir::homePath());
 }
 
 
@@ -102,7 +103,7 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
                 if((!file.fileName().startsWith("$"))){
 
                     FileFolderModel *newModel = new FileFolderModel(file);
-                    newModel->setFileType(mimeDb.mimeTypeForFile(file.filePath()).iconName());
+                    //newModel->setFileType(mimeDb.mimeTypeForFile(file.filePath()).iconName());
                     fileFolderList.append(newModel);
                 }
             }
@@ -443,8 +444,8 @@ void RDirectoryModel::deleteFile(int index){
             exist = false;
     }
 
-    if(file.rename(QDir::homePath() + "/.local/share/Trash/files" + onlyFileName)){
-        QFile trashInfo(QDir::homePath() + "/.local/share/Trash/info" + onlyFileName + ".trashinfo");
+    if(file.rename(QDir::homePath() + "/.local/share/Trash/files/" + onlyFileName)){
+        QFile trashInfo(QDir::homePath() + "/.local/share/Trash/info/" + onlyFileName + ".trashinfo");
         trashInfo.open(QIODevice::WriteOnly);
         QTextStream stream(&trashInfo);
         stream << "[Trash Info]" << "\n";
@@ -454,7 +455,7 @@ void RDirectoryModel::deleteFile(int index){
         emit FileFolderListChanged();
     }
     else
-        qDebug() << "Failed to delete file: " + model->DisplayName();
+        notify(Error::NoPermission);
 }
 
 

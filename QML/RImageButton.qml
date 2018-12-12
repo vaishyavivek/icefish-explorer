@@ -46,7 +46,7 @@ Button {
         target: backgroundRect
         property: "color"
         to: rFileSystem.HighlightColor
-        duration: 500
+        duration: rFileSystem.GlobalAnimationDuration
     }
 
     PropertyAnimation{
@@ -54,7 +54,7 @@ Button {
         target: backgroundRect
         property: "color"
         to: "transparent"
-        duration: 500
+        duration: rFileSystem.GlobalAnimationDuration
     }
 
     ToolTip{

@@ -12,18 +12,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += \
-        main.cpp \
-    SourceFiles/rdirectorymodel.cpp \
-    SourceFiles/rfilesystemmodel.cpp \
-    SourceFiles/diskinfomodel.cpp \
-    SourceFiles/filefoldermodel.cpp \
-    SourceFiles/rdesktopservices.cpp \
-    SourceFiles/bookmarkinfomodel.cpp \
-    SourceFiles/notificationmodel.cpp \
-    SourceFiles/propertiesinfomodel.cpp \
-    SourceFiles/actionmenuprovider.cpp \
-    SourceFiles/recentsinfomodel.cpp
+SOURCES += src/main.cpp \
+    src/rdirectorymodel.cpp \
+    src/rfilesystemmodel.cpp \
+    src/rdesktopservices.cpp \
+    src/bookmarkInfo/bookmarkinfomodel.cpp \
+    src/diskInfo/diskinfomodel.cpp \
+    src/fileFolder/filefoldermodel.cpp \
+    src/actionMenu/actionmenuprovider.cpp \
+    src/recentsInfo/recentsinfomodel.cpp \
+    src/notification/notificationmodel.cpp \
+    src/propertiesInfo/propertiesinfomodel.cpp \
+    src/fileOperator/rfileoperator.cpp \
+    src/fileOperator/copyoperation.cpp \
+    src/models/trashinfomodel.cpp
 
 RESOURCES += qml.qrc \
     iconlibrary.qrc
@@ -40,21 +42,26 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    HeaderFiles/rdirectorymodel.h \
-    HeaderFiles/rfilesystemmodel.h \
-    HeaderFiles/diskinfomodel.h \
-    HeaderFiles/filefoldermodel.h \
-    HeaderFiles/rdesktopservices.h \
-    HeaderFiles/bookmarkinfomodel.h \
-    HeaderFiles/menumodel.h \
-    HeaderFiles/notificationmodel.h \
-    HeaderFiles/navigationhistorymodel.h \
-    HeaderFiles/desktopfilemodel.h \
-    HeaderFiles/propertiesinfomodel.h \
-    HeaderFiles/mimeiconprovider.h \
-    HeaderFiles/actionmenuprovider.h \
-    HeaderFiles/pixmappreviewprovider.h \
-    HeaderFiles/recentsinfomodel.h \
-    HeaderFiles/addressboxmodel.h
+    src/rfilesystemmodel.h \
+    src/rdirectorymodel.h \
+    src/rdesktopservices.h \
+    src/models/addressboxmodel.h \
+    src/models/desktopfilemodel.h \
+    src/models/menumodel.h \
+    src/models/navigationhistorymodel.h \
+    src/notification/notificationmodel.h \
+    src/models/trashinfomodel.h \
+    src/bookmarkInfo/bookmarkinfomodel.h \
+    src/recentsInfo/recentsinfomodel.h \
+    src/diskInfo/diskinfomodel.h \
+    src/fileFolder/filefoldermodel.h \
+    src/actionMenu/actionmenuprovider.h \
+    src/qmlHelpers/mimeiconprovider.h \
+    src/qmlHelpers/pixmappreviewprovider.h \
+    src/propertiesInfo/propertiesinfomodel.h \
+    src/fileOperator/rfileoperator.h \
+    src/fileOperator/operationindicator.h \
+    src/fileOperator/copyoperation.h \
+    src/qmlHelpers/mimeinfoprovider.h
 
 DISTFILES +=

@@ -8,7 +8,7 @@
 #include <QMimeType>
 #include <QDateTime>
 #include <QThread>
-#include "HeaderFiles/rdesktopservices.h"
+#include "src/rdesktopservices.h"
 
 class SizeCalculator: public QThread{
     Q_OBJECT

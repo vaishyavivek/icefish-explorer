@@ -1,5 +1,5 @@
-#include "HeaderFiles/rdesktopservices.h"
-#include "HeaderFiles/desktopfilemodel.h"
+#include "rdesktopservices.h"
+#include "models/desktopfilemodel.h"
 
 #include <QFile>
 #include <QDir>

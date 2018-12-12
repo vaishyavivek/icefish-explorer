@@ -17,7 +17,7 @@ Popup{
         width: parent.width
         height: parent.height
         anchors.centerIn: parent
-        color: mainWindow.color
+        color: rFileSystem.BackgroundColor
         border.width: 0
 
         TabView{
@@ -29,7 +29,7 @@ Popup{
             style: TabViewStyle {
                 frameOverlap: 1
                 tab: Rectangle {
-                    color: styleData.selected ? "#719bca" : "#b4ccd3"
+                    color: styleData.selected ? rFileSystem.HighlightColor : "#b4ccd3"
                     implicitWidth: propertiesTabBar.width*0.3
                     implicitHeight: implicitWidth*0.3
                     Text {
@@ -37,7 +37,7 @@ Popup{
                         text: styleData.title
                         font.bold: styleData.selected
                         font.pointSize: 10
-                        color: styleData.selected ? "white" : "black"
+                        color: styleData.selected ? rFileSystem.IconColor : "black"
                     }
                 }
             }
@@ -83,7 +83,7 @@ Popup{
                                     anchors.verticalCenter: parent.verticalCenter
                                     height: parent.height*0.75
                                     width: height
-                                    iconPath: "/local/Resources/icons-check.svg"
+                                    iconPath: "/local/assets/icons-check.svg"
                                     onClicked: qtModel.Properties.Name = nameField.text
                                 }
                             }
@@ -460,7 +460,7 @@ Popup{
             width: height
             anchors.right: parent.right
             anchors.top: parent.top
-            iconPath: "/local/Resources/icons-close.svg"
+            iconPath: "/local/assets/icons-close.svg"
             onClicked: propertiesPanel.close()
         }
     }

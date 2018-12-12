@@ -7,7 +7,7 @@
 #include <QFile>
 #include <QSettings>
 
-#include "notificationmodel.h"
+#include "notification/notificationmodel.h"
 
 class RFileSystemModel : public QObject
 {
@@ -35,6 +35,8 @@ class RFileSystemModel : public QObject
     // 5 mostly accessed Paths from RecentsList
     Q_PROPERTY(QList<QObject*> MostVisitedPlacesList READ MostVisitedPlacesList NOTIFY MostVisitedPlacesListChanged)
 
+    Q_PROPERTY(QList<QObject*> TrashList READ TrashList NOTIFY TrashListChanged)
+
     /* Provides index position of AppTheme namely "Light, Dark, ..."
      * 'BackgroundColor' and 'IconColor' are associated with the current theme changed from settings
      * Defaults to Light theme if nothing is found, like started for the first time
@@ -53,7 +55,7 @@ class RFileSystemModel : public QObject
     Q_PROPERTY(int GlobalIsHiddenItemsShown READ GlobalIsHiddenItemsShown WRITE setGlobalIsHiddenItemsShown NOTIFY GlobalIsHiddenItemsShownChanged)
     Q_PROPERTY(int GlobalIsPreviewAvailable READ GlobalIsPreviewAvailable WRITE setGlobalIsPreviewAvailable NOTIFY GlobalIsPreviewAvailableChanged)
     Q_PROPERTY(int GlobalIconScale READ GlobalIconScale WRITE setGlobalIconScale NOTIFY GlobalIconScaleChanged)
-
+    Q_PROPERTY(int GlobalAnimationDuration READ GlobalAnimationDuration WRITE setGlobalAnimationDuration NOTIFY GlobalAnimationDurationChanged)
 
 public:
     explicit RFileSystemModel(QObject *parent = nullptr);
@@ -86,6 +88,8 @@ public:
     QList<QObject*> RecentsList() const{ return recentsList;}
     QList<QObject*> MostVisitedPlacesList() const{ return mostVisitedPlacesList;}
 
+    QList<QObject*> TrashList() const{ return trashList;}
+
     int AppTheme() const;
     void setAppTheme(const int AppTheme);
 
@@ -107,6 +111,9 @@ public:
     int GlobalIconScale() const;
     void setGlobalIconScale(const int GlobalIconScale);
 
+    int GlobalAnimationDuration() const;
+    void setGlobalAnimationDuration(const int GlobalAnimationDuration);
+
     ~RFileSystemModel();
 
 public slots:
@@ -121,6 +128,8 @@ public slots:
     void prepareRecentsList();
     void prepareMostVisitedPlacesList();
 
+    void prepareTrashList(QString nameFilter = "");
+
 signals:
     void NModelChanged();
 
@@ -134,6 +143,7 @@ signals:
     void BookmarkDataListChanged();
     void RecentsListChanged();
     void MostVisitedPlacesListChanged();
+    void TrashListChanged();
 
     void AppThemeChanged();
     void BackgroundColorChanged();
@@ -143,6 +153,7 @@ signals:
     void GlobalIsHiddenItemsShownChanged();
     void GlobalIsPreviewAvailableChanged();
     void GlobalIconScaleChanged();
+    void GlobalAnimationDurationChanged();
 
     // Linked with Each TabModel to allow async writing of recent events
     void writeHistoryThreaded(QString fileAccessed);
@@ -164,11 +175,14 @@ private:
     QList<QObject*> recentsList;
     QList<QObject*> mostVisitedPlacesList;
 
+    QList<QObject*> trashList;
+
     NotificationModel *nm;
 
     QString backgroundColor;
     QString iconColor;
     QString highlightColor;
+    int animationDuration;
 
     // Global Settings handler object
     QSettings settings;

@@ -1,13 +1,14 @@
 #include <QGuiApplication>
-//#include <QQuickStyle>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QIcon>
 
-#include "HeaderFiles/rfilesystemmodel.h"
-#include "HeaderFiles/rdesktopservices.h"
-#include "HeaderFiles/mimeiconprovider.h"
-#include "HeaderFiles/pixmappreviewprovider.h"
+#include "rfilesystemmodel.h"
+#include "rdirectorymodel.h"
+#include "rdesktopservices.h"
+#include "qmlHelpers/mimeiconprovider.h"
+#include "qmlHelpers/pixmappreviewprovider.h"
+#include "qmlHelpers/mimeinfoprovider.h"
 
 int main(int argc, char *argv[])
 {
@@ -23,7 +24,11 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
     //set the application icon, themed icon is not used since windows doesn't allow themed icons
-    app.setWindowIcon(QIcon(":/local/Resources/explorer-colored.png"));
+    app.setWindowIcon(QIcon(":/local/assets/explorer-colored.png"));
+
+    qmlRegisterType<MimeInfoProvider>("com.mimeinfoprovider", 1, 0, "MimeInfoProvider");
+
+    qmlRegisterType<RDirectoryModel>("com.rdirectorymodel", 1, 0, "RDirectoryModel");
 
     QQmlApplicationEngine *engine = new QQmlApplicationEngine();
 

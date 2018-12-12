@@ -1,4 +1,4 @@
-#include "HeaderFiles/notificationmodel.h"
+#include "notificationmodel.h"
 
 NotificationModel::NotificationModel(QObject *parent)
     : QObject(parent){
@@ -16,6 +16,10 @@ void NotificationModel::Notify(Error code){
     else if(code == Error::PathDoesntExist){
         header = "Unknown Path";
         comment = "File path specified was not located.";
+    }
+    else if(code == Error::RemovalFailed){
+        header = "Removal Failed";
+        comment = "Failed to remove from trash";
     }
 
     emit HeaderChanged();

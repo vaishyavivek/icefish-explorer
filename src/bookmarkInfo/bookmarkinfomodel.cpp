@@ -14,7 +14,7 @@
     along with reverse-file-manager. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "HeaderFiles/bookmarkinfomodel.h"
+#include "bookmarkinfomodel.h"
 
 BookmarkKeeper::BookmarkKeeper(QObject *parent)
     :QObject(parent){

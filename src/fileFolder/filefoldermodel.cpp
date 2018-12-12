@@ -14,7 +14,7 @@
     along with reverse-file-manager. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "HeaderFiles/filefoldermodel.h"
+#include "filefoldermodel.h"
 #include <QFile>
 #include <QDateTime>
 #include <QDebug>

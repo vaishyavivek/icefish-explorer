@@ -2,12 +2,18 @@ import QtQml 2.1
 import QtQuick 2.8
 import QtQuick.Controls 2.4
 import QtGraphicalEffects 1.0
+import com.mimeinfoprovider 1.0
+import com.rdirectorymodel 1.0
 
 Rectangle{
     id: tabViewDelegate
     property int scaleFactor: qtModel.IconScale
     property var qtModel
     property int lastIndexPositions: []
+
+    /*RDirectoryModel{
+        id: qtModel
+    }*/
 
     width: parent.width
     height: parent.height
@@ -24,7 +30,7 @@ Rectangle{
                 id: backBtn
                 height: parent.height
                 width: height
-                icon.source: "/local/Resources/icons-move-back.svg"
+                icon.source: "/local/assets/icons-move-back.svg"
                 icon.color: enabled ? rFileSystem.IconColor : "#4d26282a"
                 hoverText: "Move Backward"
                 enabled: false
@@ -40,7 +46,7 @@ Rectangle{
                 id: forwardBtn
                 height: parent.height
                 width: height
-                icon.source: "/local/Resources/icons-move-forward.svg"
+                icon.source: "/local/assets/icons-move-forward.svg"
                 icon.color: enabled ? rFileSystem.IconColor : "#4d26282a"
                 hoverText: "Move Forward"
                 enabled: false
@@ -59,7 +65,7 @@ Rectangle{
                 id: reloadBtn
                 height: parent.height
                 width: height
-                icon.source: "/local/Resources/icons-reload.svg"
+                icon.source: "/local/assets/icons-reload.svg"
                 icon.color: enabled ? rFileSystem.IconColor : "#4d26282a"
                 hoverText: "Reload"
                 onClicked: qtModel.reloadCurrentDirectory()
@@ -122,7 +128,7 @@ Rectangle{
                         Image {
                             id: newFileBtnAddImage
                             visible: false
-                            source: "/local/Resources/icons-add.svg"
+                            source: "/local/assets/icons-add.svg"
                             sourceSize.width: parent.width*0.4
                             sourceSize.height: parent.height*0.4
                             anchors.bottom: parent.bottom
@@ -158,7 +164,7 @@ Rectangle{
                         Image {
                             id: newFolderBtnAddImage
                             visible: false
-                            source: "/local/Resources/icons-add.svg"
+                            source: "/local/assets/icons-add.svg"
                             sourceSize.width: parent.width*0.4
                             sourceSize.height: parent.height*0.4
                             anchors.bottom: parent.bottom
@@ -204,7 +210,7 @@ Rectangle{
                         id: deselectAll
                         height: parent.height
                         width: height
-                        icon.source: "/local/Resources/icons-back-arrow.svg"
+                        icon.source: "/local/assets/icons-back-arrow.svg"
                         icon.color: mainWindow.fontColor
                         onClicked: selectAll.checked = false
                     }
@@ -232,7 +238,7 @@ Rectangle{
                     Image {
                         id: bookmarkIndicator
                         visible: false
-                        source: "/local/Resources/icons-bookmark-" + (favoriteBtn.isBookmarked ? "checked" : "unchecked") + ".svg"
+                        source: "/local/assets/icons-bookmark-" + (favoriteBtn.isBookmarked ? "checked" : "unchecked") + ".svg"
                         sourceSize.width: parent.width*0.3
                         sourceSize.height: parent.height*0.5
                         anchors.bottom: parent.bottom
@@ -260,7 +266,7 @@ Rectangle{
                     Image {
                         id: visibleIndicator
                         visible: false
-                        source: "/local/Resources/icons-hidden-" + (showHiddenBtn.nowVisible ? "checked" : "unchecked") + ".svg"
+                        source: "/local/assets/icons-hidden-" + (showHiddenBtn.nowVisible ? "checked" : "unchecked") + ".svg"
                         sourceSize.width: parent.width*0.5
                         sourceSize.height: parent.height*0.4
                         anchors.bottom: parent.bottom
@@ -288,7 +294,7 @@ Rectangle{
                     Image {
                         id: previewIndicator
                         visible: false
-                        source: "/local/Resources/icons-image-preview-" + (imagePreviewBtn.nowPreviewing ? "checked" : "unchecked") + ".svg"
+                        source: "/local/assets/icons-image-preview-" + (imagePreviewBtn.nowPreviewing ? "checked" : "unchecked") + ".svg"
                         sourceSize.width: parent.width*0.5
                         sourceSize.height: parent.height*0.4
                         anchors.bottom: parent.bottom
@@ -352,6 +358,14 @@ Rectangle{
                 id: fileFolderListView
                 property bool editing: false
                 property bool searching: false
+
+                property int chechboxWidth: scaleFactor*0.5
+                property int iconWidth: scaleFactor
+                property int fileNameWidth: (width - scaleFactor*1.5)*0.35
+                property int lastModifiedWidth: (width - scaleFactor*1.5)*0.12
+                property int sizeWidth: (width - scaleFactor*1.5)*0.12
+                property int typeWidth: (width - scaleFactor*1.5)*0.2
+
                 anchors.fill: parent
                 anchors.leftMargin: 5
                 anchors.rightMargin: 5
@@ -373,14 +387,16 @@ Rectangle{
                         Rectangle{
                             id: space
                             height: parent.height*0.5
-                            width: height + scaleFactor
+                            width: fileFolderListView.chechboxWidth + fileFolderListView.iconWidth + 10
                             color: "transparent"
                         }
+
                         Rectangle{
-                            width: (parent.width - space.width)*0.35
+                            width: fileFolderListView.fileNameWidth
                             height: parent.height
                             color: "transparent"
                             clip: true
+
                             Text{
                                 text: "File Name"
                                 font.family: "Sans Serif"
@@ -388,22 +404,65 @@ Rectangle{
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
                             }
+
+                            Rectangle{
+                                width: 1
+                                height: parent.height*0.9
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.right: parent.right
+                                color: rFileSystem.HighlightColor
+                                Drag.active: fileNameDrag.drag.active
+                                MouseArea{
+                                    id: fileNameDrag
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onEntered: cursorShape = Qt.SizeHorCursor
+                                    onPressed: parent.anchors.right = undefined
+                                    onReleased: parent.anchors.right = parent.parent.right
+                                    drag.target: parent
+                                }
+
+                                onXChanged: if(x > 0) fileFolderListView.fileNameWidth = x
+                            }
                         }
+
+
                         Rectangle{
-                            width: (parent.width - space.width)*0.12
+                            width: fileFolderListView.lastModifiedWidth
                             height: parent.height
                             color: "transparent"
                             clip: true
                             Text{
                                 text: "Last Modified"
                                 font.family: "Sans Serif"
-                                color: rFileSystem.BackgroundColor
+                                color: rFileSystem.IconColor
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
                             }
+
+                            Rectangle{
+                                width: 1
+                                height: parent.height*0.9
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.right: parent.right
+                                color: rFileSystem.HighlightColor
+                                Drag.active: lastModifiedDrag.drag.active
+                                MouseArea{
+                                    id: lastModifiedDrag
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onEntered: cursorShape = Qt.SizeHorCursor
+                                    onPressed: parent.anchors.right = undefined
+                                    onReleased: parent.anchors.right = parent.parent.right
+                                    drag.target: parent
+                                }
+
+                                onXChanged: if(x > 0) fileFolderListView.lastModifiedWidth = x
+                            }
                         }
+
                         Rectangle{
-                            width: (parent.width - space.width)*0.12
+                            width: fileFolderListView.sizeWidth
                             height: parent.height
                             color: "transparent"
                             clip: true
@@ -414,9 +473,30 @@ Rectangle{
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
                             }
+
+                            Rectangle{
+                                width: 1
+                                height: parent.height*0.9
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.right: parent.right
+                                color: rFileSystem.HighlightColor
+                                Drag.active: sizeDrag.drag.active
+                                MouseArea{
+                                    id: sizeDrag
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onEntered: cursorShape = Qt.SizeHorCursor
+                                    onPressed: parent.anchors.right = undefined
+                                    onReleased: parent.anchors.right = parent.parent.right
+                                    drag.target: parent
+                                }
+
+                                onXChanged: if(x > 0) fileFolderListView.sizeWidth = x
+                            }
                         }
+
                         Rectangle{
-                            width: (parent.width - space.width)*0.2
+                            width: fileFolderListView.typeWidth
                             height: parent.height
                             color: "transparent"
                             clip: true
@@ -426,6 +506,26 @@ Rectangle{
                                 color: rFileSystem.IconColor
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
                                 anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                            Rectangle{
+                                width: 1
+                                height: parent.height*0.9
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.right: parent.right
+                                color: rFileSystem.HighlightColor
+                                Drag.active: typeDrag.drag.active
+                                MouseArea{
+                                    id: typeDrag
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onEntered: cursorShape = Qt.SizeHorCursor
+                                    onPressed: parent.anchors.right = undefined
+                                    onReleased: parent.anchors.right = parent.parent.right
+                                    drag.target: parent
+                                }
+
+                                onXChanged: if(x > 0) fileFolderListView.typeWidth = x
                             }
                         }
                     }
@@ -448,8 +548,8 @@ Rectangle{
 
                         RCheckBox{
                             id: check
-                            height: parent.height*0.5
-                            width: height
+                            height: fileFolderListView.chechboxWidth
+                            width: fileFolderListView.chechboxWidth
                             checked: selectAll.checked
                             onCheckedChanged: {
                                 model.modelData.Checked = checked
@@ -461,7 +561,7 @@ Rectangle{
                         Rectangle{
                             id: iconRect
                             height: parent.height*0.9
-                            width: scaleFactor
+                            width: fileFolderListView.iconWidth
                             color: "transparent"
                             Image {
                                 id: iconImage
@@ -481,7 +581,7 @@ Rectangle{
 
                         Rectangle{
                             id: displayName
-                            width: (parent.width - check.width - iconRect.width)*0.35
+                            width: fileFolderListView.fileNameWidth
                             height: parent.height
                             color: "transparent"
                             clip: true
@@ -507,7 +607,7 @@ Rectangle{
 
                         Rectangle{
                             id: dateTime
-                            width: (parent.width - check.width - iconRect.width)*0.12
+                            width: fileFolderListView.lastModifiedWidth
                             height: parent.height
                             color: "transparent"
                             Text {
@@ -526,7 +626,7 @@ Rectangle{
 
                         Rectangle{
                             id: size
-                            width: (parent.width - check.width - iconRect.width)*0.12
+                            width: fileFolderListView.sizeWidth
                             height: parent.height
                             color: "transparent"
                             Text {
@@ -545,13 +645,19 @@ Rectangle{
 
                         Rectangle{
                             id: type
-                            width: (parent.width - check.width - iconRect.width)*0.2
+                            width: fileFolderListView.typeWidth
                             height: parent.height
                             color: "transparent"
+
+                            /*MimeInfoProvider{
+                                id: mip
+                                FilePath: model.modelData.Path
+                            }*/
+
                             Text {
                                 width: parent.width
                                 height: parent.height
-                                text: model.modelData.FileType
+                               // text: mip.MimeShortInfo
                                 color: rFileSystem.IconColor
                                 font.family: "Sans Serif"
                                 font.pointSize: Math.max(scaleFactor*0.16, 8)
@@ -577,7 +683,7 @@ Rectangle{
                                 id: renameBtn
                                 height: parent.height
                                 width: height
-                                icon.source: "/local/Resources/icons-rename.svg"
+                                icon.source: "/local/assets/icons-rename.svg"
                                 icon.color: rFileSystem.IconColor
                                 hoverText: "Rename"
                                 onClicked: {
@@ -591,7 +697,7 @@ Rectangle{
                                 id: deleteBtn
                                 height: parent.height
                                 width: height
-                                icon.source: "/local/Resources/icons-trash.svg"
+                                icon.source: "/local/assets/icons-trash.svg"
                                 icon.color: rFileSystem.IconColor
                                 hoverText: "Delete"
                                 onClicked: qtModel.deleteFile(index)
@@ -600,7 +706,7 @@ Rectangle{
                                 id: actionBtn
                                 height: parent.height
                                 width: height
-                                icon.source: "/local/Resources/icons-switch.svg"
+                                icon.source: "/local/assets/icons-switch.svg"
                                 icon.color: rFileSystem.IconColor
                                 hoverText: "More Actions"
                                 onClicked: {
@@ -647,7 +753,7 @@ Rectangle{
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: rFileSystem.HighlightColor
-                        duration: 100
+                        duration: rFileSystem.GlobalAnimationDuration
                     }
                     PropertyAnimation{
                         id: mouseExitedAnimation
@@ -655,7 +761,7 @@ Rectangle{
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: "transparent"
-                        duration: 100
+                        duration: rFileSystem.GlobalAnimationDuration
                     }
                 }
 

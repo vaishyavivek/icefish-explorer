@@ -1,11 +1,13 @@
-#include "HeaderFiles/rfilesystemmodel.h"
-
 #include <sys/vfs.h>
-#include "HeaderFiles/diskinfomodel.h"
-#include "HeaderFiles/filefoldermodel.h"
-#include "HeaderFiles/bookmarkinfomodel.h"
-#include "HeaderFiles/rdirectorymodel.h"
-#include "HeaderFiles/recentsinfomodel.h"
+
+#include "rfilesystemmodel.h"
+#include "rdirectorymodel.h"
+#include "diskInfo/diskinfomodel.h"
+#include "fileFolder/filefoldermodel.h"
+#include "bookmarkInfo/bookmarkinfomodel.h"
+#include "recentsInfo/recentsinfomodel.h"
+#include "models/trashinfomodel.h"
+
 
 RFileSystemModel::RFileSystemModel(QObject *parent)
     : QObject(parent){
@@ -31,6 +33,7 @@ RFileSystemModel::RFileSystemModel(QObject *parent)
 
     backgroundColor = settings.value("global/backgroundColor").toString();
     iconColor = settings.value("global/iconColor").toString();
+    animationDuration = settings.value("global/animationDuration").toInt();
 }
 
 void RFileSystemModel::writeBookmarkAsync(QString filePath, bool addOrRemove){
@@ -161,6 +164,58 @@ void RFileSystemModel::prepareMostVisitedPlacesList(){
         }
         emit MostVisitedPlacesListChanged();
     }
+}
+
+
+void RFileSystemModel::prepareTrashList(QString nameFilter){
+    //this is dir where Unix/Linux alike systems keep their trash content by default
+    QDir trashDir(QDir::homePath() + "/.local/share/Trash/files");
+    //get all the directories and files in trash, sorted according to their time of deletion- newest first
+
+    trashDir.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+    trashDir.setSorting(QDir::Time | QDir::Reversed);
+    if(!nameFilter.isEmpty())
+        trashDir.setNameFilters(QStringList() << ("*" + nameFilter + "*"));
+
+    QFileInfoList trashedFileDataList = trashDir.entryInfoList();
+
+    //clear the trash list- it is done in order to process any subsequent trash update request
+    trashList.clear();
+
+    foreach (QFileInfo anotherTrashedFile, trashedFileDataList) {
+
+        TrashInfoModel *trashObj = new TrashInfoModel();
+
+        trashObj->setDisplayName(anotherTrashedFile.fileName());
+        trashObj->setCurrentPath(anotherTrashedFile.filePath());
+
+        /* Unix/Linux stores the info about deleted files in the ~/.local/share/Trash/info/ dir in the form--
+         * "Path='the-actual-path-where-the-file-was-deleted-from'
+         * DeletionDate='YYYY-MM-DDTHH:MM:SS'"
+         */
+        QString trashInfoDir = QDir::homePath() + "/.local/share/Trash/info/" + anotherTrashedFile.fileName() + ".trashinfo";
+        QFile trashedFileInfo(trashInfoDir);
+
+        if(trashedFileInfo.open(QIODevice::ReadOnly)){
+
+            QTextStream stream(&trashedFileInfo);
+
+            QString anotherLine = stream.readLine();
+
+            anotherLine = stream.readLine();
+            anotherLine = anotherLine.right(anotherLine.length() - 5);
+            trashObj->setActualPath(anotherLine);
+
+            anotherLine = stream.readLine();
+            anotherLine = anotherLine.right(anotherLine.length() - 13);
+            trashObj->setDeletedDate(anotherLine);
+
+            trashedFileInfo.close();
+
+            trashList.append(trashObj);
+        }
+    }
+    emit TrashListChanged();
 }
 
 
@@ -314,6 +369,18 @@ int RFileSystemModel::GlobalIconScale() const{
 
 void RFileSystemModel::setGlobalIconScale(const int GlobalIconScale){
     settings.setValue("global/iconScale", (GlobalIconScale + 1)*16);
+}
+
+int RFileSystemModel::GlobalAnimationDuration() const{
+    return animationDuration;
+}
+
+void RFileSystemModel::setGlobalAnimationDuration(const int GlobalAnimationDuration){
+    if(animationDuration != GlobalAnimationDuration){
+        animationDuration = GlobalAnimationDuration;
+        settings.setValue("global/animationDuration", GlobalAnimationDuration);
+        emit GlobalAnimationDurationChanged();
+    }
 }
 
 RFileSystemModel::~RFileSystemModel(){
