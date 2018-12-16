@@ -6,6 +6,7 @@ CONFIG += c++11
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
+#DEFINES += QT_QML_DEBUG_NO_WARNING
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -25,7 +26,8 @@ SOURCES += src/main.cpp \
     src/propertiesInfo/propertiesinfomodel.cpp \
     src/fileOperator/rfileoperator.cpp \
     src/fileOperator/copyoperation.cpp \
-    src/models/trashinfomodel.cpp
+    src/models/trashinfomodel.cpp \
+    src/dialogbox/rdialogbox.cpp
 
 RESOURCES += qml.qrc \
     iconlibrary.qrc
@@ -62,6 +64,7 @@ HEADERS += \
     src/fileOperator/rfileoperator.h \
     src/fileOperator/operationindicator.h \
     src/fileOperator/copyoperation.h \
-    src/qmlHelpers/mimeinfoprovider.h
+    src/qmlHelpers/mimeinfoprovider.h \
+    src/dialogbox/rdialogbox.h
 
 DISTFILES +=

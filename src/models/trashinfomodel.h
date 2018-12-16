@@ -52,6 +52,7 @@ public slots:
 
 signals:
     void notify(Error);
+    void removeDelegate();
     void DisplayNameChanged();
     void CurrentPathChanged();
     void ActualPathChanged();

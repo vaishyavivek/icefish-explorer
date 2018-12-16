@@ -12,6 +12,8 @@ RDirectoryModel::RDirectoryModel(QObject *parent) : QObject(parent){
     properties = new PropertiesInfoModel();
     isHome = false;
     updateCurrentDirectory(QDir::homePath());
+
+    connect(&watcher, &QFileSystemWatcher::directoryChanged, this, &RDirectoryModel::reloadCurrentDirectory);
 }
 
 
@@ -89,12 +91,16 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
             getIsBookmarked(&localDirectory);
             getIsHiddenItemsShown(&localDirectory);
             getIsPreviewAvailable(&localDirectory);
+            getCurrentView(&localDirectory);
             getSortingRole(&localDirectory);
             getSortingOrder(&localDirectory);
             getSortingPreference(&localDirectory);
             getIconScale(&localDirectory);
 
             QFileInfoList infoList = localDirectory.entryInfoList();
+
+            watcher.removePaths(watcher.directories());
+            watcher.addPath(directoryToSwitchTo);
 
             //clear current list to update it
             fileFolderList.clear();
@@ -122,12 +128,6 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
 
 
 
-
-void RDirectoryModel::getIsBookmarked(QDir *localDirectory){
-    isBookmarked = settings.value(localDirectory->path() + "/isBookmarked").toBool();
-    emit IsBookmarkedChanged();
-}
-
 void RDirectoryModel::setIsBookmarked(const bool IsBookmarked){
     isBookmarked = IsBookmarked;
     settings.setValue(addressBoxData + "/isBookmarked", IsBookmarked);
@@ -135,6 +135,19 @@ void RDirectoryModel::setIsBookmarked(const bool IsBookmarked){
     emit IsBookmarkedChanged();
 }
 
+void RDirectoryModel::getIsBookmarked(QDir *localDirectory){
+    isBookmarked = settings.value(localDirectory->path() + "/isBookmarked").toBool();
+    emit IsBookmarkedChanged();
+}
+
+
+
+void RDirectoryModel::setIsHiddenItemsShown(const bool IsHiddenItemsShown){
+    isHiddenItemsShown = IsHiddenItemsShown;
+    settings.setValue(addressBoxData + "/isHiddenItemsShown", IsHiddenItemsShown);
+    emit IsHiddenItemsShownChanged();
+    reloadCurrentDirectory();
+}
 
 
 void RDirectoryModel::getIsHiddenItemsShown(QDir *localDirectory){
@@ -150,14 +163,6 @@ void RDirectoryModel::getIsHiddenItemsShown(QDir *localDirectory){
 
     emit IsHiddenItemsShownChanged();
 }
-
-void RDirectoryModel::setIsHiddenItemsShown(const bool IsHiddenItemsShown){
-    isHiddenItemsShown = IsHiddenItemsShown;
-    settings.setValue(addressBoxData + "/isHiddenItemsShown", IsHiddenItemsShown);
-    emit IsHiddenItemsShownChanged();
-    reloadCurrentDirectory();
-}
-
 
 
 
@@ -180,7 +185,20 @@ void RDirectoryModel::getIsPreviewAvailable(QDir *localDirectory){
 }
 
 
+void RDirectoryModel::setCurrentView(const int &CurrentView){
+    if(settings.value("global/currentView").toInt() == 0){
+        currentView = CurrentView;
+        settings.setValue(addressBoxData + "/currentView", CurrentView);
+        emit CurrentViewChanged();
+    }
+}
 
+void RDirectoryModel::getCurrentView(QDir *localDirectory){
+    int globalView = settings.value("global/currentView").toInt();
+    currentView = settings.value(localDirectory->path() + "/currentView").toInt();
+    currentView = (globalView == 0) ? currentView : globalView;
+    emit CurrentViewChanged();
+}
 
 
 void RDirectoryModel::setSortingRole(const int &SortingRole){
@@ -390,7 +408,9 @@ void RDirectoryModel::reloadCurrentDirectory(){
 
     wildSearchKey = "";
     if(updateCurrentDirectoryInternal(nhm->Path()) == 0){
-        emit forNavBtnEnabled(pointerToCurrentDirectoryInNavigationHistoryInfoList < navigationHistoryInfoList.length());
+        //emit forNavBtnEnabled(pointerToCurrentDirectoryInNavigationHistoryInfoList > 0);
+        //if(pointerToCurrentDirectoryInNavigationHistoryInfoList > 0)
+        emit forNavBtnEnabled(pointerToCurrentDirectoryInNavigationHistoryInfoList < navigationHistoryInfoList.length() - 1);
         emit backNavBtnEnabled(pointerToCurrentDirectoryInNavigationHistoryInfoList > 0);
         emit reloadBtnEnabled(true);
 

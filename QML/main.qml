@@ -109,19 +109,26 @@ ApplicationWindow{
                                     tabHeader.currentIndex = index
                                     mainTabControl.currentIndex = index
                                 }
+                            }
 
+                            Rectangle{
+                                id: animatingRect
+                                anchors.fill: parent
+                                opacity: 0.3
+                                radius: 5
+                                color: "transparent"
                             }
 
                             PropertyAnimation{
                                 id: mouseEnteredAnimation
-                                target: tabHeaderDelegate
+                                target: animatingRect
                                 property: "color"
                                 to: rFileSystem.HighlightColor
                                 duration: rFileSystem.GlobalAnimationDuration
                             }
                             PropertyAnimation{
                                 id: mouseExitedAnimation
-                                target: tabHeaderDelegate
+                                target: animatingRect
                                 property: "color"
                                 to: (tabHeader.currentIndex == index) ? "transparent" : "lightgrey"
                                 duration: rFileSystem.GlobalAnimationDuration
@@ -141,7 +148,9 @@ ApplicationWindow{
                         id: addNewTabBtn
                         height: parent.height
                         width: height
-                        icon.name: "list-add"//"file:///home/eobardthawne/.icons/Papirus/32/emblems/emblem-new.svg"
+                        icon.source: "/local/assets/icons-add.svg"
+                        icon.width: width/2
+                        icon.height: height/2
                         icon.color: rFileSystem.IconColor
                         hoverText: "New Tab"
                         onClicked: {
@@ -168,7 +177,7 @@ ApplicationWindow{
                 height: parent.height - tabHeaderParentRect.height - 1
                 tabsVisible: false
                 Component.onCompleted: createTab()
-                onCurrentIndexChanged: forceActiveFocus()
+                //onCurrentIndexChanged: forceActiveFocus()
             }
         }
     }

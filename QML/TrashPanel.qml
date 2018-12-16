@@ -57,7 +57,7 @@ Popup{
                     height: parent.height
                     width: height
                     anchors.right: parent.right
-                    icon.name: "application-exit"//"/local/assets/icons-close.svg"
+                    icon.source: "/local/assets/icons-popup-close.svg"
                     icon.color: rFileSystem.IconColor
                     onClicked: {
                         isOpened = false
@@ -99,7 +99,7 @@ Popup{
                         property bool nowPreviewing: false
                         height: parent.height
                         width: height
-                        icon.name: "image-x-generic"
+                        icon.source: "/local/assets/icons-folder.svg"
                         icon.color: "transparent"
                         hoverText: (nowPreviewing ? "Stop Previewing items" : "Enable Image Preview")
                         onClicked: imagePreviewBtn.nowPreviewing = !imagePreviewBtn.nowPreviewing
@@ -280,21 +280,29 @@ Popup{
                         onClicked: trashList.currentIndex = index
                     }
 
+                    Rectangle{
+                        id: animatingRect
+                        anchors.fill: parent
+                        radius: 5
+                        opacity: 0.3
+                        color: "transparent"
+                    }
+
                     PropertyAnimation{
                         id: mouseEnteredAnimation
-                        target: trashListDelegate
+                        target: animatingRect
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: rFileSystem.HighlightColor
-                        duration: 250
+                        duration: rFileSystem.GlobalAnimationDuration
                     }
                     PropertyAnimation{
                         id: mouseExitedAnimation
-                        target: trashListDelegate
+                        target: animatingRect
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: "transparent"
-                        duration: 250
+                        duration: rFileSystem.GlobalAnimationDuration
                     }
                 }
 
@@ -308,6 +316,7 @@ Popup{
                     height: 50
                     color: rFileSystem.HighlightColor
                     opacity: 0.4
+                    radius: 5
 
                     Rectangle{
                         width: 5
@@ -323,7 +332,7 @@ Popup{
         NumberAnimation{
             property: "width"
             to: trashPanel.widthWhenExpanded
-            duration: rFileSystem.GlobalAnimationDuration
+            duration: rFileSystem.GlobalAnimationDuration*2
         }
     }
 
@@ -331,7 +340,7 @@ Popup{
         NumberAnimation{
             property: "width"
             to: 0
-            duration: rFileSystem.GlobalAnimationDuration
+            duration: rFileSystem.GlobalAnimationDuration*2
         }
     }
 

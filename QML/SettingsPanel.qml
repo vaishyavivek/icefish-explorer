@@ -56,7 +56,7 @@ Popup{
                     height: parent.height
                     width: height
                     anchors.right: parent.right
-                    icon.name: "application-exit"//"/local/Resources/icons-close.svg"
+                    icon.source: "/local/assets/icons-popup-close.svg"
                     icon.color: rFileSystem.IconColor
                     onClicked: {
                         isOpened = false
@@ -104,6 +104,39 @@ Popup{
                         rFileSystem.BackgroundColor = backgroundColorList[currentIndex]
                         rFileSystem.HighlightColor = highlightColorList[currentIndex]
                     }
+                }
+            }
+            Rectangle{
+                height: 2
+                width: parent.width
+                color: "lightgrey"
+                opacity: 0.5
+            }
+
+            Rectangle{
+                id: animationDuration
+                width: parent.width
+                height: 50
+                color: "transparent"
+                Text {
+                    text: qsTr("Animation Duration")
+                    font.pointSize: 10
+                    anchors.left: parent.left
+                    color: rFileSystem.IconColor
+                    anchors.leftMargin: 10
+                }
+                Slider{
+                    id: animationDurationSlider
+                    width: parent.width*0.5
+                    height: 30
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.bottom: parent.bottom
+                    minimumValue: 50
+                    maximumValue: 2000
+                    stepSize: 50
+                    value: rFileSystem.GlobalAnimationDuration
+                    onValueChanged: rFileSystem.GlobalAnimationDuration = value
                 }
             }
             Rectangle{
@@ -230,29 +263,27 @@ Popup{
             }
 
             Rectangle{
-                id: animationDuration
+                id: fileFolderView
                 width: parent.width
                 height: 50
                 color: "transparent"
                 Text {
-                    text: qsTr("Animation Duration")
+                    text: qsTr("Display Style")
                     font.pointSize: 10
                     anchors.left: parent.left
                     color: rFileSystem.IconColor
                     anchors.leftMargin: 10
                 }
-                Slider{
-                    id: animationDurationSlider
+                RComboBox{
+                    id: fileFolderViewCb
                     width: parent.width*0.5
                     height: 30
                     anchors.left: parent.left
                     anchors.leftMargin: 10
                     anchors.bottom: parent.bottom
-                    minimumValue: 50
-                    maximumValue: 2000
-                    stepSize: 50
-                    value: rFileSystem.GlobalAnimationDuration
-                    onValueChanged: rFileSystem.GlobalAnimationDuration = value
+                    model: ["Default", "ListView", "GridView"]
+                    currentIndex: rFileSystem.GlobalFileFolderView
+                    onCurrentIndexChanged: rFileSystem.GlobalFileFolderView = currentIndex
                 }
             }
             Rectangle{
@@ -268,7 +299,7 @@ Popup{
         NumberAnimation{
             property: "width"
             to: settingsPanel.widthWhenExpanded
-            duration: 500
+            duration: rFileSystem.GlobalAnimationDuration*2
         }
     }
 
@@ -276,7 +307,7 @@ Popup{
         NumberAnimation{
             property: "width"
             to: 0
-            duration: 500
+            duration: rFileSystem.GlobalAnimationDuration*2
         }
     }
 }

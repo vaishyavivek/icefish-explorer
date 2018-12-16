@@ -22,6 +22,8 @@
         <file>QML/RecentsPanel.qml</file>
         <file>QML/AddressBox.qml</file>
         <file>QML/TrashPanel.qml</file>
+        <file>QML/FileFolderListView.qml</file>
+        <file>QML/FileFolderGridView.qml</file>
         <file>QML/test.qml</file>
     </qresource>
 </RCC>

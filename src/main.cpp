@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
+
     /* Set the application credentials, to be used by dekstop environments for naming the window
      * QSettings also uses this to store and retrieve app settings such App Theme etc
      */

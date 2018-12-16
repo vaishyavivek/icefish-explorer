@@ -55,7 +55,7 @@ Popup{
                     height: parent.height
                     width: height
                     anchors.right: parent.right
-                    icon.name: "application-exit"//"/local/Resources/icons-close.svg"
+                    icon.source: "/local/assets/icons-popup-close.svg"
                     icon.color: rFileSystem.IconColor
                     onClicked: {
                         isOpened = false
@@ -182,7 +182,7 @@ Popup{
         NumberAnimation{
             property: "width"
             to: bookmarkPanel.widthWhenExpanded
-            duration: 500
+            duration: rFileSystem.GlobalAnimationDuration*2
         }
     }
 
@@ -190,7 +190,7 @@ Popup{
         NumberAnimation{
             property: "width"
             to: 0
-            duration: 500
+            duration: rFileSystem.GlobalAnimationDuration*2
         }
     }
 

@@ -39,11 +39,19 @@ Button {
         anchors.centerIn: parent
         opacity: enabled ? 1 : 0.4
         color: "transparent"
+
+        Rectangle{
+            id: animatingRect
+            anchors.fill: parent
+            opacity: 0.3
+            radius: 5
+            color: "transparent"
+        }
     }
 
     PropertyAnimation{
         id: mouseEnteredAnimation
-        target: backgroundRect
+        target: animatingRect
         property: "color"
         to: rFileSystem.HighlightColor
         duration: rFileSystem.GlobalAnimationDuration
@@ -51,7 +59,7 @@ Button {
 
     PropertyAnimation{
         id: mouseExitedAnimation
-        target: backgroundRect
+        target: animatingRect
         property: "color"
         to: "transparent"
         duration: rFileSystem.GlobalAnimationDuration

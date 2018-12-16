@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
+//import Qt.labs.platform 1.0
 
 Popup {
     id: sidePanel
@@ -303,7 +304,7 @@ Popup {
         target: sidePanel
         property: "width"
         to: widthWhenExpanded
-        duration: rFileSystem.GlobalAnimationDuration
+        duration: rFileSystem.GlobalAnimationDuration*2
     }
 
     PropertyAnimation{
@@ -311,7 +312,7 @@ Popup {
         target: sidePanel
         property: "width"
         to: normalizedWidth
-        duration: rFileSystem.GlobalAnimationDuration
+        duration: rFileSystem.GlobalAnimationDuration*2
     }
 
     Component.onCompleted: sidePanel.open()

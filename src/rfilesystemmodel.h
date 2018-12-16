@@ -56,6 +56,7 @@ class RFileSystemModel : public QObject
     Q_PROPERTY(int GlobalIsPreviewAvailable READ GlobalIsPreviewAvailable WRITE setGlobalIsPreviewAvailable NOTIFY GlobalIsPreviewAvailableChanged)
     Q_PROPERTY(int GlobalIconScale READ GlobalIconScale WRITE setGlobalIconScale NOTIFY GlobalIconScaleChanged)
     Q_PROPERTY(int GlobalAnimationDuration READ GlobalAnimationDuration WRITE setGlobalAnimationDuration NOTIFY GlobalAnimationDurationChanged)
+    Q_PROPERTY(int GlobalFileFolderView READ GlobalFileFolderView WRITE setGlobalFileFolderView NOTIFY GlobalFileFolderViewChanged)
 
 public:
     explicit RFileSystemModel(QObject *parent = nullptr);
@@ -114,6 +115,9 @@ public:
     int GlobalAnimationDuration() const;
     void setGlobalAnimationDuration(const int GlobalAnimationDuration);
 
+    int GlobalFileFolderView() const;
+    void setGlobalFileFolderView(const int &GlobalFileFolderView);
+
     ~RFileSystemModel();
 
 public slots:
@@ -154,6 +158,7 @@ signals:
     void GlobalIsPreviewAvailableChanged();
     void GlobalIconScaleChanged();
     void GlobalAnimationDurationChanged();
+    void GlobalFileFolderViewChanged();
 
     // Linked with Each TabModel to allow async writing of recent events
     void writeHistoryThreaded(QString fileAccessed);

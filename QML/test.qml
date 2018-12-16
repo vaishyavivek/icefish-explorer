@@ -1,42 +1,55 @@
-import QtQuick 2.8
-import QtQuick.Controls 2.2
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.3
+import QtQuick.Extras 1.4
+import QtQuick.Window 2.10
+import QtQuick.Controls.Material 2.12
+import QtQuick.Controls.Universal 2.12
 
 
 ApplicationWindow{
-    id: mainWindow
+    width: 400
+    height: 800
     visible: true
-    minimumWidth: 900
-    minimumHeight: 600
+    color: "grey"
 
-    Item {
-        width: 200; height: 200
+    Rectangle{
+        id: rectangle
+        width: 300
+        height: 400
+        color: "#3a3b3f"
 
-        DropArea {
-            x: 75; y: 75
-            width: 50; height: 50
+        Column{
+            id: columnLayout
+            anchors.fill: parent
+            spacing: 10
 
-            Rectangle {
-                anchors.fill: parent
-                color: "green"
 
-                visible: parent.containsDrag
+            Switch {
+                id: element
+                text: qsTr("Connect")
             }
-        }
 
-        Rectangle {
-            x: 10; y: 10
-            width: 20; height: 20
-            color: "red"
+            Rectangle{
+                width: parent.width
+                height: 200
+                ScrollView{
+                    id: scrollView
+                    anchors.fill: parent
 
-            Drag.active: dragArea.drag.active
-            //Drag.hotSpot.x: 10
-            //Drag.hotSpot.y: 10
+                    TextArea {
+                        id: textAreadd
+                        width: parent.width
+                        height: parent.height
+                        background: Rectangle {
+                            Layout.maximumHeight: 350
+                        }
 
-            MouseArea {
-                id: dragArea
-                anchors.fill: parent
-
-                drag.target: parent
+                        text: qsTr("Waiting...")
+                        wrapMode: Text.WrapAnywhere
+                        horizontalAlignment: Text.AlignLeft
+                    }
+                }
             }
         }
     }

@@ -8,6 +8,7 @@
 #include <QTextStream>
 #include <QMimeDatabase>
 #include <QSettings>
+#include <QFileSystemWatcher>
 
 #include "notification/notificationmodel.h"
 #include "rdesktopservices.h"
@@ -23,6 +24,8 @@ class RDirectoryModel : public QObject
     Q_PROPERTY(bool IsBookmarked READ IsBookmarked WRITE setIsBookmarked NOTIFY IsBookmarkedChanged)
     Q_PROPERTY(bool IsHiddenItemsShown READ IsHiddenItemsShown WRITE setIsHiddenItemsShown NOTIFY IsHiddenItemsShownChanged)
     Q_PROPERTY(bool IsPreviewAvailable READ IsPreviewAvailable WRITE setIsPreviewAvailable NOTIFY IsPreviewAvailableChanged)
+
+    Q_PROPERTY(int CurrentView READ CurrentView WRITE setCurrentView NOTIFY CurrentViewChanged)
 
     Q_PROPERTY(int SortingRole READ SortingRole WRITE setSortingRole NOTIFY SortingRoleChanged)
     Q_PROPERTY(int SortingOrder READ SortingOrder WRITE setSortingOrder NOTIFY SortingOrderChanged)
@@ -64,6 +67,9 @@ public:
 
     bool IsPreviewAvailable() const{ return isPreviewAvailable;}
     void setIsPreviewAvailable(const bool IsPreviewAvailable);
+
+    int CurrentView() const{ return currentView;}
+    void setCurrentView(const int &CurrentView);
 
     int SortingRole() const{ return sortingRole;}
     void setSortingRole(const int &SortingRole);
@@ -118,6 +124,7 @@ signals:
     void IsBookmarkedChanged();
     void IsHiddenItemsShownChanged();
     void IsPreviewAvailableChanged();
+    void CurrentViewChanged();
     void SortingRoleChanged();
     void SortingOrderChanged();
     void SortingPreferenceChanged();
@@ -151,6 +158,8 @@ private:
 
     void getIsPreviewAvailable(QDir *localDirectory);
 
+    void getCurrentView(QDir *localDirectory);
+
     void getIconScale(QDir *localDirectory);
 
     void getSortingRole(QDir *localDirectory);
@@ -169,6 +178,7 @@ private:
     bool isBookmarked;
     bool isHiddenItemsShown;
     bool isPreviewAvailable;
+    int currentView;
     int sortingRole;
     int sortingOrder;
     int sortingPreference;
@@ -199,6 +209,7 @@ private:
 
     RDesktopServices rds;
     QSettings settings;
+    QFileSystemWatcher watcher;
 };
 
 #endif // RDIRECTORYMODEL_H

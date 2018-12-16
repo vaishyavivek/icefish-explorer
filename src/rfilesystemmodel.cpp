@@ -1,5 +1,6 @@
 #include <sys/vfs.h>
 
+
 #include "rfilesystemmodel.h"
 #include "rdirectorymodel.h"
 #include "diskInfo/diskinfomodel.h"
@@ -381,6 +382,14 @@ void RFileSystemModel::setGlobalAnimationDuration(const int GlobalAnimationDurat
         settings.setValue("global/animationDuration", GlobalAnimationDuration);
         emit GlobalAnimationDurationChanged();
     }
+}
+
+int RFileSystemModel::GlobalFileFolderView() const{
+    return settings.value("global/currentView").toInt();
+}
+
+void RFileSystemModel::setGlobalFileFolderView(const int &GlobalFileFolderView){
+    settings.setValue("global/currentView", GlobalFileFolderView);
 }
 
 RFileSystemModel::~RFileSystemModel(){

@@ -22,7 +22,7 @@ void TrashInfoModel::recover(){
             else{
                 fileInfo.close();
                 fileInfo.remove();
-                deleteLater();
+                emit removeDelegate();
             }
         }
         else
@@ -40,6 +40,8 @@ void TrashInfoModel::remove(){
         QFile trashInfo(currentPath + ".trashinfo");
         if(!trashInfo.remove())
             emit notify(Error::RemovalFailed);
+        else
+            emit removeDelegate();
     }
     else
         emit notify(Error::RemovalFailed);

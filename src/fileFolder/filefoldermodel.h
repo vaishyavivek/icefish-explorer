@@ -48,10 +48,10 @@ class FileFolderModel : public QObject
     Q_PROPERTY(int ActionsMenuCount READ ActionsMenuCount NOTIFY ActionsMenuCountChanged)
 
 public:
-    FileFolderModel(QObject *parent = nullptr);
+    FileFolderModel(QObject *parent = nullptr)
+        :QObject(parent){}
 
-    FileFolderModel(QFileInfo FileInfo, QObject *parent = nullptr)
-        :QObject(parent), fileInfo(FileInfo){}
+    FileFolderModel(QFileInfo FileInfo, QObject *parent = nullptr);
 
     bool Selected() const{ return selected;}
     void setSelected(const bool Selected){ selected = Selected;}
@@ -60,7 +60,7 @@ public:
     void setDisplayName(const QString &DisplayName);
     void changeTabTitle(const QString &Title);
 
-    QString FileType() const{ return t_FileType;}
+    QString FileType() const{ return (fileInfo.isDir() ? "Directory" : fileInfo.completeSuffix());}
     void setFileType(QString FileType);
 
     QString Path() const{return fileInfo.filePath();}
@@ -97,7 +97,7 @@ signals:
 
     void ActionsMenuChanged();
     void ActionsMenuCountChanged();
-
+    void startThread(QString);
 
 private:
     QFileInfo fileInfo;

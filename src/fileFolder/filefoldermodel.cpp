@@ -18,9 +18,22 @@
 #include <QFile>
 #include <QDateTime>
 #include <QDebug>
+#include "src/qmlHelpers/mimeinfoprovider.h"
 
-FileFolderModel::FileFolderModel(QObject *parent)
-    :QObject(parent){}
+
+FileFolderModel::FileFolderModel(QFileInfo FileInfo, QObject *parent)
+    :QObject(parent), fileInfo(FileInfo){
+    QThread *thread = new QThread();
+    MimeExtractorThread *met = new MimeExtractorThread();
+    met->moveToThread(thread);
+    connect(thread, &QThread::finished, met, &MimeExtractorThread::deleteLater);
+    connect(this, &FileFolderModel::startThread, met, &MimeExtractorThread::findInfo);
+    connect(met, &MimeExtractorThread::getMimeShortInfo, this, &FileFolderModel::setFileType);
+    //thread->start();
+    //emit startThread(fileInfo.absoluteFilePath());
+}
+
+
 
 QString FileFolderModel::DisplayName() const{
     if(t_DisplayName.isEmpty())

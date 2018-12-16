@@ -67,28 +67,29 @@ Dialog{
             }
         }
     }
-
-    footer: DialogButtonBox{
-        padding: 0
+    
+    footer: Item{
         height: 40
-        alignment: Qt.AlignHCenter
-         RTextButton{
-             text: "Create"
-             height: 30
-             width: 50
-             onClicked: {
-                 if(qtModel.createNewFolder(fileNameInput.text)){
-                     fileNameInput.text = "New Folder"
-                     newFolderDialogBox.close()
-                 }
-             }
-         }
-         RTextButton{
-             text: "Cancel"
-             DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
-             height: 30
-             width: 50
-         }
+        Row{
+            anchors.horizontalCenter: parent.horizontalCenter
+            RTextButton{
+                text: "Create"
+                height: 30
+                width: 50
+                onClicked: {
+                    if(qtModel.createNewFolder(fileNameInput.text)){
+                        fileNameInput.text = "New Folder"
+                        newFolderDialogBox.close()
+                    }
+                }
+            }
+            RTextButton{
+                text: "Cancel"
+                height: 30
+                width: 50
+                onClicked: newFolderDialogBox.reject()
+            }
+        }
     }
 
     onOpened: fileNameInput.forceActiveFocus()
