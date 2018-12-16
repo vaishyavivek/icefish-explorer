@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
  * 5- adding dbus support
  ************* 6- adding path to theme the app************done
  ************* 7- recents****************done
- * 8- gridview
+ ************* 8- gridview*****************done
  * 9- google-drive integration
  * 10- dropbox integration
  * 11- on-the-fly encreption for cloud data

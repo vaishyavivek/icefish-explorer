@@ -337,7 +337,7 @@ Component{
                         hoverText: "Rename"
                         onClicked: {
                             nameInput.readOnly = false
-                            fileFolderListView.editing = true
+                            editing = true
                             nameInput.selectAll()
                             nameInput.forceActiveFocus()
                         }
