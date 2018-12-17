@@ -367,6 +367,7 @@ Component{
                             id: actionMenu
                             menuList: model.modelData.ActionsMenu
                             filePath: model.modelData.Path
+
                             height: (model.modelData.ActionsMenuCount)*26
                             width: 200
                             x: propertiesBtn.x - 220

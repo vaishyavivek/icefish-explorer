@@ -182,10 +182,13 @@ ApplicationWindow{
         }
     }
 
-    function createTab(){
+    function createTab(path){
         var tab = mainTabControl.addTab("", Qt.createComponent("TabViewDelegate.qml"))
         tab.active = true
-        rFileSystem.createNewTab()
+        if(path === undefined)
+            rFileSystem.createNewTab()
+        else
+            rFileSystem.createNewTab(path)
         tab.item.qtModel = rFileSystem.getTabData()
         mainTabControl.currentIndex = tabHeader.count - 1
         tabHeader.currentIndex = tabHeader.count - 1

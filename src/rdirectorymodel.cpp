@@ -290,6 +290,15 @@ QList<QObject*> RDirectoryModel::getActionMenuFor(QString filePath){
     if(!open->Submenu().isEmpty())
         menu.append(open);
 
+    QFileInfo dir(filePath);
+    if(dir.isDir()){
+        MenuModel *newTab = new MenuModel();
+        newTab->setServiceName("Open in New tab");
+        newTab->setAction("newtab");
+        menu.append(newTab);
+    }
+
+
     MenuModel *cut = new MenuModel();
     cut->setServiceName("Cut");
     cut->setAction("cut");

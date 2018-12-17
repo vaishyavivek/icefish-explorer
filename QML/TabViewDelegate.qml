@@ -20,7 +20,7 @@ Rectangle{
 
     width: parent.width
     height: parent.height
-    //color: rFileSystem.BackgroundColor
+    color: rFileSystem.BackgroundColor
 
     Column{
         anchors.fill: parent

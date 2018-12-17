@@ -460,7 +460,8 @@ Popup{
             width: height
             anchors.right: parent.right
             anchors.top: parent.top
-            iconPath: "/local/assets/icons-close.svg"
+            icon.source: "/local/assets/icons-close.svg"
+            icon.color: rFileSystem.IconColor
             onClicked: propertiesPanel.close()
         }
     }
@@ -470,13 +471,13 @@ Popup{
             property: "width"
             from: 0
             to: 300
-            duration: 500
+            duration: rFileSystem.GlobalAnimationDuration
         }
         NumberAnimation{
             property: "height"
             from: 0
             to: 400
-            duration: 500
+            duration: rFileSystem.GlobalAnimationDuration
         }
     }
 
@@ -484,12 +485,12 @@ Popup{
         NumberAnimation{
             property: "width"
             to: 0
-            duration: 500
+            duration: rFileSystem.GlobalAnimationDuration
         }
         NumberAnimation{
             property: "height"
             to: 0
-            duration: 500
+            duration: rFileSystem.GlobalAnimationDuration
         }
     }
 

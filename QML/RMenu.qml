@@ -47,7 +47,12 @@ ToolTip{
                         onEntered: mouseEnteredAnimation.start()
                         onExited: mouseExitedAnimation.start()
                         onClicked: {
-                            qtModel.performAction(filePath, model.modelData.Action)
+                            var action = model.modelData.Action
+                            if(action === "newtab")
+                                mainWindow.createTab(filePath)
+                                //rFileSystem.createNewTab(filePath)
+                            else
+                                qtModel.performAction(filePath, action)
                             rmenu.close()
                         }
                     }
