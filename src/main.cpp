@@ -5,10 +5,13 @@
 
 #include "rfilesystemmodel.h"
 #include "rdirectorymodel.h"
+#include "fileOperator/rfileoperator.h"
 #include "rdesktopservices.h"
 #include "qmlHelpers/mimeiconprovider.h"
 #include "qmlHelpers/pixmappreviewprovider.h"
 #include "qmlHelpers/mimeinfoprovider.h"
+#include "qmlHelpers/xdgiconprovider.h"
+#include "dialogbox/rdialogbox.h"
 
 int main(int argc, char *argv[])
 {
@@ -31,6 +34,8 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<RDirectoryModel>("com.rdirectorymodel", 1, 0, "RDirectoryModel");
 
+    qmlRegisterType<RDialogBox>("com.rdialogbox", 1, 0, "RDialogBox");
+
     QQmlApplicationEngine *engine = new QQmlApplicationEngine();
 
     QQmlContext *ctxt = engine->rootContext();
@@ -45,12 +50,16 @@ int main(int argc, char *argv[])
     ctxt->setContextProperty("rFileSystem", rfsm);
 
 
+    RFileOperator *rfop = new RFileOperator(engine);
+    ctxt->setContextProperty("rFileOperator", rfop);
+
     /* Class was designed to be used for providing desktop services like getting themed icon, filetype from meme database etc
      * But now its not used anymore for that purpose,
      * there're still some use cases for this, which will be replaced with more of generic Qt libraries
      *
      * It still serves the purpose of retrieving desktop service handler apps, like VLC opens mp4, Firefox opens http/s request
      * I assume this is still not complete, because of its slow handling time hence requires further work
+     * ******removed-20-12*********
      */
     RDesktopServices rds;
     rds.startMimeCaching();
@@ -63,9 +72,15 @@ int main(int argc, char *argv[])
      */
     engine->addImageProvider("mime", new MimeIconProvider());
     engine->addImageProvider("preview", new PixmapPreviewProvider());
+    engine->addImageProvider("xdg", new XDGIconProvider());
 
     //loads the main.qml in ApplicationWindow
     engine->load(QUrl(QStringLiteral("qrc:/QML/main.qml")));
+
+    if(argc > 1){
+        QString currentAddress = argv[1];
+        rfsm->createNewTab(currentAddress);
+    }
 
     if (engine->rootObjects().isEmpty())
         return -1;
@@ -78,8 +93,8 @@ int main(int argc, char *argv[])
  ************* 1- desktop services************done
  ************* 2- properties ----------designed----------linking left
  ************* 3- linking with global properties************done
- * 4- allowing file operations
- * 5- adding dbus support
+ ************* 4- allowing file operations***********50% work done
+ ************* 5- adding dbus support**** uncertain whether to implement or not
  ************* 6- adding path to theme the app************done
  ************* 7- recents****************done
  ************* 8- gridview*****************done

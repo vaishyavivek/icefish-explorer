@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
+import "../CustomComponents"
 
 Popup{
     id: trashPanel
@@ -16,7 +17,15 @@ Popup{
         width: parent.width
         height: parent.height
         border.width: 1
+        anchors.centerIn: parent
         color: rFileSystem.BackgroundColor
+
+        Rectangle{
+            anchors.fill: parent
+            opacity: 0.2
+            color: rFileSystem.HighlightColor
+        }
+
         Column{
             id: column
             anchors.fill: parent
@@ -142,7 +151,8 @@ Popup{
 
             ListView{
                 id: trashList
-                width: parent.width - 5
+                property int indexBeforeUpdating: 0
+                width: parent.width - 8
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: parent.height - headerBar.height - 4
                 model: rFileSystem.TrashList
@@ -247,7 +257,11 @@ Popup{
                                 icon.source: "/local/assets/icons-remove.svg"
                                 icon.color: rFileSystem.IconColor
                                 hoverText: "Remove"
-                                onClicked: model.modelData.remove()
+                                onClicked: {
+                                    trashList.indexBeforeUpdating = index
+                                    model.modelData.remove()
+                                    rFileSystem.prepareRecentsList()
+                                }
                             }
 
                             RImageButton{
@@ -257,7 +271,11 @@ Popup{
                                 icon.source: "/local/assets/icons-recover.svg"
                                 icon.color: rFileSystem.IconColor
                                 hoverText: "Recover"
-                                onClicked: model.modelData.recover()
+                                onClicked: {
+                                    trashList.indexBeforeUpdating = index
+                                    model.modelData.recover()
+                                    rFileSystem.prepareRecentsList()
+                                }
                             }
 
                             RImageButton{
@@ -324,6 +342,8 @@ Popup{
                         color: rFileSystem.IconColor
                     }
                 }
+
+                onModelChanged: currentIndex = indexBeforeUpdating
             }
         }
     }

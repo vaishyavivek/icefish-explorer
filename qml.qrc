@@ -1,29 +1,31 @@
 <RCC>
     <qresource prefix="/">
         <file>QML/main.qml</file>
-        <file>QML/SidePanel.qml</file>
         <file>QML/TabViewDelegate.qml</file>
-        <file>QML/RCheckBox.qml</file>
-        <file>QML/ShortcutMenu.qml</file>
-        <file>QML/RImageButton.qml</file>
-        <file>QML/RImageExpandingButton.qml</file>
-        <file>QML/RScaleControlSpinBox.qml</file>
-        <file>QML/NotificationPanel.qml</file>
-        <file>QML/BookmarkPanel.qml</file>
-        <file>QML/RMenu.qml</file>
-        <file>QML/NewFolderDialogBox.qml</file>
-        <file>QML/RTextButton.qml</file>
-        <file>QML/NewFileDialogBox.qml</file>
-        <file>QML/RComboBox.qml</file>
-        <file>QML/SettingsPanel.qml</file>
-        <file>QML/WildSearchPanel.qml</file>
-        <file>QML/PropertiesPanel.qml</file>
-        <file>QML/SortingPanel.qml</file>
-        <file>QML/RecentsPanel.qml</file>
-        <file>QML/AddressBox.qml</file>
-        <file>QML/TrashPanel.qml</file>
         <file>QML/FileFolderListView.qml</file>
         <file>QML/FileFolderGridView.qml</file>
+        <file>QML/AddressBarComponents/AddressBox.qml</file>
+        <file>QML/AddressBarComponents/ShortcutMenu.qml</file>
+        <file>QML/SidePanels/SidePanel.qml</file>
+        <file>QML/SidePanels/BookmarkPanel.qml</file>
+        <file>QML/SidePanels/RecentsPanel.qml</file>
+        <file>QML/SidePanels/TrashPanel.qml</file>
+        <file>QML/SidePanels/SettingsPanel.qml</file>
+        <file>QML/CustomComponents/RCheckBox.qml</file>
+        <file>QML/CustomComponents/RImageButton.qml</file>
+        <file>QML/CustomComponents/RImageExpandingButton.qml</file>
+        <file>QML/CustomComponents/RScaleControlSpinBox.qml</file>
+        <file>QML/CustomComponents/RMenu.qml</file>
+        <file>QML/CustomComponents/RTextButton.qml</file>
+        <file>QML/CustomComponents/RComboBox.qml</file>
+        <file>QML/Popups/SortingPanel.qml</file>
+        <file>QML/Popups/NotificationPanel.qml</file>
+        <file>QML/Popups/NewFolderDialogBox.qml</file>
+        <file>QML/Popups/NewFileDialogBox.qml</file>
+        <file>QML/Popups/WildSearchPanel.qml</file>
+        <file>QML/Popups/PropertiesPanel.qml</file>
+        <file>QML/BackgroundProcessIndicator/IndicatorPanel.qml</file>
         <file>QML/test.qml</file>
+        <file>QML/FileFolderSelectionDialogBox.qml</file>
     </qresource>
 </RCC>

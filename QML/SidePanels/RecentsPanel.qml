@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import "../CustomComponents"
 
 Popup{
     id: recentsPanel
@@ -15,7 +16,15 @@ Popup{
         width: parent.width
         height: parent.height
         border.width: 1
+        anchors.centerIn: parent
         color: rFileSystem.BackgroundColor
+
+        Rectangle{
+            anchors.fill: parent
+            opacity: 0.2
+            color: rFileSystem.HighlightColor
+        }
+
         Column{
             anchors.fill: parent
             spacing: 5
@@ -73,8 +82,9 @@ Popup{
 
             ListView{
                 id: recentsList
-                width: parent.width
+                width: parent.width - 8
                 height: parent.height - headerBar.height - 4
+                anchors.horizontalCenter: parent.horizontalCenter
                 clip: true
                 model: rFileSystem.RecentsList
 
@@ -140,21 +150,30 @@ Popup{
                         }
                     }
 
+
+
+                    Rectangle{
+                        id: animatingRect
+                        anchors.fill: parent
+                        radius: 5
+                        opacity: 0.3
+                        color: "transparent"
+                    }
                     PropertyAnimation{
                         id: mouseEnteredAnimation
-                        target: recentsListDelegate
+                        target: animatingRect
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: rFileSystem.HighlightColor
-                        duration: 100
+                        duration: rFileSystem.GlobalAnimationDuration
                     }
                     PropertyAnimation{
                         id: mouseExitedAnimation
-                        target: recentsListDelegate
+                        target: animatingRect
                         property: "color"
                         easing.type: Easing.OutInQuad
                         to: "transparent"
-                        duration: 100
+                        duration: rFileSystem.GlobalAnimationDuration
                     }
                 }
 
@@ -167,6 +186,7 @@ Popup{
                     height: 25
                     color: rFileSystem.HighlightColor
                     opacity: 0.4
+                    radius: 5
 
                     Rectangle{
                         width: 5

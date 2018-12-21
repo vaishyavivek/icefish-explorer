@@ -1,50 +1,34 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+//import QtGraphicalEffects 1.0
 
 Button {
     id: rButton
-    property string iconPath
+    property string hoverText: ""
+    property bool toolTipEnabled: hoverText.length > 0
 
-    checkable: true
     hoverEnabled: true
     padding: 0
 
-    contentItem: Rectangle{
+
+    /*contentItem: Rectangle{
         width: rButton.width
         height: rButton.height
         color: "transparent"
-
-        Row{
-            anchors.fill: parent
-            Rectangle{
-                id: image
-                height: parent.height
-                width: height*0.9
-                color: "transparent"
-                Image {
-                    source: iconPath
-                    sourceSize.width: parent.height*0.75
-                    sourceSize.height: parent.height*0.75
-                    anchors.centerIn: parent
-                }
-            }
-
-            Rectangle{
-                width: parent.width - image.width
-                height: parent.height
-                color: "transparent"
-                Text {
-                    color: rFileSystem.IconColor
-                    text: rButton.text
-                    font: rButton.font
-                    verticalAlignment: Text.AlignVCenter
-                    width: parent.width
-                    height: parent.height
-                    clip: true
-                }
-            }
+        Image{
+            id: image
+            source: rButton.iconPath
+            sourceSize.width: parent.width*0.75
+            sourceSize.height: parent.height*0.75
+            anchors.centerIn: parent
         }
-    }
+
+        ColorOverlay{
+            anchors.fill: image
+            source: rButton.iconPath
+            color: mainWindow.fontColor
+        }
+    }*/
 
     background: Rectangle {
         id: backgroundRect
@@ -53,6 +37,7 @@ Button {
         anchors.centerIn: parent
         opacity: enabled ? 1 : 0.4
         color: "transparent"
+
         Rectangle{
             id: animatingRect
             anchors.fill: parent
@@ -76,6 +61,22 @@ Button {
         property: "color"
         to: "transparent"
         duration: rFileSystem.GlobalAnimationDuration
+    }
+
+    ToolTip{
+        id: tooltip
+        visible: toolTipEnabled && parent.hovered
+        text: hoverText
+        delay: 200
+        timeout: 1000
+        contentItem: Text {
+            text: tooltip.text
+            font: tooltip.font
+            color: rFileSystem.BackgroundColor
+        }
+        background: Rectangle {
+            color: rFileSystem.IconColor
+        }
     }
 
     onHoveredChanged: {

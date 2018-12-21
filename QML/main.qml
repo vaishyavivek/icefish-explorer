@@ -2,6 +2,9 @@ import QtQuick 2.8
 import QtQuick.Controls 2.2
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
+import "SidePanels"
+import "CustomComponents"
+import "Popups"
 
 ApplicationWindow{
     id: mainWindow
@@ -35,7 +38,14 @@ ApplicationWindow{
                 id: tabHeaderParentRect
                 width: parent.width
                 height: 35
-                color: mainWindow.color
+                color: "transparent"
+
+                Rectangle{
+                    anchors.fill: parent
+                    opacity: 0.2
+                    color: rFileSystem.HighlightColor
+                }
+
                 Row{
                     anchors.fill: parent
                     ListView{
@@ -65,7 +75,7 @@ ApplicationWindow{
                                     color: "transparent"
 
                                     Image {
-                                        source: "image://mime/" + model.modelData.Path
+                                        source: "image://mime" + model.modelData.Path
                                         sourceSize.width: parent.width*0.75
                                         sourceSize.height: parent.height*0.75
                                         anchors.centerIn: parent
@@ -158,7 +168,7 @@ ApplicationWindow{
                                 addNewTabBtn.visible = false
                                 addNewTabBtn.width = 0
                             }
-                            createTab()
+                            rFileSystem.createNewTab()
                         }
                     }
                 }
@@ -168,7 +178,7 @@ ApplicationWindow{
                 width: parent.width
                 height: 1
                 opacity: 0.2
-                color: "black"
+                color: rFileSystem.IconColor
             }
 
             TabView{
@@ -176,19 +186,18 @@ ApplicationWindow{
                 width: parent.width
                 height: parent.height - tabHeaderParentRect.height - 1
                 tabsVisible: false
-                Component.onCompleted: createTab()
-                //onCurrentIndexChanged: forceActiveFocus()
+                Component.onCompleted: rFileSystem.createNewTab()//createTab()
             }
         }
     }
 
-    function createTab(path){
+    function createTab(){
         var tab = mainTabControl.addTab("", Qt.createComponent("TabViewDelegate.qml"))
         tab.active = true
-        if(path === undefined)
+        /*if(path === undefined)
             rFileSystem.createNewTab()
         else
-            rFileSystem.createNewTab(path)
+            rFileSystem.createNewTab(path)*/
         tab.item.qtModel = rFileSystem.getTabData()
         mainTabControl.currentIndex = tabHeader.count - 1
         tabHeader.currentIndex = tabHeader.count - 1
@@ -213,5 +222,11 @@ ApplicationWindow{
         x: sidePanel.width + mainTabControl.width/2 - width/2
         oldY: mainWindow.height
         newY: mainWindow.height - height - 10
+    }
+
+    Connections{
+        target: rFileSystem
+        ignoreUnknownSignals: true
+        onCreateQmlTab: createTab()
     }
 }

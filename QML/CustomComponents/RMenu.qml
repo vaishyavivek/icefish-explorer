@@ -49,8 +49,7 @@ ToolTip{
                         onClicked: {
                             var action = model.modelData.Action
                             if(action === "newtab")
-                                mainWindow.createTab(filePath)
-                                //rFileSystem.createNewTab(filePath)
+                                rFileSystem.createNewTab(filePath)
                             else
                                 qtModel.performAction(filePath, action)
                             rmenu.close()

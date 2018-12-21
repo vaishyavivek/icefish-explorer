@@ -6,6 +6,13 @@
 
 #include <QDebug>
 #include <QDateTime>
+#include <QtWidgets/QApplication>
+#include <QMimeData>
+#include <QUrl>
+#include <QByteArray>
+#include <QDataStream>
+#include <QDrag>
+#include <QClipboard>
 
 RDirectoryModel::RDirectoryModel(QObject *parent) : QObject(parent){
     pointerToCurrentDirectoryInNavigationHistoryInfoList = -1;
@@ -13,7 +20,12 @@ RDirectoryModel::RDirectoryModel(QObject *parent) : QObject(parent){
     isHome = false;
     updateCurrentDirectory(QDir::homePath());
 
-    connect(&watcher, &QFileSystemWatcher::directoryChanged, this, &RDirectoryModel::reloadCurrentDirectory);
+    connect(&watcher, &QFileSystemWatcher::directoryChanged, this, &RDirectoryModel::requestToReloadFromQml);
+
+    clipboardContentCount = 0;
+    lastOperationType = 0;
+    connect(QApplication::clipboard(), &QClipboard::dataChanged, this, &RDirectoryModel::enableClipboardPasting);
+    emit enableClipboardPasting();
 }
 
 
@@ -44,7 +56,6 @@ void RDirectoryModel::updateCurrentDirectory(QString newDirectoryToSwitchTo){
         else if(notificationLevel == 1)
             emit notify(Error::PathDoesntExist);
         else if(notificationLevel == 2){
-            //setAddressBoxData(newDirectoryToSwitchTo.left(newDirectoryToSwitchTo.lastIndexOf("/")));
             if(pointerToCurrentDirectoryInNavigationHistoryInfoList < navigationHistoryInfoList.length())
                 forNavBtnEnabled(true);
             if(pointerToCurrentDirectoryInNavigationHistoryInfoList > 0)
@@ -99,7 +110,8 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
 
             QFileInfoList infoList = localDirectory.entryInfoList();
 
-            watcher.removePaths(watcher.directories());
+            if(!watcher.directories().isEmpty())
+                watcher.removePaths(watcher.directories());
             watcher.addPath(directoryToSwitchTo);
 
             //clear current list to update it
@@ -146,9 +158,8 @@ void RDirectoryModel::setIsHiddenItemsShown(const bool IsHiddenItemsShown){
     isHiddenItemsShown = IsHiddenItemsShown;
     settings.setValue(addressBoxData + "/isHiddenItemsShown", IsHiddenItemsShown);
     emit IsHiddenItemsShownChanged();
-    reloadCurrentDirectory();
+    emit requestToReloadFromQml();
 }
-
 
 void RDirectoryModel::getIsHiddenItemsShown(QDir *localDirectory){
 
@@ -185,6 +196,7 @@ void RDirectoryModel::getIsPreviewAvailable(QDir *localDirectory){
 }
 
 
+
 void RDirectoryModel::setCurrentView(const int &CurrentView){
     if(settings.value("global/currentView").toInt() == 0){
         currentView = CurrentView;
@@ -199,6 +211,7 @@ void RDirectoryModel::getCurrentView(QDir *localDirectory){
     currentView = (globalView == 0) ? currentView : globalView;
     emit CurrentViewChanged();
 }
+
 
 
 void RDirectoryModel::setSortingRole(const int &SortingRole){
@@ -275,6 +288,41 @@ void RDirectoryModel::getIconScale(QDir *localDirectory){
     emit IconScaleChanged();
 }
 
+
+
+void RDirectoryModel::enableClipboardPasting(){
+    const QMimeData *mime = QApplication::clipboard()->mimeData();
+    if(mime->hasUrls())
+        clipboardContentCount = mime->urls().length();
+    else
+        clipboardContentCount = 0;
+    emit ClipboardContentCountChanged();
+}
+
+void RDirectoryModel::copyOrCutItems(int type, QString filePath){
+    QClipboard *clipboard = QApplication::clipboard();
+    lastOperationType = type;
+    if(filePath.isEmpty()){
+        QList<QUrl> urlList;
+        foreach(QObject *file, fileFolderList){
+            FileFolderModel *fileModel = qobject_cast<FileFolderModel*>(file);
+            if(fileModel->Selected())
+                urlList.append(QUrl::fromLocalFile(fileModel->Path()));
+            fileModel->deleteLater();
+        }
+        QMimeData *data = new QMimeData;
+        data->setUrls(urlList);
+        clipboard->setMimeData(data);
+    }
+    else if(!filePath.isEmpty()){
+        QMimeData *data = new QMimeData;
+        QList<QUrl> urllist;
+        urllist.append(QUrl::fromLocalFile(filePath));
+        data->setUrls(urllist);
+        clipboard->setMimeData(data);
+    }
+    emit ClipboardOperationTypeChanged();
+}
 
 
 QList<QObject*> RDirectoryModel::getActionMenuFor(QString filePath){
@@ -360,7 +408,6 @@ void RDirectoryModel::setAddressBoxData(QString changedAddress){
             changedAddress = changedAddress.section("/", 1);
         }
 
-        //emit askAddressBoxToSwitchToListViewMode(true);
         emit AddressBoxDataChanged();
         emit AddressBoxDataListViewChanged();
     }
@@ -505,7 +552,6 @@ bool RDirectoryModel::createNewFolder(QString folderName){
     }
 
     dir.mkdir(folderName);
-    reloadCurrentDirectory();
     return true;
 }
 
@@ -526,16 +572,17 @@ bool RDirectoryModel::createNewFile(QString fileName, QString fileType){
     QFile file(fileInfo.absoluteFilePath());
     if(!file.open(QIODevice::WriteOnly))
         file.close();
-
-    reloadCurrentDirectory();
     return true;
 }
 
 
 void RDirectoryModel::performAction(QString filePath, QString action, QString optionalParam){
-    if(action == "open-with"){
+    if(action == "open-with")
         rds.runDesktopService(filePath, optionalParam);
-    }
+    else if(action == "copy")
+        copyOrCutItems(0, filePath);
+    else if(action == "cut")
+        copyOrCutItems(1, filePath);
     else if(action == "properties"){
         properties->setProperties(filePath);
         emit PropertiesChanged();

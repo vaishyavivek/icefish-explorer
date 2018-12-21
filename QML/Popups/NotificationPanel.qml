@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import "../CustomComponents"
 
 Popup{
     id: notificationPanel
@@ -43,7 +44,8 @@ Popup{
                     height: parent.height
                     width: height
                     anchors.right: parent.right
-                    iconPath: "/local/Resources/icons-close.svg"
+                    icon.source: "/local/Resources/icons-close.svg"
+                    icon.color: rFileSystem.IconColor
                     onClicked: notificationPanel.close()
                 }
             }

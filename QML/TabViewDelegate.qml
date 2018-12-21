@@ -4,6 +4,9 @@ import QtQuick.Controls 2.4
 import QtGraphicalEffects 1.0
 import com.mimeinfoprovider 1.0
 import com.rdirectorymodel 1.0
+import "CustomComponents"
+import "AddressBarComponents"
+import "Popups"
 
 Rectangle{
     id: tabViewDelegate
@@ -12,6 +15,8 @@ Rectangle{
     property real highlightMoveDuration: rFileSystem.GlobalAnimationDuration
     property bool editing: false
     property bool searching: false
+    property int selectionCount: 0
+    property int totalModelCount: 0
     //property alias focus: fileFolderViewFocus.focus
 
     /*RDirectoryModel{
@@ -21,6 +26,13 @@ Rectangle{
     width: parent.width
     height: parent.height
     color: rFileSystem.BackgroundColor
+
+    Rectangle{
+        width: parent.width
+        height: 92
+        opacity: 0.2
+        color: rFileSystem.HighlightColor
+    }
 
     Column{
         anchors.fill: parent
@@ -72,7 +84,7 @@ Rectangle{
                 icon.source: "/local/assets/icons-reload.svg"
                 icon.color: enabled ? rFileSystem.IconColor : "#4d26282a"
                 hoverText: "Reload"
-                onClicked: qtModel.reloadCurrentDirectory()
+                onClicked: reloadView()//qtModel.reloadCurrentDirectory()
                 Connections{
                     target: qtModel
                     ignoreUnknownSignals: true
@@ -92,7 +104,7 @@ Rectangle{
             width: parent.width
             height: 1
             opacity: 0.2
-            color: "black"
+            color: rFileSystem.IconColor
         }
 
         Rectangle{
@@ -104,7 +116,7 @@ Rectangle{
             Rectangle{
                 id: defaultLayout
                 opacity: visible ? 1 : 0
-                visible: !selectAll.checked
+                visible: selectionCount  == 0
                 height: parent.height
                 width: height*5
                 anchors.left: parent.left
@@ -119,7 +131,8 @@ Rectangle{
                         id: selectAll
                         height: parent.height*0.75
                         width: height
-                        checked: false
+                        checked: selectionCount == totalModelCount
+                        Component.onCompleted: checked = false
                     }
 
                     RImageButton{
@@ -195,13 +208,35 @@ Rectangle{
                             y: newFolderBtn.height
                         }
                     }
+
+                    RImageButton{
+                        id: pasteItems
+                        height: parent.height
+                        width: height
+                        visible: qtModel.ClipboardContentCount > 0
+                        icon.source: "/local/assets/icons-paste.svg"
+                        icon.color: rFileSystem.IconColor
+                        hoverText: (qtModel.ClipboardOperationType === 0 ? "Copy " : "Move ") + qtModel.ClipboardContentCount + " Item"
+                                   + (qtModel.ClipboardContentCount === 1 ? "" : "s") + " Here"
+                        onClicked: {
+                            switch(qtModel.ClipboardOperationType){
+                            case 0:
+                                rFileOperator.copyFiles(qtModel.AddressBoxData)
+                                break;
+                            case 1:
+                                rFileOperator.moveFiles(qtModel.AddressBoxData)
+                            }
+                        }
+                    }
                 }
+
+                Behavior on opacity { PropertyAnimation{ duration: rFileSystem.GlobalAnimationDuration}}
             }
 
             Rectangle{
                 id: layoutWhenSelected
                 opacity: visible ? 1 : 0
-                visible: selectAll.checked
+                visible: selectionCount > 0
                 height: parent.height
                 width: height*5
                 anchors.left: parent.left
@@ -217,10 +252,36 @@ Rectangle{
                         height: parent.height
                         width: height
                         icon.source: "/local/assets/icons-back-arrow.svg"
-                        icon.color: mainWindow.fontColor
-                        onClicked: selectAll.checked = false
+                        icon.color: rFileSystem.IconColor
+                        onClicked: {
+                            selectAll.checked = false
+                            selectionCount = 0
+                            reloadView()
+                        }
+                    }
+
+                    RImageButton{
+                        id: copyItems
+                        height: parent.height
+                        width: height
+                        icon.source: "/local/assets/icons-copy.svg"
+                        icon.color: rFileSystem.IconColor
+                        hoverText: "Copy " + selectionCount + " Item" + (selectionCount == 1 ? "" : "s")
+                        onClicked: qtModel.copyOrCutItems(0)
+                    }
+
+                    RImageButton{
+                        id: moveItems
+                        height: parent.height
+                        width: height
+                        icon.source: "/local/assets/icons-cut.svg"
+                        icon.color: rFileSystem.IconColor
+                        hoverText: "Cut " + selectionCount + " Item" + (selectionCount == 1 ? "" : "s")
+                        onClicked: qtModel.copyOrCutItems(1)
                     }
                 }
+
+                Behavior on opacity { PropertyAnimation{ duration: rFileSystem.GlobalAnimationDuration}}
             }
 
             Row{
@@ -325,7 +386,7 @@ Rectangle{
                     width: height
                     icon.source: "/local/assets/icons-" + (currentView == 0 ? "list" : "grid") + "view.svg"
                     icon.color: rFileSystem.IconColor
-                    hoverText: (currentView == 0 ? "ListView" : "GridView")
+                    hoverText: (currentView == 0 ? "Switch to GridView" : "Switch to ListView")
                     onClicked: qtModel.CurrentView = (currentView == 0) ? 1 : 0
                 }
 
@@ -366,7 +427,7 @@ Rectangle{
             width: parent.width
             height: 1
             opacity: 0.2
-            color: "black"
+            color: rFileSystem.IconColor
         }
 
         Rectangle{
@@ -384,6 +445,7 @@ Rectangle{
                 Loader{
                     id: fileFolderView
                     property int currentIndex: 0
+                    property int currentIndexForReloading: 0
                     anchors.fill: parent
                     sourceComponent: (qtModel.CurrentView === 0) ? fileFolderListView : fileFolderGridView
 
@@ -435,6 +497,19 @@ Rectangle{
         highlightMoveDuration = rFileSystem.GlobalAnimationDuration
     }
 
+    function reloadView(){
+        var index = fileFolderView.currentIndexForReloading
+        qtModel.reloadCurrentDirectory()
+        //set the highlight movement to maximum so that there's no time lapse in update
+        highlightMoveDuration = 10
+
+        //now change to the last active index in the model
+        fileFolderView.currentIndex = index
+
+        //set the highlight to default values
+        highlightMoveDuration = rFileSystem.GlobalAnimationDuration
+    }
+
     function updateModel(newPath, index){
         qtModel.ActiveIndexInCurrentModel = index
         qtModel.updateCurrentDirectory(newPath)
@@ -442,4 +517,10 @@ Rectangle{
     }
 
     //onFocusChanged: fileFolderViewFocus.forceActiveFocus()
+
+    Connections{
+        target: qtModel
+        ignoreUnknownSignals: true
+        onRequestToReloadFromQml: reloadView()
+    }
 }

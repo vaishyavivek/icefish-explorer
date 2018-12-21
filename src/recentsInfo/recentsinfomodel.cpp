@@ -10,9 +10,13 @@ RecentsInfoModel::RecentsInfoModel(QObject *parent) : QObject(parent)
 
 HistoryKeeper::HistoryKeeper(QObject *parent)
     :QObject(parent){
-    historyFilePath = QDir::homePath() + "/.RevProgIFace/FileHistory.rde";
+    historyFilePath = QDir::homePath() + "/.config/Reverse Explorer";
+    QDir dir;
+    dir.mkpath(historyFilePath);
 
+    historyFilePath += "/FileHistory.rde";
     QFile historyFile(historyFilePath);
+
     if(!historyFile.exists()){
         historyFile.open(QIODevice::WriteOnly);
         historyFile.close();
@@ -24,7 +28,7 @@ void HistoryKeeper::WriteHistoryAsync(QString fileAccessed){
     if(fileAccessed.endsWith('/') && fileAccessed.length() > 1)
         fileAccessed = fileAccessed.left(fileAccessed.length() - 1);
 
-    QFile historyFile(QDir::homePath() + "/.RevProgIFace/FileHistory.rde");
+    QFile historyFile(historyFilePath);
 
     if(!historyFile.exists()){
         historyFile.open(QIODevice::WriteOnly);
@@ -62,8 +66,8 @@ void HistoryKeeper::WriteHistoryAsync(QString fileAccessed){
 }
 
 void HistoryKeeper::refineMostlyVisitedSites(){
-    QFile historyFile(QDir::homePath() + "/.RevProgIFace/FileHistory.rde");
-    QFile highHistoryFile(QDir::homePath() + "/.RevProgIFace/MostVisitedPlaces.rde");
+    QFile historyFile(historyFilePath);
+    QFile highHistoryFile(QDir::homePath() + "/.config/Reverse Explorer/MostVisitedPlaces.rde");
 
     if(historyFile.open(QIODevice::ReadOnly)){
         QString wholeFile = historyFile.readAll();

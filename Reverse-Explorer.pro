@@ -1,4 +1,4 @@
-QT += quick
+QT += dbus quick
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -25,9 +25,9 @@ SOURCES += src/main.cpp \
     src/notification/notificationmodel.cpp \
     src/propertiesInfo/propertiesinfomodel.cpp \
     src/fileOperator/rfileoperator.cpp \
-    src/fileOperator/copyoperation.cpp \
     src/models/trashinfomodel.cpp \
-    src/dialogbox/rdialogbox.cpp
+    src/dialogbox/rdialogbox.cpp \
+    src/fileOperator/operation.cpp
 
 RESOURCES += qml.qrc \
     iconlibrary.qrc
@@ -65,6 +65,9 @@ HEADERS += \
     src/fileOperator/operationindicator.h \
     src/fileOperator/copyoperation.h \
     src/qmlHelpers/mimeinfoprovider.h \
-    src/dialogbox/rdialogbox.h
+    src/dialogbox/rdialogbox.h \
+    src/qmlHelpers/xdgiconprovider.h \
+    src/fileOperator/operation.h \
+    src/fileOperator/cutoperation.h
 
 DISTFILES +=

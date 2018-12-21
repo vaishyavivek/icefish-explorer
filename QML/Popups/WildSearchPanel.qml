@@ -56,6 +56,6 @@ Popup{
     onClosed: {
         searchKey = ""
         qtModel.reloadCurrentDirectory()
-        fileFolderListView.searching = false
+        fileFolderView.searching = false
     }
 }

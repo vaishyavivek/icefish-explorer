@@ -47,6 +47,9 @@ class RDirectoryModel : public QObject
     Q_PROPERTY(QList<QObject*> AddressBoxShortcutMenuList READ AddressBoxShortcutMenuList NOTIFY AddressBoxShortcutMenuListChanged)
     Q_PROPERTY(int AddressBoxShortcutMenuListCount READ AddressBoxShortcutMenuListCount NOTIFY AddressBoxShortcutMenuListCountChanged)
 
+    Q_PROPERTY(int ClipboardContentCount READ ClipboardContentCount NOTIFY ClipboardContentCountChanged)
+    Q_PROPERTY(int ClipboardOperationType READ ClipboardOperationType NOTIFY ClipboardOperationTypeChanged)
+
 public:
     explicit RDirectoryModel(QObject *parent = nullptr);
 
@@ -83,6 +86,7 @@ public:
     int IconScale() const{ return iconScale;}
     void setIconScale(const int IconScale);
 
+
     PropertiesInfoModel* Properties(){return properties;}
 
     bool IsHome() const{ return isHome;}
@@ -100,6 +104,9 @@ public:
     Q_INVOKABLE void navigateForward();
     Q_INVOKABLE void reloadCurrentDirectory();
 
+    int ClipboardContentCount() const{ return clipboardContentCount;}
+    int ClipboardOperationType() const{ return lastOperationType;}
+
 public slots:
     void deleteFile(int index);
 
@@ -108,7 +115,9 @@ public slots:
 
     QList<QObject*> getActionMenuFor(QString filePath);
     void performAction(QString filePath, QString action, QString optionalParam = "");
-    //bool runDesktopService
+
+    void enableClipboardPasting();
+    void copyOrCutItems(int type, QString filePath = "");
 
 signals:
     void TitleChanged(QString newTitle);
@@ -119,7 +128,6 @@ signals:
     void FileFolderListChanged();
     void activeIndexInCurrentModelChanged();
     void WildSearchKeyChanged();
-    void triggerIconCacheThreads();
 
     void IsBookmarkedChanged();
     void IsHiddenItemsShownChanged();
@@ -131,27 +139,27 @@ signals:
     void IconScaleChanged();
 
     void PropertiesChanged();
+    void showProperties();
 
     void IsHomeChanged();
 
     void backNavBtnEnabled(bool newValue);
     void forNavBtnEnabled(bool newValue);
     void reloadBtnEnabled(bool newValue);
+    void requestToReloadFromQml();
 
     void AddressBoxDataChanged();
     void AddressBoxDataListViewChanged();
     void AddressBoxShortcutMenuListChanged();
     void AddressBoxShortcutMenuListCountChanged();
 
-    void askAddressBoxToSwitchToListViewMode(bool newValue);
-
     void createNew_ChooseAnother(QString suggestedName);
 
-    void showProperties();
-
-    void changeFileFolderView(int newView);
+    void ClipboardOperationTypeChanged();
+    void ClipboardContentCountChanged();
 
 private:
+
     void getIsBookmarked(QDir *localDirectory);
 
     void getIsHiddenItemsShown(QDir *localDirectory);
@@ -185,6 +193,9 @@ private:
     int iconScale;
 
     PropertiesInfoModel *properties;
+
+    int clipboardContentCount;
+    int lastOperationType;
 
     //<TODO>
     bool isHome;

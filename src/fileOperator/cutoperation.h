@@ -1,10 +1,10 @@
-#ifndef COPYOPERATION_H
-#define COPYOPERATION_H
+#ifndef CUTOPERATION_H
+#define CUTOPERATION_H
 
 #include <QDebug>
 #include "operation.h"
 
-class CopyOperation : public Operation
+class CutOperation : public Operation
 {
     Q_OBJECT
     void run() override{
@@ -58,21 +58,19 @@ class CopyOperation : public Operation
                 }
 
                 currentFile.close();
+                currentFile.remove();
                 destinationFile.close();
             }
-
             if(!errored)
                 emit setProgress(100);
         }
     }
 
 public:
-    CopyOperation(QList<QUrl> FileList, QString DestinitionPath){
+    CutOperation(QList<QUrl> FileList, QString DestinitionPath){
         fileList = FileList;
         destinitionPath = DestinitionPath;
     }
-
-
 };
 
-#endif // COPYOPERATION_H
+#endif // CUTOPERATION_H

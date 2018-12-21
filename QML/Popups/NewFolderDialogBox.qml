@@ -1,16 +1,23 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.3
+import "../CustomComponents"
 
 Dialog{
     id: newFolderDialogBox
     property string currentPath
+    property int retryCounter: 0
+
+    modal: true
+    dim: false
+
+    closePolicy: Popup.NoAutoClose
 
     header: Item{
         width: newFolderDialogBox.header.width
         height: 25
         Rectangle{
             anchors.fill: parent
-            opacity: 0.3
+            opacity: 0.2
             color: "#95bcc8"
         }
 
@@ -40,40 +47,28 @@ Dialog{
                 Text {
                     width: parent.width
                     height: 30
-                    text: qsTr("Create New File in: \n" + currentPath)
+                    text: qsTr("Create New Folder in: \n" + currentPath)
                 }
 
-                Row{
+                TextField{
+                    id: fileNameInput
                     width: parent.width
                     height: 30
-                    spacing: 2
-                    TextField{
-                        id: fileNameInput
-                        width: parent.width*0.7
-                        height: parent.height
-                        text: "New File"
-                        onFocusChanged: if(focus) selectAll()
-
-                        Connections{
-                            target: qtModel
-                            ignoreUnknownSignals: true
-                            onCreateNew_ChooseAnother: {
-                                fileNameInput.text = suggestedName
-                                fileNameInput.forceActiveFocus()
-                            }
+                    text: "New Folder"
+                    onFocusChanged: if(focus) selectAll()
+                    Connections{
+                        target: qtModel
+                        ignoreUnknownSignals: true
+                        onCreateNew_ChooseAnother: {
+                            fileNameInput.text = suggestedName
+                            fileNameInput.forceActiveFocus()
                         }
-                    }
-                    RComboBox{
-                        id: fileType
-                        width: parent.width*0.3
-                        height: parent.height
-                        model: ["txt", "doc", "Other"]
                     }
                 }
             }
         }
     }
-
+    
     footer: Item{
         height: 40
         Row{
@@ -83,9 +78,9 @@ Dialog{
                 height: 30
                 width: 50
                 onClicked: {
-                    if(qtModel.createNewFile(fileNameInput.text, fileType.currentText)){
-                        fileNameInput.text = "New File"
-                        newFileDialogBox.close()
+                    if(qtModel.createNewFolder(fileNameInput.text)){
+                        fileNameInput.text = "New Folder"
+                        newFolderDialogBox.close()
                     }
                 }
             }
@@ -93,7 +88,7 @@ Dialog{
                 text: "Cancel"
                 height: 30
                 width: 50
-                onClicked: newFileDialogBox.reject()
+                onClicked: newFolderDialogBox.reject()
             }
         }
     }

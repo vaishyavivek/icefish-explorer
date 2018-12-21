@@ -38,5 +38,12 @@
         <file>assets/icons-bookmark.svg</file>
         <file>assets/icons-listview.svg</file>
         <file>assets/icons-gridview.svg</file>
+        <file>assets/icons-cd-up.svg</file>
+        <file>assets/icons-copy.svg</file>
+        <file>assets/icons-cut.svg</file>
+        <file>assets/icons-paste.svg</file>
+        <file>assets/icons-collapse.svg</file>
+        <file>assets/icons-expand.svg</file>
+        <file>assets/icons-process.svg</file>
     </qresource>
 </RCC>

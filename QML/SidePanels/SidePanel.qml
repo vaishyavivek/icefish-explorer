@@ -3,6 +3,8 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 //import Qt.labs.platform 1.0
+import "../CustomComponents"
+import "../BackgroundProcessIndicator"
 
 Popup {
     id: sidePanel
@@ -22,6 +24,12 @@ Popup {
         width: parent.width
         height: parent.height
         color: rFileSystem.BackgroundColor
+
+        Rectangle{
+            anchors.fill: parent
+            opacity: 0.2
+            color: rFileSystem.HighlightColor
+        }
 
         Column{
             anchors.fill: parent
@@ -78,8 +86,7 @@ Popup {
                         id: homeBar
                         width: parent.width
                         height: normalizedWidth
-                        //icon.name: "user-home"
-                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:user-home", 64)
+                        icon.source: "image://xdg/user-home"
                         text: "Home"
                         onClicked: updateCurrentDirectory("home")
                         ButtonGroup.group: radioGroup
@@ -89,9 +96,8 @@ Popup {
                         id: documentsBar
                         width: parent.width
                         height: normalizedWidth
-                        //icon.name: "folder-documents"
-                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder-documents", 64)
-                        text: "Your Documents"
+                        icon.source: "image://xdg/folder-documents"
+                        text: "Documents"
                         onClicked: updateCurrentDirectory("Documents")
                         ButtonGroup.group: radioGroup
                     }
@@ -100,8 +106,8 @@ Popup {
                         id: downloadsBar
                         width: parent.width
                         height: normalizedWidth
-                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder-download", 64)
-                        text: "Your Downloads"
+                        icon.source: "image://xdg/folder-downloads"
+                        text: "Downloads"
                         onClicked: updateCurrentDirectory("Downloads")
                         ButtonGroup.group: radioGroup
                     }
@@ -110,8 +116,8 @@ Popup {
                         id: musicBar
                         width: parent.width
                         height: normalizedWidth
-                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder-music", 64)
-                        text: "Your Musics"
+                        icon.source: "image://xdg/folder-music"
+                        text: "Musics"
                         onClicked: updateCurrentDirectory("Music")
                     }
 
@@ -119,8 +125,8 @@ Popup {
                         id: videoBar
                         width: parent.width
                         height: normalizedWidth
-                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder-video", 64)
-                        text: "Your Videos"
+                        icon.source: "image://xdg/folder-video"
+                        text: "Videos"
                         onClicked: updateCurrentDirectory("Videos")
                         ButtonGroup.group: radioGroup
                     }
@@ -129,8 +135,8 @@ Popup {
                         id: pictureBar
                         width: parent.width
                         height: normalizedWidth
-                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder-pictures", 64)
-                        text: "Your Pictures"
+                        icon.source: "image://xdg/folder-pictures"
+                        text: "Pictures"
                         onClicked: updateCurrentDirectory("Pictures")
                         ButtonGroup.group: radioGroup
                     }
@@ -184,7 +190,7 @@ Popup {
                             RImageExpandingButton{
                                 width: parent.width
                                 height: normalizedWidth
-                                iconPath: "file://" + rDesktopService.getThemeIcon("std-name:drive-harddisk", 64)
+                                icon.source: "image://xdg/drive-harddisk"
                                 text: "<b>" + model.modelData.DisplayName + "</b> (" + model.modelData.DevName + ")"
                                 onClicked: {
                                     updateCurrentDirectory(model.modelData.MountPoint)
@@ -207,8 +213,9 @@ Popup {
                         id: bookmarksBtn
                         width: parent.width
                         height: normalizedWidth
-                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder-favorites", 64)
-                        text: "Your Bookmarks"
+                        icon.source: "image://xdg/folder-favorites"
+                        text: "Bookmarks"
+                        hoverText: "Your Bookmarks"
                         checked: bookmarkPanel.isOpened
 
                         BookmarkPanel{
@@ -227,8 +234,9 @@ Popup {
                         id: recentsBtn
                         width: parent.width
                         height: normalizedWidth
-                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:folder-activities", 64)
-                        text: "Your Recently Visited Places"
+                        icon.source: "image://xdg/folder-activities"
+                        text: "Recents"
+                        hoverText: "Your Recently Visited Places"
                         checked: recentsPanel.isOpened
 
                         RecentsPanel{
@@ -247,7 +255,7 @@ Popup {
                         id: trashBtn
                         width: parent.width
                         height: normalizedWidth
-                        iconPath: "file://" + rDesktopService.getThemeIcon("std-name:user-trash", 64)
+                        icon.source: "image://xdg/user-trash"
                         text: "Trash"
                         checked: trashPanel.isOpened
 
@@ -274,11 +282,36 @@ Popup {
                     }
 
                     RImageExpandingButton{
+                        id: processBtn
+                        width: parent.width
+                        height: normalizedWidth
+                        icon.source: "/local/assets/icons-process.svg"
+                        icon.color: rFileSystem.IconColor
+                        text: "Processes"
+                        hoverText: "File Operations you perform"
+                        checked: indicatorPanel.isOpened
+
+                        IndicatorPanel{
+                            id: indicatorPanel
+                            x: sidePanel.width
+                            y: sidePanelParentRect.y - processBtn.y - 2
+                            widthWhenExpanded: mainWindow.width*0.35
+                            height: mainWindow.height - 35
+                        }
+                        onClicked: {
+                            indicatorPanel.isOpened ? indicatorPanel.close() : indicatorPanel.open()
+                            indicatorPanel.isOpened = !indicatorPanel.isOpened
+                        }
+                    }
+
+                    RImageExpandingButton{
                         id: settingsBtn
                         width: parent.width
                         height: normalizedWidth
-                        iconPath: "/local/assets/icons-settings.svg"
+                        icon.source: "/local/assets/icons-settings.svg"
+                        icon.color: rFileSystem.IconColor
                         text: "Global Settings"
+                        hoverText: "Customize your File Manager"
                         checked: settingsPanel.isOpened
 
                         SettingsPanel{
@@ -287,13 +320,13 @@ Popup {
                             y: sidePanelParentRect.y - settingsBtn.y - 2
                             widthWhenExpanded: mainWindow.width*0.35
                             height: mainWindow.height - 35
-                            background: rFileSystem.BackgroundColor
                         }
                         onClicked: {
                             settingsPanel.isOpened ? settingsPanel.close() : settingsPanel.open()
                             settingsPanel.isOpened = !settingsPanel.isOpened
                         }
                     }
+
                 }
             }
         }

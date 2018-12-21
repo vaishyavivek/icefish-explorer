@@ -1,9 +1,10 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.4
 import QtGraphicalEffects 1.0
-
+import "CustomComponents"
 
 Component{
+    //property alias currentIndex: fileFolderListView.currentIndex
     ListView{
         id: fileFolderListView
 
@@ -199,11 +200,10 @@ Component{
                     id: check
                     height: fileFolderListView.chechboxWidth
                     width: fileFolderListView.chechboxWidth
-                    checked: selectAll.checked
+                    checked: model.modelData.Selected || selectAll.checked
                     onCheckedChanged: {
-                        model.modelData.Checked = checked
-                        //layoutWhenSelected.visible = checked
-                        //defaultLayout.visible = checked
+                        model.modelData.Selected = checked
+                        checked ? selectionCount++ : selectionCount--
                     }
                 }
 
@@ -423,7 +423,7 @@ Component{
         highlight: Rectangle{
             width: fileFolderListView.width
             height: scaleFactor
-            color: rFileSystem.HighlightColor
+            color: rFileSystem.SelectedColor
             opacity: 0.4
             radius: 5
             Rectangle{
@@ -453,9 +453,13 @@ Component{
             }
         }
 
-        onCurrentIndexChanged: editing = false
+        onCurrentIndexChanged: {
+            fileFolderView.currentIndexForReloading = currentIndex
+            editing = false
+        }
 
         onModelChanged: {
+            totalModelCount = count
             if(!fileFolderListView.focus)
                 fileFolderListView.forceActiveFocus()
         }

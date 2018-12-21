@@ -8,7 +8,8 @@
 #include "bookmarkInfo/bookmarkinfomodel.h"
 #include "recentsInfo/recentsinfomodel.h"
 #include "models/trashinfomodel.h"
-
+#include <QDBusConnection>
+#include <QDBusConnectionInterface>
 
 RFileSystemModel::RFileSystemModel(QObject *parent)
     : QObject(parent){
@@ -36,6 +37,28 @@ RFileSystemModel::RFileSystemModel(QObject *parent)
     iconColor = settings.value("global/iconColor").toString();
     animationDuration = settings.value("global/animationDuration").toInt();
 }
+
+
+/*void RFileSystemModel::setupDbus(){
+    QDBusConnection::sessionBus().registerObject(QStringLiteral("/org/freedesktop/FileManager1"), this,
+                                                 QDBusConnection::ExportScriptableContents | QDBusConnection::ExportAdaptors);
+    QDBusConnection::sessionBus().interface()->registerService(QStringLiteral("org.freedesktop.FileManager1"),
+                                                                   QDBusConnectionInterface::QueueService);
+}
+
+void RFileSystemModel::ShowFolders(const QStringList &uriList, const QString &startUpId){
+    Q_UNUSED(startUpId);
+    foreach(QString uri, uriList){
+        QDir dir(uri);
+        if(dir.exists())
+            createNewTab(uri);
+    }
+}
+
+void RFileSystemModel::ShowItems(const QStringList &uriList, const QString &startUpId){
+    Q_UNUSED(startUpId);
+}*/
+
 
 void RFileSystemModel::writeBookmarkAsync(QString filePath, bool addOrRemove){
     addOrRemove ? emit addBookmark(filePath) : emit removeBookmark(filePath);
@@ -119,7 +142,7 @@ void RFileSystemModel::GetAttachedDiskList(){
 void RFileSystemModel::prepareRecentsList(){
 
     recentsList.clear();
-    QFile historyFile(QDir::homePath() + "/.RevProgIFace/FileHistory.rde");
+    QFile historyFile(QDir::homePath() + "/.config/Reverse Explorer/FileHistory.rde");
     if(historyFile.open(QIODevice::ReadOnly)){
         QString buffer = historyFile.readAll();
         QStringList historyList = buffer.split('\n', QString::SkipEmptyParts);
@@ -251,15 +274,16 @@ void RFileSystemModel::createNewTab(QString Path){
     connect(newTab, &RDirectoryModel::TitleChanged, ffm, &FileFolderModel::changeTabTitle);
     connect(newTab, &RDirectoryModel::notify, nm, &NotificationModel::Notify);
 
-    newTab->updateCurrentDirectory(Path);
+    tabHeaderList.append(ffm);
+    emit TabHeaderListChanged();
 
     tabDataList.append(newTab);
-    tabHeaderList.append(ffm);
-
-    emit TabHeaderListChanged();
+    newTab->updateCurrentDirectory(Path);
 
     connect(newTab, &RDirectoryModel::WriteBookmarkThreaded, this, &RFileSystemModel::writeBookmarkAsync);
     connect(newTab, &RDirectoryModel::WriteHistoryTabbed, this, &RFileSystemModel::writeHistoryThreaded);
+
+    emit createQmlTab();
 }
 
 QObject* RFileSystemModel::getTabData(){
@@ -343,6 +367,17 @@ void RFileSystemModel::setHighlightColor(const QString &HighlightColor){
     }
 }
 
+QString RFileSystemModel::SelectedColor() const{
+    return selectedColor;
+}
+
+void RFileSystemModel::setSelectedColor(const QString &SelectedColor){
+    if(selectedColor != SelectedColor){
+        selectedColor = SelectedColor;
+        settings.setValue("global/selectedColor", selectedColor);
+        emit SelectedColorChanged();
+    }
+}
 
 int RFileSystemModel::GlobalIsHiddenItemsShown() const{
     return settings.value("global/isHiddenItemsShown").toInt();

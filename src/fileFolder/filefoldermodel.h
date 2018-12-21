@@ -60,7 +60,7 @@ public:
     void setDisplayName(const QString &DisplayName);
     void changeTabTitle(const QString &Title);
 
-    QString FileType() const{ return (fileInfo.isDir() ? "Directory" : fileInfo.completeSuffix());}
+    QString FileType() const{ return (fileInfo.isDir() ? "Directory" : fileInfo.suffix());}
     void setFileType(QString FileType);
 
     QString Path() const{return fileInfo.filePath();}

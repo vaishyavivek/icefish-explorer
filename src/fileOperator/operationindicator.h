@@ -2,15 +2,16 @@
 #define OPERATIONINDICATOR_H
 
 #include <QObject>
+#include "rfileoperator.h"
 
 class OperationIndicator: public QObject{
     Q_OBJECT
-    Q_PROPERTY(QString Header READ Header WRITE setHeader NOTIFY HeaderChanged)
-    Q_PROPERTY(int Progress READ Progress WRITE setProgress NOTIFY ProgressChanged)
-    Q_PROPERTY(QString StatusReport READ StatusReport WRITE setStatusReport NOTIFY StatusReportChanged)
-    Q_PROPERTY(QString TimeRequired READ TimeRequired WRITE setTimeRequired NOTIFY TimeRequiredChanged)
-    Q_PROPERTY(QString TransferSpeed READ TransferSpeed WRITE setTransferSpeed NOTIFY TransferSpeedChanged)
 
+    Q_PROPERTY(QString Header READ Header NOTIFY HeaderChanged)
+    Q_PROPERTY(int Progress READ Progress NOTIFY ProgressChanged)
+    //Q_PROPERTY(QString StatusReport READ StatusReport NOTIFY StatusReportChanged)
+    Q_PROPERTY(QString TimeRequired READ TimeRequired NOTIFY TimeRequiredChanged)
+    Q_PROPERTY(QString TransferSpeed READ TransferSpeed NOTIFY TransferSpeedChanged)
 
 public:
     OperationIndicator(QObject *parent = nullptr)
@@ -25,15 +26,15 @@ public:
     }
 
     int Progress() const{return progress;}
-    void setProgress(const int &Progress){
+    void setProgress(int Progress){
         if(progress != Progress){
             progress = Progress;
             emit ProgressChanged();
         }
     }
 
-    QString StatusReport() const{ return statusReport;}
-    void setStatusReport(const QString &StatusReport){
+    OperationState StatusReport() const{ return statusReport;}
+    void setStatusReport(const OperationState StatusReport){
         if(statusReport != StatusReport){
             statusReport = StatusReport;
             emit StatusReportChanged();
@@ -66,9 +67,29 @@ signals:
 private:
     QString header;
     int progress;
-    QString statusReport;
+    OperationState statusReport;
     QString timeRequired;
     QString transferSpeed;
 };
 
 #endif // OPERATIONINDICATOR_H
+
+
+/*class QmlHelper : public QObject{
+    Q_OBJECT
+
+public:
+    QmlHelper(QObject *parent = nullptr)
+        :QObject (parent){}
+
+signals:
+    void setHeader(const QString &);
+    void setProgress(const int);
+    void setTimeRequired(const QString &);
+    void setTransferSpeed(const QString &);
+
+public slots:
+    void getHeader(const QString &Header){
+        emit setHeader(Header);
+    }
+};*/

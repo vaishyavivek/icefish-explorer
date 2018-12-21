@@ -45,7 +45,7 @@ class RFileSystemModel : public QObject
     Q_PROPERTY(QString BackgroundColor READ BackgroundColor WRITE setBackgroundColor NOTIFY BackgroundColorChanged)
     Q_PROPERTY(QString IconColor READ IconColor WRITE setIconColor NOTIFY IconColorChanged)
     Q_PROPERTY(QString HighlightColor READ HighlightColor WRITE setHighlightColor NOTIFY HighlightColorChanged)
-
+    Q_PROPERTY(QString SelectedColor READ SelectedColor WRITE setSelectedColor NOTIFY SelectedColorChanged)
 
     /* While opening a new directory in any tab, first preference is given to these global properties and then the per directory settings are applied
      * 'Default(0)': Each directory will follow its own settings
@@ -60,6 +60,12 @@ class RFileSystemModel : public QObject
 
 public:
     explicit RFileSystemModel(QObject *parent = nullptr);
+
+    //void setupDbus();
+
+    //Q_SCRIPTABLE void ShowFolders(const QStringList& uriList, const QString& startUpId);
+    //Q_SCRIPTABLE void ShowItems(const QStringList& uriList, const QString& startUpId);
+
 
     /* Handles Tab Creation/ Navigation/ Deletion stuffs
      * can be invoked from any part of QML code
@@ -103,6 +109,9 @@ public:
     QString HighlightColor() const;
     void setHighlightColor(const QString &HighlightColor);
 
+    QString SelectedColor() const;
+    void setSelectedColor(const QString &SelectedColor);
+
     int GlobalIsHiddenItemsShown() const;
     void setGlobalIsHiddenItemsShown(const int GlobalIsHiddenItemsShown);
 
@@ -135,6 +144,8 @@ public slots:
     void prepareTrashList(QString nameFilter = "");
 
 signals:
+    void createQmlTab();
+
     void NModelChanged();
 
     // Signals to notify BookmarkKeeper Thread to add or remove the currently bookmarked place
@@ -153,6 +164,7 @@ signals:
     void BackgroundColorChanged();
     void IconColorChanged();
     void HighlightColorChanged();
+    void SelectedColorChanged();
 
     void GlobalIsHiddenItemsShownChanged();
     void GlobalIsPreviewAvailableChanged();
@@ -187,6 +199,7 @@ private:
     QString backgroundColor;
     QString iconColor;
     QString highlightColor;
+    QString selectedColor;
     int animationDuration;
 
     // Global Settings handler object

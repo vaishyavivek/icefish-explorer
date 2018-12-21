@@ -23,6 +23,7 @@
 
 FileFolderModel::FileFolderModel(QFileInfo FileInfo, QObject *parent)
     :QObject(parent), fileInfo(FileInfo){
+    selected = false;
     QThread *thread = new QThread();
     MimeExtractorThread *met = new MimeExtractorThread();
     met->moveToThread(thread);
@@ -77,7 +78,7 @@ void FileFolderModel::setFileType(QString FileType){
 
 
 QString FileFolderModel::FileSize() const{
-    if(t_FileType.contains("directory", Qt::CaseInsensitive)){
+    if(fileInfo.isDir()){
         QDir directory(fileInfo.filePath());
         return QString::number(directory.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot).length()) + " Files/Folders";
     }

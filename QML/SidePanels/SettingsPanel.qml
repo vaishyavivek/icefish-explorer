@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Controls 1.4
+import "../CustomComponents"
 
 Popup{
     id: settingsPanel
@@ -16,7 +17,15 @@ Popup{
         width: parent.width - 2
         height: parent.height - 2
         border.width: 1
-        color: mainWindow.color
+        anchors.centerIn: parent
+        color: rFileSystem.BackgroundColor
+
+        Rectangle{
+            anchors.fill: parent
+            opacity: 0.2
+            color: rFileSystem.HighlightColor
+        }
+
         Column{
             anchors.fill: parent
             spacing: 5
@@ -88,8 +97,8 @@ Popup{
                     id: themeCb
                     property var iconColorList: ["black", "white", "darkred", "darkslateblue", "deeppink", "antiquewhite"]
                     property var backgroundColorList: ["white", "#312d2d", "cornsilk", "azure", "pink", "cornflowerblue"]
-                    property var highlightColorList: ["powderblue", "darkgray", "goldenrod", "aqua", "mistyrose", "slateblue"]
-                    property var selectionColorList
+                    property var highlightColorList: ["silver", "lightgray", "moccasin", "paleturquoise", "mistyrose", "slateblue"]
+                    property var selectionColorList: ["grey", "darkgray", "goldenrod", "aqua", "mistyrose", "slateblue"]
 
                     width: parent.width*0.5
                     height: 30
@@ -103,6 +112,7 @@ Popup{
                         rFileSystem.IconColor = iconColorList[currentIndex]
                         rFileSystem.BackgroundColor = backgroundColorList[currentIndex]
                         rFileSystem.HighlightColor = highlightColorList[currentIndex]
+                        rFileSystem.SelectedColor = selectionColorList[currentIndex]
                     }
                 }
             }

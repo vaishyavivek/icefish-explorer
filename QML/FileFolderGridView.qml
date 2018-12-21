@@ -1,6 +1,7 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.4
 import QtGraphicalEffects 1.0
+import "CustomComponents"
 
 Component{
     GridView{
@@ -27,11 +28,9 @@ Component{
                 id: check
                 height: scaleFactor/2
                 width: scaleFactor/2
-                checked: selectAll.checked
+                checked: model.modelData.Selected || selectAll.checked
                 onCheckedChanged: {
-                    model.modelData.Checked = checked
-                    //layoutWhenSelected.visible = checked
-                    //defaultLayout.visible = checked
+                    model.modelData.Selected = checked
                 }
             }
 
@@ -71,6 +70,7 @@ Component{
                         id: nameInput
                         text: model.modelData.DisplayName
                         font.family: "Sans Serif"
+                        horizontalAlignment: Text.AlignHCenter
                         color: rFileSystem.IconColor
                         font.pointSize: Math.max(scaleFactor*0.16, 8)
                         anchors.verticalCenter: parent.verticalCenter
@@ -95,11 +95,18 @@ Component{
                 height: scaleFactor
                 width: height*3
                 padding: 0
-                closePolicy: Popup.NoAutoClose
+                closePolicy: Popup.CloseOnPressOutside
+                modal: false
 
                 Rectangle{
                     anchors.fill: parent
                     color: "transparent"
+
+                    Rectangle{
+                        anchors.fill: parent
+                        opacity: 0.3
+                        color: rFileSystem.BackgroundColor
+                    }
 
                     Row{
                         anchors.fill: parent
@@ -198,17 +205,21 @@ Component{
         highlight: Rectangle{
             width: fileFolderGridView.cellWidth
             height: fileFolderGridView.cellHeight
-            color: rFileSystem.HighlightColor
+            color: rFileSystem.SelectedColor
             opacity: 0.4
             radius: 5
         }
 
         onModelChanged: {
+            totalModelCount = count
             if(!fileFolderGridView.focus)
                 fileFolderGridView.forceActiveFocus()
         }
 
-        onCurrentIndexChanged: editing = false
+        onCurrentIndexChanged: {
+            fileFolderView.currentIndexForReloading = currentIndex
+            editing = false
+        }
 
         Keys.onPressed: {
             if(!editing){
