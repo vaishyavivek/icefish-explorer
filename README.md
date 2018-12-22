@@ -1,6 +1,6 @@
-## Reverse Explorer
+## Turbo File eXplorer
 
-*A File Manager, for power users and for the cloud.*
+*A File Manager, for power users needing customizations.*
 
 ---
 
