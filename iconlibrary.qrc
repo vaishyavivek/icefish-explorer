@@ -45,5 +45,6 @@
         <file>assets/icons-collapse.svg</file>
         <file>assets/icons-expand.svg</file>
         <file>assets/icons-process.svg</file>
+        <file>assets/company-logo.png</file>
     </qresource>
 </RCC>

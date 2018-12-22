@@ -16,24 +16,28 @@ Wish to have multiple directories opened within single window, we've covered you
 
 No more pressing 'r' 'r' 'r' thousand times, type 'reverse' and you'll get your desired file.
 
+**No Additional Popup Windows**
+
+Everything under the same Window, all your file operations can be monitored from side bar like a web browser.
+
 **Custom Icons**
 
-Bored with default icons, customize it at your convenience. (only Linux supported)
+Perfect integration with KDE(Qt5) and Gnome(GTK+) icon caches.
 
 **Themes**
 
-Comes with default light theme with an optional dark theme (experimental).
+Comes with default Light theme with an optional Dark theme and 5 others.
 
 **The Cloud on the Ground**
 
-Get your Google Drive, Dropbox and Onedrive files in your local PC without actually downloading theme.
+<coming soon>Get your Google Drive, Dropbox and OneDrive files in your local PC without actually downloading them.
 
 **FreeDesktop.org compliant**
 
-Allows easy switching from other file-managers pre-existing on xdg-compliant platforms.
+Built for easy switching from Dolphin and Nautilus.
 
 **Cross Platform**
 
-One File Manager, one UI, constant across all your devices, Linux and Windows supported, macOS port is under development.
+<ongoing>One File Manager, one UI, constant across all your devices, Linux and Windows supported, macOS port is under development.
 
 ---

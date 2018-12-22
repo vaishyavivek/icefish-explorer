@@ -51,7 +51,7 @@ void HistoryKeeper::WriteHistoryAsync(QString fileAccessed){
             }
         }
 
-        line = QString::number(timesVisited+1) + "|" + QDateTime::currentDateTime().toString("ddd MMMM d yyyy|hh:mm") + "|" + fileAccessed;
+        line = QString::number(timesVisited+1) + "|" + QDateTime::currentDateTime().toString("dd/MM/yy hh:mm") + "|" + fileAccessed;
         historyList.append(line);
 
         if(historyFile.open(QIODevice::WriteOnly)){

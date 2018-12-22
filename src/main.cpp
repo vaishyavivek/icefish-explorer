@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     /* Set the application credentials, to be used by dekstop environments for naming the window
      * QSettings also uses this to store and retrieve app settings such App Theme etc
      */
-    QCoreApplication::setApplicationName("reverse-explorer");
+    QCoreApplication::setApplicationName("Turbo FX");
     QCoreApplication::setOrganizationDomain("geetasoftwarecompany.com");
     QCoreApplication::setOrganizationName("Geeta Software Company");
 

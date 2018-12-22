@@ -33,8 +33,8 @@ public:
         }
     }
 
-    OperationState StatusReport() const{ return statusReport;}
-    void setStatusReport(const OperationState StatusReport){
+    RFileOperator::OperationState StatusReport() const{ return statusReport;}
+    void setStatusReport(const RFileOperator::OperationState StatusReport){
         if(statusReport != StatusReport){
             statusReport = StatusReport;
             emit StatusReportChanged();
@@ -67,29 +67,9 @@ signals:
 private:
     QString header;
     int progress;
-    OperationState statusReport;
+    RFileOperator::OperationState statusReport;
     QString timeRequired;
     QString transferSpeed;
 };
 
 #endif // OPERATIONINDICATOR_H
-
-
-/*class QmlHelper : public QObject{
-    Q_OBJECT
-
-public:
-    QmlHelper(QObject *parent = nullptr)
-        :QObject (parent){}
-
-signals:
-    void setHeader(const QString &);
-    void setProgress(const int);
-    void setTimeRequired(const QString &);
-    void setTransferSpeed(const QString &);
-
-public slots:
-    void getHeader(const QString &Header){
-        emit setHeader(Header);
-    }
-};*/

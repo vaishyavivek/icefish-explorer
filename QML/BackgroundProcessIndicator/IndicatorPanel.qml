@@ -84,7 +84,7 @@ Popup{
                 height: parent.height - headerBar.height - 5
                 anchors.horizontalCenter: parent.horizontalCenter
                 contentWidth: width
-                contentHeight: ongoingProcesses.height + waitingProcesses.height
+                contentHeight: ongoingProcesses.height + waitingProcesses.height + completedProcesses.height
 
                 Rectangle{
                     id: ongoingProcesses
@@ -270,6 +270,97 @@ Popup{
                             height: visible ? 30 : 0
                             color: "transparent"
                             visible: waitingProcesses.isExpanded && waitingProcessesContent.count === 0
+                            Text{
+                                anchors.fill: parent
+                                text: "Nothing to show here"
+                                font.family: "Sans Serif"
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                color: rFileSystem.IconColor
+                            }
+                        }
+                    }
+
+                    Behavior on height { PropertyAnimation{ duration: rFileSystem.GlobalAnimationDuration}}
+                }
+
+                Rectangle{
+                    id: completedProcesses
+                    anchors.top: waitingProcesses.bottom
+                    property bool isExpanded: false
+                    width: parent.width
+                    height: isExpanded ? 25 + completedProcessesContent.height + nocompleted.height: 25
+                    color: "transparent"
+                    radius: 5
+                    Column{
+                        anchors.fill: parent
+                        RImageExpandingButton{
+                            width: parent.width
+                            height: 25
+                            text: "Completed Processes"
+                            icon.source: "/local/assets/icons-" + (completedProcesses.sExpanded ? "collapse.svg" : "expand.svg")
+                            icon.color: rFileSystem.IconColor
+                            onClicked: completedProcesses.isExpanded = !completedProcesses.isExpanded
+                        }
+
+                        ListView{
+                            id: completedProcessesContent
+                            width: parent.width
+                            height: count*60
+                            visible: completedProcesses.isExpanded
+                            model: rFileOperator.CompletedProcessList
+
+                            delegate: Rectangle{
+                                id: completedProcessesContentListDelegate
+                                width: parent.width
+                                height: 60
+                                Column{
+                                    anchors.fill: parent
+                                    anchors.margins: 5
+                                    spacing: 5
+
+                                    Rectangle{
+                                        width: parent.width
+                                        height: (parent.height - 15)*0.33
+                                        color: "transparent"
+                                        Text{
+                                            text: model.modelData.Header
+                                            font.family: "Sans Serif"
+                                            color: rFileSystem.IconColor
+                                        }
+                                    }
+
+                                    Rectangle{
+                                        width: parent.width
+                                        height: (parent.height - 15)*0.33
+                                        color: "transparent"
+                                        Text{
+                                            text: model.modelData.TimeRequired
+                                            font.family: "Sans Serif"
+                                            color: rFileSystem.IconColor
+                                        }
+                                    }
+
+                                    Rectangle{
+                                        width: parent.width
+                                        height: (parent.height - 15)*0.33
+                                        color: "transparent"
+                                        Text{
+                                            text: model.modelData.TransferSpeed
+                                            font.family: "Sans Serif"
+                                            color: rFileSystem.IconColor
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        Rectangle{
+                            id: nocompleted
+                            width: parent.width
+                            height: visible ? 30 : 0
+                            color: "transparent"
+                            visible: completedProcesses.isExpanded && completedProcessesContent.count === 0
                             Text{
                                 anchors.fill: parent
                                 text: "Nothing to show here"

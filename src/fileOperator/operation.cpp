@@ -103,3 +103,27 @@ QString Operation::getFormattedFileSize(qint64 fileSize){
     else
         return " Unknown";
 }
+
+
+void Operation::saveTransferStates(QString opType){
+    QFile file(QDir::homePath() + "/.config/" + QCoreApplication::organizationName() + "/" + QCoreApplication::applicationName() + "-operations.conf");
+
+    if(!file.exists()){
+        file.open(QIODevice::WriteOnly);
+        file.close();
+    }
+
+    if(file.open(QIODevice::Append)){
+        QTextStream stream(&file);
+        stream << "{OpType: " + opType;
+        stream << ";Origin: ";
+        foreach(QUrl url, fileList)
+            stream << url.path() + ",";
+
+        stream << ";Destinition: " + destinitionPath;
+        stream << ";FinishedAt: " + QDateTime::currentDateTime().toString("dd/MM/yy hh:mm");
+        stream << ";ElapsedTime: " + QString::number(static_cast<int>(elaspedTime.nsecsElapsed()/1000000000));
+        stream << ";}\n";
+        file.close();
+    }
+}
