@@ -8,8 +8,8 @@
 #include "bookmarkInfo/bookmarkinfomodel.h"
 #include "recentsInfo/recentsinfomodel.h"
 #include "models/trashinfomodel.h"
-#include <QDBusConnection>
-#include <QDBusConnectionInterface>
+//#include <QDBusConnection>
+//#include <QDBusConnectionInterface>
 
 RFileSystemModel::RFileSystemModel(QObject *parent)
     : QObject(parent){
