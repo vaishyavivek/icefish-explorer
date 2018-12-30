@@ -139,27 +139,9 @@ Rectangle{
                         id: newFileBtn
                         height: parent.height
                         width: height
-                        //icon.name: "x-office-document"
-                        icon.source: "/local/assets/icons-file.svg"
+                        icon.source: "/local/assets/icons-new-file.svg"
                         icon.color: rFileSystem.IconColor
                         hoverText: "New File"
-                        Image {
-                            id: newFileBtnAddImage
-                            visible: false
-                            source: "/local/assets/icons-add.svg"
-                            sourceSize.width: parent.width*0.4
-                            sourceSize.height: parent.height*0.4
-                            anchors.bottom: parent.bottom
-                            anchors.right: parent.right
-                            anchors.rightMargin: 2
-                        }
-                        ColorOverlay{
-                            z: 2
-                            anchors.fill: newFileBtnAddImage
-                            source: newFileBtnAddImage
-                            color: rFileSystem.IconColor
-                        }
-
                         onClicked: newFileDialogBox.open()
 
                         NewFileDialogBox{
@@ -176,27 +158,9 @@ Rectangle{
                         id: newFolderBtn
                         height: parent.height
                         width: height
-                        //icon.name: "folder"
-                        icon.source: "/local/assets/icons-folder.svg"
+                        icon.source: "/local/assets/icons-new-folder.svg"
                         icon.color: rFileSystem.IconColor
                         hoverText: "New Folder"
-                        Image {
-                            id: newFolderBtnAddImage
-                            visible: false
-                            source: "/local/assets/icons-add.svg"
-                            sourceSize.width: parent.width*0.4
-                            sourceSize.height: parent.height*0.4
-                            anchors.bottom: parent.bottom
-                            anchors.right: parent.right
-                            anchors.rightMargin: 2
-                        }
-                        ColorOverlay{
-                            z: 2
-                            anchors.fill: newFolderBtnAddImage
-                            source: newFolderBtnAddImage
-                            color: rFileSystem.IconColor
-                        }
-
                         onClicked: newFolderDialogBox.open()
 
                         NewFolderDialogBox{
@@ -297,28 +261,10 @@ Rectangle{
                     property bool isBookmarked: qtModel.IsBookmarked
                     height: parent.height
                     width: height
-                    //icon.name: "directory"
-                    icon.source: "/local/assets/icons-bookmark.svg"
+                    icon.source: "/local/assets/icons-bookmark-" + (isBookmarked ? "checked" : "unchecked") + ".svg"
                     icon.color: rFileSystem.IconColor
                     hoverText: (isBookmarked ? "Remove Bookmark" : "Bookmark this place")
                     onClicked: qtModel.IsBookmarked = !isBookmarked
-
-                    Image {
-                        id: bookmarkIndicator
-                        visible: false
-                        source: "/local/assets/icons-bookmark-" + (favoriteBtn.isBookmarked ? "checked" : "unchecked") + ".svg"
-                        sourceSize.width: parent.width*0.3
-                        sourceSize.height: parent.height*0.5
-                        anchors.bottom: parent.bottom
-                        anchors.right: parent.right
-                        anchors.rightMargin: 2
-                    }
-                    ColorOverlay{
-                        z: 2
-                        anchors.fill: bookmarkIndicator
-                        source: bookmarkIndicator
-                        color: rFileSystem.IconColor
-                    }
                 }
 
                 RImageButton{
@@ -326,28 +272,10 @@ Rectangle{
                     property bool nowVisible: qtModel.IsHiddenItemsShown
                     height: parent.height
                     width: height
-                    //icon.name: "folder"
-                    icon.source: "/local/assets/icons-folder.svg"
+                    icon.source: "/local/assets/icons-hidden-" + (nowVisible ? "checked" : "unchecked") + ".svg"
                     icon.color: rFileSystem.IconColor
                     hoverText: (nowVisible ? "Hide Hidden Items" : "Show Hidden Items")
                     onClicked: qtModel.IsHiddenItemsShown = !nowVisible
-
-                    Image {
-                        id: visibleIndicator
-                        visible: false
-                        source: "/local/assets/icons-hidden-" + (showHiddenBtn.nowVisible ? "checked" : "unchecked") + ".svg"
-                        sourceSize.width: parent.width*0.5
-                        sourceSize.height: parent.height*0.4
-                        anchors.bottom: parent.bottom
-                        anchors.right: parent.right
-                        anchors.rightMargin: 2
-                    }
-                    ColorOverlay{
-                        z: 2
-                        anchors.fill: visibleIndicator
-                        source: visibleIndicator
-                        color: rFileSystem.IconColor
-                    }
                 }
 
                 RImageButton{
@@ -355,28 +283,10 @@ Rectangle{
                     property bool nowPreviewing: qtModel.IsPreviewAvailable
                     height: parent.height
                     width: height
-                    //icon.name: "image-x-generic"
-                    icon.source: "/local/assets/icons-folder.svg"
+                    icon.source: "/local/assets/icons-image-preview-" + (nowPreviewing ? "checked" : "unchecked") + ".svg"
                     icon.color: rFileSystem.IconColor
                     hoverText: (nowPreviewing ? "Stop Previewing items" : "Enable Image Preview")
                     onClicked: qtModel.IsPreviewAvailable = !nowPreviewing
-
-                    Image {
-                        id: previewIndicator
-                        visible: false
-                        source: "/local/assets/icons-image-preview-" + (imagePreviewBtn.nowPreviewing ? "checked" : "unchecked") + ".svg"
-                        sourceSize.width: parent.width*0.5
-                        sourceSize.height: parent.height*0.4
-                        anchors.bottom: parent.bottom
-                        anchors.right: parent.right
-                        anchors.rightMargin: 2
-                    }
-                    ColorOverlay{
-                        z: 2
-                        anchors.fill: previewIndicator
-                        source: previewIndicator
-                        color: rFileSystem.IconColor
-                    }
                 }
 
                 RImageButton{

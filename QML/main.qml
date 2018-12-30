@@ -63,7 +63,7 @@ ApplicationWindow{
                             id: tabHeaderDelegate
                             width: tabHeader.perDelegateWidth
                             height: parent.height
-                            color: (tabHeader.currentIndex == index) ? "transparent" : "lightgrey"
+                            color: (tabHeader.currentIndex == index) ? "transparent" : "lightgray"
                             opacity: (tabHeader.currentIndex == index) ? 1 : 0.4
 
                             Row{
@@ -125,7 +125,7 @@ ApplicationWindow{
                                 id: animatingRect
                                 anchors.fill: parent
                                 opacity: 0.3
-                                radius: 5
+                                radius: height/2
                                 color: "transparent"
                             }
 
@@ -140,7 +140,7 @@ ApplicationWindow{
                                 id: mouseExitedAnimation
                                 target: animatingRect
                                 property: "color"
-                                to: (tabHeader.currentIndex == index) ? "transparent" : "lightgrey"
+                                to: (tabHeader.currentIndex == index) ? "transparent" : "lightgray"
                                 duration: rFileSystem.GlobalAnimationDuration
                             }
                         }

@@ -2,7 +2,6 @@
 #include <QDir>
 #include <QDateTime>
 #include <QTextStream>
-#include <QCoreApplication>
 
 RecentsInfoModel::RecentsInfoModel(QObject *parent) : QObject(parent)
 {
@@ -11,11 +10,11 @@ RecentsInfoModel::RecentsInfoModel(QObject *parent) : QObject(parent)
 
 HistoryKeeper::HistoryKeeper(QObject *parent)
     :QObject(parent){
-    historyFilePath = QDir::homePath() + "/.config/" + QCoreApplication::organizationName();
+    historyFilePath = QDir::homePath() + "/.config/Reverse Explorer";
     QDir dir;
     dir.mkpath(historyFilePath);
 
-    historyFilePath += "/FileHistory.conf";
+    historyFilePath += "/FileHistory.rde";
     QFile historyFile(historyFilePath);
 
     if(!historyFile.exists()){
@@ -52,7 +51,7 @@ void HistoryKeeper::WriteHistoryAsync(QString fileAccessed){
             }
         }
 
-        line = QString::number(timesVisited+1) + "|" + QDateTime::currentDateTime().toString("dd/MM/yy|hh:mm") + "|" + fileAccessed;
+        line = QString::number(timesVisited+1) + "|" + QDateTime::currentDateTime().toString("dd/MM/yy hh:mm") + "|" + fileAccessed;
         historyList.append(line);
 
         if(historyFile.open(QIODevice::WriteOnly)){
@@ -68,7 +67,7 @@ void HistoryKeeper::WriteHistoryAsync(QString fileAccessed){
 
 void HistoryKeeper::refineMostlyVisitedSites(){
     QFile historyFile(historyFilePath);
-    QFile highHistoryFile(QDir::homePath() + "/.config/" + QCoreApplication::organizationName() + "/MostVisitedPlaces.conf");
+    QFile highHistoryFile(QDir::homePath() + "/.config/Reverse Explorer/MostVisitedPlaces.rde");
 
     if(historyFile.open(QIODevice::ReadOnly)){
         QString wholeFile = historyFile.readAll();

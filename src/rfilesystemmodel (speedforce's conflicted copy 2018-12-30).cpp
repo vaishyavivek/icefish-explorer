@@ -1,5 +1,5 @@
 #include <sys/vfs.h>
-#include <QCoreApplication>
+
 
 #include "rfilesystemmodel.h"
 #include "rdirectorymodel.h"
@@ -142,7 +142,7 @@ void RFileSystemModel::GetAttachedDiskList(){
 void RFileSystemModel::prepareRecentsList(){
 
     recentsList.clear();
-    QFile historyFile(QDir::homePath() + "/.config/" + QCoreApplication::organizationName() + "/FileHistory.conf" );
+    QFile historyFile(QDir::homePath() + "/.config/Reverse Explorer/FileHistory.rde");
     if(historyFile.open(QIODevice::ReadOnly)){
         QString buffer = historyFile.readAll();
         QStringList historyList = buffer.split('\n', QString::SkipEmptyParts);
@@ -168,7 +168,7 @@ void RFileSystemModel::prepareRecentsList(){
 void RFileSystemModel::prepareMostVisitedPlacesList(){
 
     mostVisitedPlacesList.clear();
-    QFile historyFile(QDir::homePath() + "/.config" + QCoreApplication::organizationName() + "/MostVisitedPlaces.conf");
+    QFile historyFile(QDir::homePath() + "/.RevProgIFace/MostVisitedPlaces.rde");
     if(historyFile.open(QIODevice::ReadOnly)){
         QString buffer = historyFile.readAll();
         QStringList historyList = buffer.split('\n', QString::SkipEmptyParts);

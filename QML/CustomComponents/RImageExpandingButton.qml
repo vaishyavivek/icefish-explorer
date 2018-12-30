@@ -10,7 +10,7 @@ Button {
     checkable: true
     hoverEnabled: true
     padding: 0
-    icon.color: "transparent"
+    icon.color: rFileSystem.IconColor
 
     contentItem: Rectangle{
         width: rButton.width
@@ -29,8 +29,9 @@ Button {
                     id: image
                     source: icon.source
                     visible: false
-                    sourceSize.width: parent.height*0.75
-                    sourceSize.height: parent.height*0.75
+                    sourceSize.width: parent.height*0.6
+                    sourceSize.height: parent.height*0.6
+                    fillMode: Image.PreserveAspectFit
                     anchors.centerIn: parent
                 }
                 ColorOverlay{
@@ -64,11 +65,12 @@ Button {
         anchors.centerIn: parent
         opacity: enabled ? 1 : 0.4
         color: "transparent"
+
         Rectangle{
             id: animatingRect
             anchors.fill: parent
             opacity: 0.3
-            radius: 5
+            radius: height/2
             color: "transparent"
         }
     }
@@ -101,6 +103,7 @@ Button {
             color: rFileSystem.BackgroundColor
         }
         background: Rectangle {
+            radius: height/2
             color: rFileSystem.IconColor
         }
     }

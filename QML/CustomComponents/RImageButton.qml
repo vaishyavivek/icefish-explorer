@@ -1,6 +1,6 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
-//import QtGraphicalEffects 1.0
+import QtGraphicalEffects 1.0
 
 Button {
     id: rButton
@@ -9,26 +9,27 @@ Button {
 
     hoverEnabled: true
     padding: 0
+    icon.color: "transparent"
 
-
-    /*contentItem: Rectangle{
+    contentItem: Rectangle{
         width: rButton.width
         height: rButton.height
         color: "transparent"
         Image{
             id: image
-            source: rButton.iconPath
-            sourceSize.width: parent.width*0.75
-            sourceSize.height: parent.height*0.75
+            source: icon.source
+            sourceSize.width: parent.width*0.6
+            sourceSize.height: parent.height*0.6
+            fillMode: Image.PreserveAspectFit
             anchors.centerIn: parent
         }
 
         ColorOverlay{
             anchors.fill: image
-            source: rButton.iconPath
-            color: mainWindow.fontColor
+            source: image
+            color: rButton.icon.color
         }
-    }*/
+    }
 
     background: Rectangle {
         id: backgroundRect
@@ -42,7 +43,7 @@ Button {
             id: animatingRect
             anchors.fill: parent
             opacity: 0.3
-            radius: 5
+            radius: height/2
             color: "transparent"
         }
     }
@@ -67,7 +68,7 @@ Button {
         id: tooltip
         visible: toolTipEnabled && parent.hovered
         text: hoverText
-        delay: 200
+        delay: 250
         timeout: 1000
         contentItem: Text {
             text: tooltip.text
@@ -75,6 +76,7 @@ Button {
             color: rFileSystem.BackgroundColor
         }
         background: Rectangle {
+            radius: tooltip.height/2
             color: rFileSystem.IconColor
         }
     }
