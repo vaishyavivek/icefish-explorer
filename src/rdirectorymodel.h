@@ -11,13 +11,13 @@
 #include <QFileSystemWatcher>
 
 #include "notification/notificationmodel.h"
-#include "rdesktopservices.h"
 #include "propertiesInfo/propertiesinfomodel.h"
 
 class RDirectoryModel : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList<QObject*> FileFolderList READ FileFolderList NOTIFY FileFolderListChanged)
+    Q_PROPERTY(int FileFolderListCount READ FileFolderListCount NOTIFY FileFolderListCountChanged)
     Q_PROPERTY(int ActiveIndexInCurrentModel READ ActiveIndexInCurrentModel WRITE setActiveIndexInCurrentModel)
     Q_PROPERTY(QString WildSearchKey READ WildSearchKey WRITE setWildSearchKey NOTIFY WildSearchKeyChanged)
 
@@ -54,6 +54,7 @@ public:
     explicit RDirectoryModel(QObject *parent = nullptr);
 
     QList<QObject*> FileFolderList() const{ return fileFolderList;}
+    int FileFolderListCount() const{ return fileFolderList.length();}
 
     int ActiveIndexInCurrentModel() const;
     void setActiveIndexInCurrentModel(const int ActiveIndexInCurrentModel);
@@ -100,6 +101,10 @@ public:
     Q_INVOKABLE void updateCurrentDirectory(QString newDirectoryToSwitchTo);
     Q_INVOKABLE void updateAddressBoxShortcutMenuList(QString jumpAddress = "");
 
+    QList<QObject*> getAssociatedServicesList(QString fileName);
+    bool runDesktopService(QString filePath);
+    bool runDesktopService(QString filePath, QString desktopFilePath);
+
     Q_INVOKABLE void navigateBackward();
     Q_INVOKABLE void navigateForward();
     Q_INVOKABLE void reloadCurrentDirectory();
@@ -126,6 +131,7 @@ signals:
     void WriteHistoryTabbed(QString fileVisited);
 
     void FileFolderListChanged();
+    void FileFolderListCountChanged();
     void activeIndexInCurrentModelChanged();
     void WildSearchKeyChanged();
 
@@ -218,7 +224,6 @@ private:
     QList<QObject*> addressBoxShortcutMenuList;
     QList<QObject*> addressBoxDataListView;
 
-    RDesktopServices rds;
     QSettings settings;
     QFileSystemWatcher watcher;
 };

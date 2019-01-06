@@ -38,10 +38,7 @@ QString SizeCalculator::formattedFileSize(){
 
 
 
-PropertiesInfoModel::PropertiesInfoModel(QObject *parent) : QObject(parent)
-{
-    rds = new RDesktopServices();
-}
+PropertiesInfoModel::PropertiesInfoModel(QObject *parent) : QObject(parent){}
 
 QString PropertiesInfoModel::Name() const{
     return file.baseName();
@@ -64,7 +61,7 @@ QString PropertiesInfoModel::Type() const{
 QString PropertiesInfoModel::IconPath() const{
     if(mimeDb.mimeTypeForFile(file.filePath()).iconName().contains("image"))
         return file.absoluteFilePath();
-    return rds->getThemeIcon(file.absoluteFilePath(), 128);
+    return "image://mime/" + mimeDb.mimeTypeForFile(file.filePath()).iconName();
 }
 
 

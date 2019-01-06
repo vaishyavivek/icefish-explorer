@@ -16,8 +16,8 @@ Rectangle{
     property bool editing: false
     property bool searching: false
     property int selectionCount: 0
-    property int totalModelCount: 0
-    //property alias focus: fileFolderViewFocus.focus
+    property var currentItem
+    property int currentIndex
 
     /*RDirectoryModel{
         id: qtModel
@@ -131,7 +131,7 @@ Rectangle{
                         id: selectAll
                         height: parent.height*0.75
                         width: height
-                        checked: selectionCount == totalModelCount
+                        checked: selectionCount === qtModel.FileFolderListCount
                         Component.onCompleted: checked = false
                     }
 
@@ -357,7 +357,7 @@ Rectangle{
                     property int currentIndex: 0
                     property int currentIndexForReloading: 0
                     anchors.fill: parent
-                    sourceComponent: (qtModel.CurrentView === 0) ? fileFolderListView : fileFolderGridView
+                    sourceComponent: qtModel.FileFolderListCount === 0 ? emptyComp : (qtModel.CurrentView === 0 ? fileFolderListView : fileFolderGridView)
 
                     FileFolderListView{
                         id: fileFolderListView
@@ -365,6 +365,39 @@ Rectangle{
 
                     FileFolderGridView{
                         id: fileFolderGridView
+                    }
+
+                    Component{
+                        id: emptyComp
+                        Rectangle{
+                            anchors.fill: parent
+                            Text {
+                                width: parent.width
+                                text: qsTr("This directory is empty")
+                                font.pointSize: 11
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                        }
+                    }
+                }
+
+                Keys.onPressed: {
+                    //console.log(event.key)
+                    if(!editing){
+                        event.accepted = true
+                        if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return)
+                            updateModel(currentItem.filePath, currentIndex)
+                        else if(event.key === Qt.Key_Backspace){
+                            if(searching)
+                                wildSearchPanel.searchKey = wildSearchPanel.searchKey.substring(0, wildSearchPanel.searchKey.length - 1)
+                            else if(backBtn.enabled)
+                                navigateBackward()
+                        }
+                        else if(event.key >= Qt.Key_A && event.key <= Qt.Key_Z){
+                            searching = true
+                            wildSearchPanel.searchKey += String.fromCharCode(event.key)
+                            wildSearchPanel.open()
+                        }
                     }
                 }
             }

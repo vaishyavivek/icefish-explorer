@@ -16,7 +16,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += src/main.cpp \
     src/rdirectorymodel.cpp \
     src/rfilesystemmodel.cpp \
-    src/rdesktopservices.cpp \
     src/bookmarkInfo/bookmarkinfomodel.cpp \
     src/diskInfo/diskinfomodel.cpp \
     src/fileFolder/filefoldermodel.cpp \

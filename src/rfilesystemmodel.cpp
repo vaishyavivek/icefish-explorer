@@ -8,6 +8,7 @@
 #include "bookmarkInfo/bookmarkinfomodel.h"
 #include "recentsInfo/recentsinfomodel.h"
 #include "models/trashinfomodel.h"
+#include "models/desktopfilemodel.h"
 //#include <QDBusConnection>
 //#include <QDBusConnectionInterface>
 
@@ -249,8 +250,7 @@ void RFileSystemModel::updateStoredBookmarkList(){
     if(bookmarkFile.open(QIODevice::ReadOnly)){
         QString wholeFile = bookmarkFile.readAll();
         QStringList book = wholeFile.split('\n', QString::SkipEmptyParts);
-        RDesktopServices rds;
-        QString folderIcon = "file://" + rds.getThemeIcon("std-name:folder");
+        QString folderIcon = "image://xdg/inode-directory";
         foreach (wholeFile, book) {
             BookmarkInfoModel *model = new BookmarkInfoModel();
             model->setActualPath(wholeFile);
@@ -321,6 +321,7 @@ void RFileSystemModel::deleteTab(int index){
 
     emit TabHeaderListChanged();
 }
+
 
 
 int RFileSystemModel::AppTheme() const{

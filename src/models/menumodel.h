@@ -32,7 +32,10 @@ public:
     void setAction(const QString &Action){ action = Action;}
 
     QList<QObject*> Submenu() const{ return submenu;}
-    void setSubmenu(QList<QObject*> Submenu){ submenu.append(Submenu);}
+    void setSubmenu(QList<QObject*> Submenu){
+        submenu.clear();
+        submenu.append(Submenu);
+    }
 
     int SubmenuCount() const{ return submenu.length();}
 

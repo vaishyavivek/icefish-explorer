@@ -51,7 +51,7 @@ Component{
                         text: "File Name"
                         font.family: "Sans Serif"
                         color: rFileSystem.IconColor
-                        font.pointSize: Math.max(scaleFactor*0.16, 8)
+                        font.pointSize: Math.max(scaleFactor*0.32, 10)
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -86,7 +86,7 @@ Component{
                         text: "Last Modified"
                         font.family: "Sans Serif"
                         color: rFileSystem.IconColor
-                        font.pointSize: Math.max(scaleFactor*0.16, 8)
+                        font.pointSize: Math.max(scaleFactor*0.32, 10)
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -120,7 +120,7 @@ Component{
                         text: "Size"
                         font.family: "Sans Serif"
                         color: rFileSystem.IconColor
-                        font.pointSize: Math.max(scaleFactor*0.16, 8)
+                        font.pointSize: Math.max(scaleFactor*0.32, 10)
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -154,7 +154,7 @@ Component{
                         text: "Type"
                         font.family: "Sans Serif"
                         color: rFileSystem.IconColor
-                        font.pointSize: Math.max(scaleFactor*0.16, 8)
+                        font.pointSize: Math.max(scaleFactor*0.32, 10)
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -239,7 +239,7 @@ Component{
                         text: model.modelData.DisplayName
                         font.family: "Sans Serif"
                         color: rFileSystem.IconColor
-                        font.pointSize: Math.max(scaleFactor*0.16, 8)
+                        font.pointSize: Math.max(scaleFactor*0.32, 8)
                         anchors.verticalCenter: parent.verticalCenter
 
                         readOnly: true
@@ -265,7 +265,7 @@ Component{
                         text: model.modelData.Date_Time_Modified
                         color: rFileSystem.IconColor
                         font.family: "Sans Serif"
-                        font.pointSize: Math.max(scaleFactor*0.16, 8)
+                        font.pointSize: Math.max(scaleFactor*0.32, 8)
                         anchors.verticalCenter: parent.verticalCenter
                         clip: true
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -284,7 +284,7 @@ Component{
                         text: model.modelData.FileSize
                         color: rFileSystem.IconColor
                         font.family: "Sans Serif"
-                        font.pointSize: Math.max(scaleFactor*0.16, 8)
+                        font.pointSize: Math.max(scaleFactor*0.32, 8)
                         anchors.verticalCenter: parent.verticalCenter
                         clip: true
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -309,7 +309,7 @@ Component{
                         text: model.modelData.FileType
                         color: rFileSystem.IconColor
                         font.family: "Sans Serif"
-                        font.pointSize: Math.max(scaleFactor*0.16, 8)
+                        font.pointSize: Math.max(scaleFactor*0.32, 8)
                         anchors.verticalCenter: parent.verticalCenter
                         clip: true
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -435,23 +435,7 @@ Component{
 
         ScrollIndicator.vertical: ScrollIndicator{}
 
-        Keys.onPressed: {
-            if(!editing){
-                if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return)
-                    updateModel(currentItem.filePath, currentIndex)
-                else if(event.key === Qt.Key_Backspace){
-                    if(searching)
-                        wildSearchPanel.searchKey = wildSearchPanel.searchKey.substring(0, wildSearchPanel.searchKey.length - 1)
-                    else if(backBtn.enabled)
-                        navigateBackward()
-                }
-                else if(event.key >= Qt.Key_A && event.key <= Qt.Key_Z){
-                    searching = true
-                    wildSearchPanel.searchKey += String.fromCharCode(event.key)
-                    wildSearchPanel.open()
-                }
-            }
-        }
+        onCurrentItemChanged: tabViewDelegate.currentItem = currentItem
 
         onCurrentIndexChanged: {
             fileFolderView.currentIndexForReloading = currentIndex
@@ -459,7 +443,6 @@ Component{
         }
 
         onModelChanged: {
-            totalModelCount = count
             if(!fileFolderListView.focus)
                 fileFolderListView.forceActiveFocus()
         }
@@ -467,7 +450,10 @@ Component{
         Connections{
             target: fileFolderView
             ignoreUnknownSignals: true
-            onCurrentIndexChanged: fileFolderListView.currentIndex = fileFolderView.currentIndex
+            onCurrentIndexChanged: {
+                console.log("some")
+                fileFolderListView.currentIndex = fileFolderView.currentIndex
+            }
         }
     }
 }

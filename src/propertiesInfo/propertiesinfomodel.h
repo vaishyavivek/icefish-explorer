@@ -8,7 +8,6 @@
 #include <QMimeType>
 #include <QDateTime>
 #include <QThread>
-#include "src/rdesktopservices.h"
 
 class SizeCalculator: public QThread{
     Q_OBJECT
@@ -183,7 +182,6 @@ private:
     QFileInfo file;
     QMimeDatabase mimeDb;
     QMimeType mime;
-    RDesktopServices *rds;
 
     QString size;
 };

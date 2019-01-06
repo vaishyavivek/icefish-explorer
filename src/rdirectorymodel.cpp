@@ -3,6 +3,7 @@
 #include "models/menumodel.h"
 #include "models/navigationhistorymodel.h"
 #include "models/addressboxmodel.h"
+#include "models/desktopfilemodel.h"
 
 #include <QDebug>
 #include <QDateTime>
@@ -11,6 +12,7 @@
 #include <QUrl>
 #include <QByteArray>
 #include <QDataStream>
+#include <QProcess>
 #include <QDrag>
 #include <QClipboard>
 
@@ -126,10 +128,11 @@ int RDirectoryModel::updateCurrentDirectoryInternal(QString directoryToSwitchTo)
                 }
             }
             emit FileFolderListChanged();
+            emit FileFolderListCountChanged();
             return 0;//no error
         }
         else if(file.isFile()){
-            rds.runDesktopService(directoryToSwitchTo);
+            runDesktopService(directoryToSwitchTo);
             return 2;//destop service opened
         }
         else return 3;//unknown error
@@ -333,7 +336,7 @@ QList<QObject*> RDirectoryModel::getActionMenuFor(QString filePath){
     open->setServiceName("Open with");
     open->setHasSubmenu(true);
     open->setAction("open-with");
-    open->setSubmenu(rds.getAssociatedServicesList(filePath));
+    open->setSubmenu(getAssociatedServicesList(filePath));
 
     if(!open->Submenu().isEmpty())
         menu.append(open);
@@ -370,6 +373,98 @@ QList<QObject*> RDirectoryModel::getActionMenuFor(QString filePath){
     return menu;
 }
 
+
+QList<QObject*> RDirectoryModel::getAssociatedServicesList(QString fileName){
+    QList<QObject*> associatedServiceList;
+
+    QMimeDatabase mimeDb;
+    QMimeType mime = mimeDb.mimeTypeForFile(fileName);
+    QString iconName = mime.iconName();
+
+    if(iconName == "application-x-sharedlib")
+        return associatedServiceList;
+
+    iconName.replace('-', '/');
+
+    QFile mimeInfoFile("/usr/share/applications/mimeinfo.cache");
+    if(mimeInfoFile.open(QIODevice::ReadOnly | QIODevice::Text)){
+        QString wholeFile(mimeInfoFile.readAll());
+        int first = wholeFile.indexOf(iconName) + iconName.length() + 1;
+        int last = wholeFile.indexOf('\n', first);
+        QString allApps = wholeFile.mid(first, last - first);
+        foreach(QString app, allApps.split(';', QString::SkipEmptyParts)){
+            DesktopFileModel *newService = new DesktopFileModel();
+            newService->setDesktopFile(app);
+
+            //open *.desktop file for this app
+            QFile modelFile("/usr/share/applications/" + app);
+
+            if(modelFile.open(QIODevice::ReadOnly)){
+                app = modelFile.readAll();
+
+                /* sample vlc.desktop file
+                 * [Desktop Entry]
+                    Version=1.0
+                    Name=VLC media player
+                    GenericName=Media player
+                    Exec=/usr/bin/vlc --started-from-file %U
+                    Icon=vlc
+                    *
+                    *
+                    *
+                 */
+
+                int nextIndex = app.indexOf("Name=") + 5;
+                QString temp = app.mid(nextIndex, app.indexOf('\n', nextIndex) - nextIndex);
+                newService->setServiceName(temp);
+
+                nextIndex = app.indexOf("Exec=") + 5;
+                temp = app.mid(nextIndex, app.indexOf('\n', nextIndex) - nextIndex);
+                newService->setExecPath(temp);
+
+                nextIndex = app.indexOf("Icon=") + 5;
+                app = app.mid(nextIndex, app.indexOf('\n', nextIndex) - nextIndex);
+                newService->setServiceIcon("image://xdg/" + app);
+
+                modelFile.close();
+            }
+            if(!newService->ServiceName().isEmpty())
+                associatedServiceList.append(newService);
+        }
+    }
+    mimeInfoFile.close();
+
+    DesktopFileModel *defaultService = new DesktopFileModel();
+    defaultService->setDesktopFile("rdesktopservices.desktop");
+    defaultService->setServiceName("Select another app...");
+    defaultService->setServiceIcon("/local/Resources/not-found.svg");
+    associatedServiceList.append(defaultService);
+
+    return associatedServiceList;
+}
+
+bool RDirectoryModel::runDesktopService(QString filePath){
+    return QProcess::startDetached("xdg-open " + filePath);
+}
+
+bool RDirectoryModel::runDesktopService(QString filePath, QString desktopFilePath){
+
+    QFile desktopFile("/usr/share/applications/" + desktopFilePath);
+    if(desktopFile.open(QIODevice::ReadOnly)){
+        QString wholeFile = desktopFile.readAll();
+        wholeFile = wholeFile.mid(wholeFile.indexOf("Exec=") + 5);
+        wholeFile = wholeFile.left(wholeFile.indexOf('\n'));
+        if(wholeFile.contains('%'))
+            wholeFile = wholeFile.left(wholeFile.indexOf('%'));
+
+        if(!QProcess::startDetached(wholeFile + "\"" + filePath + "\""))
+            QProcess::startDetached(wholeFile, QStringList() << filePath);
+
+        desktopFile.close();
+        return true;
+    }
+    return false;
+}
 
 
 
@@ -529,6 +624,7 @@ void RDirectoryModel::deleteFile(int index){
         stream << "DeletionDate=" << QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:ss");
         fileFolderList.removeAt(index);
         emit FileFolderListChanged();
+        emit FileFolderListCountChanged();
     }
     else
         notify(Error::NoPermission);
@@ -578,7 +674,7 @@ bool RDirectoryModel::createNewFile(QString fileName, QString fileType){
 
 void RDirectoryModel::performAction(QString filePath, QString action, QString optionalParam){
     if(action == "open-with")
-        rds.runDesktopService(filePath, optionalParam);
+        runDesktopService(filePath, optionalParam);
     else if(action == "copy")
         copyOrCutItems(0, filePath);
     else if(action == "cut")

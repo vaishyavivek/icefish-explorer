@@ -6,7 +6,6 @@
 #include "rfilesystemmodel.h"
 #include "rdirectorymodel.h"
 #include "fileOperator/rfileoperator.h"
-#include "rdesktopservices.h"
 #include "qmlHelpers/mimeiconprovider.h"
 #include "qmlHelpers/pixmappreviewprovider.h"
 #include "qmlHelpers/mimeinfoprovider.h"
@@ -52,18 +51,6 @@ int main(int argc, char *argv[])
 
     RFileOperator *rfop = new RFileOperator(engine);
     ctxt->setContextProperty("rFileOperator", rfop);
-
-    /* Class was designed to be used for providing desktop services like getting themed icon, filetype from meme database etc
-     * But now its not used anymore for that purpose,
-     * there're still some use cases for this, which will be replaced with more of generic Qt libraries
-     *
-     * It still serves the purpose of retrieving desktop service handler apps, like VLC opens mp4, Firefox opens http/s request
-     * I assume this is still not complete, because of its slow handling time hence requires further work
-     * ******removed-20-12*********
-     */
-    RDesktopServices rds;
-    rds.startMimeCaching();
-    ctxt->setContextProperty("rDesktopService", &rds);
 
 
     /* Image Providers for QML

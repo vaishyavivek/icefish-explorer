@@ -176,13 +176,13 @@ Popup {
                                     background: Rectangle {
                                         z: -2
                                         clip: true
-                                        color: "lightblue"
+                                        color: rFileSystem.HighlightColor
                                         implicitWidth: diskListViewDelegate.width
                                     }
                                     progress: Rectangle {
                                         z: -2
                                         clip: true
-                                        color: "skyblue"
+                                        color: rFileSystem.IconColor
                                         implicitWidth: diskListViewDelegate.width
                                     }
                                 }

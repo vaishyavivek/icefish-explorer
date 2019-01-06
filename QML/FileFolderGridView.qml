@@ -211,7 +211,6 @@ Component{
         }
 
         onModelChanged: {
-            totalModelCount = count
             if(!fileFolderGridView.focus)
                 fileFolderGridView.forceActiveFocus()
         }
