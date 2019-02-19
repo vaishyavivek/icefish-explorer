@@ -9,9 +9,9 @@ import "../BackgroundProcessIndicator"
 Popup {
     id: sidePanel
     property bool isExpanded: false
-    property bool isPined: false
-    property int normalizedWidth: 50
-    property int widthWhenExpanded: 250
+    property bool isPined: rFileSystem.IsPinPinned
+    property int normalizedWidth: 35
+    property int widthWhenExpanded: 200
 
     padding: 0
     rightPadding: 1
@@ -57,16 +57,7 @@ Popup {
                     anchors.right: parent.right
                     icon.source: isPined ? "/local/assets/icons-pin.png" : "/local/assets/icons-unpin.svg"
                     icon.color: rFileSystem.IconColor
-                    onClicked: {
-                        if(isPined){
-                            isExpanded = false
-                            reverseExpandAnimation.start()
-                            sideBar.width = normalizedWidth
-                        }
-                        else
-                            sideBar.width = widthWhenExpanded
-                        isPined = !isPined
-                    }
+                    onClicked: rFileSystem.IsPinPinned = !isPined
                 }
             }
 
@@ -351,18 +342,30 @@ Popup {
     Component.onCompleted: sidePanel.open()
 
     function expandMenu(){
-        isExpanded = true
-        expandAnimation.start()
+        if(!isExpanded){
+            isExpanded = true
+            expandAnimation.start()
+        }
+        if(isPined)
+            sideBar.width = widthWhenExpanded
     }
 
     function reverseExpandMenu(){
-        isExpanded = false
-        reverseExpandAnimation.start()
+        if(isExpanded){
+            isExpanded = false
+            reverseExpandAnimation.start()
+            sideBar.width = normalizedWidth
+        }
     }
 
     function updateCurrentDirectory(Path){
         rFileSystem.updateCurrentDirectoryOnCurrentView(Path, tabHeader.currentIndex)
         if(!isPined)
             reverseExpandMenu()
+    }
+
+    onIsPinedChanged: {
+        widthWhenExpanded = 200
+        isPined ? expandMenu() : reverseExpandMenu()
     }
 }

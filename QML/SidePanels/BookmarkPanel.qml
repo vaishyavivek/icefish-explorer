@@ -127,7 +127,7 @@ Popup{
                             id: removeBtn
                             height: parent.height
                             width: height
-                            icon.source: "/local/Resources/icons-close.svg"
+                            icon.source: "/local/assets/icons-close.svg"
                             icon.color: rFileSystem.IconColor
                             onClicked: {
                                 bookmarkListDelegate.visible = false

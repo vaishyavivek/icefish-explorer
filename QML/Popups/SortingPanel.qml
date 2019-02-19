@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.12
 import "../CustomComponents"
 
 Popup{
@@ -9,8 +9,9 @@ Popup{
     property int newY
     property string currentSelection: sortingRole.currentItem.role + " " + sortingOrder.currentItem.order
 
-    padding: 2
-    modal: false
+    padding: 0
+    margins: 0
+    modal: true
     height: 278
 
     Rectangle{
@@ -18,8 +19,7 @@ Popup{
         height: parent.height
         color: rFileSystem.BackgroundColor
         Column{
-            anchors.bottomMargin: 5
-            anchors.topMargin: 5
+            anchors.margins: 5
             anchors.fill: parent
             spacing: 5
 
@@ -48,12 +48,32 @@ Popup{
                     property string role: model.role
                     width: parent.width
                     height: 28
-                    color: (sortingRole.currentIndex == index) ? rFileSystem.HighlightColor : "transparent"
+                    color: (sortingRole.currentIndex == index) ? rFileSystem.SelectedColor : "transparent"
 
                     Rectangle{
+                        id: animatingRect
                         anchors.fill: parent
-                        opacity: 0.2
-                        color: "#c4d7dd"
+                        radius: 5
+                        opacity: 0.3
+                        color: "transparent"
+                    }
+
+
+                    PropertyAnimation{
+                        id: mouseEnteredAnimation
+                        target: animatingRect
+                        property: "color"
+                        easing.type: Easing.OutInQuad
+                        to: rFileSystem.HighlightColor
+                        duration: rFileSystem.GlobalAnimationDuration
+                    }
+                    PropertyAnimation{
+                        id: mouseExitedAnimation
+                        target: animatingRect
+                        property: "color"
+                        easing.type: Easing.OutInQuad
+                        to: "transparent"
+                        duration: rFileSystem.GlobalAnimationDuration
                     }
 
                     Text {
@@ -68,7 +88,10 @@ Popup{
 
                     MouseArea{
                         anchors.fill: parent
+                        hoverEnabled: true
                         onClicked: sortingRole.currentIndex = index
+                        onEntered: mouseEnteredAnimation.start()
+                        onExited: mouseExitedAnimation.start()
                     }
                 }
 
@@ -107,12 +130,32 @@ Popup{
                     property string order: model.order
                     width: sortingOrder.width/2
                     height: 28
-                    color: (sortingOrder.currentIndex == index) ? rFileSystem.HighlightColor : "transparent"
+                    color: (sortingOrder.currentIndex == index) ? rFileSystem.SelectedColor : "transparent"
 
                     Rectangle{
+                        id: animatingRectS
                         anchors.fill: parent
-                        opacity: 0.2
-                        color: "#c4d7dd"
+                        radius: 5
+                        opacity: 0.3
+                        color: "transparent"
+                    }
+
+
+                    PropertyAnimation{
+                        id: mouseEnteredAnimationS
+                        target: animatingRectS
+                        property: "color"
+                        easing.type: Easing.OutInQuad
+                        to: rFileSystem.HighlightColor
+                        duration: rFileSystem.GlobalAnimationDuration
+                    }
+                    PropertyAnimation{
+                        id: mouseExitedAnimationS
+                        target: animatingRectS
+                        property: "color"
+                        easing.type: Easing.OutInQuad
+                        to: "transparent"
+                        duration: rFileSystem.GlobalAnimationDuration
                     }
 
                     Image {
@@ -124,7 +167,10 @@ Popup{
 
                     MouseArea{
                         anchors.fill: parent
+                        hoverEnabled: true
                         onClicked: sortingOrder.currentIndex = index
+                        onEntered: mouseEnteredAnimationS.start()
+                        onExited: mouseExitedAnimationS.start()
                     }
                 }
 
@@ -166,12 +212,32 @@ Popup{
                 delegate: Rectangle{
                     width: sortingPreference.width/2
                     height: 28
-                    color: (sortingPreference.currentIndex == index) ? rFileSystem.HighlightColor : "transparent"
+                    color: (sortingPreference.currentIndex == index) ? rFileSystem.SelectedColor : "transparent"
 
                     Rectangle{
+                        id: animatingRectP
                         anchors.fill: parent
-                        opacity: 0.2
-                        color: "#c4d7dd"
+                        radius: 5
+                        opacity: 0.3
+                        color: "transparent"
+                    }
+
+
+                    PropertyAnimation{
+                        id: mouseEnteredAnimationP
+                        target: animatingRectP
+                        property: "color"
+                        easing.type: Easing.OutInQuad
+                        to: rFileSystem.HighlightColor
+                        duration: rFileSystem.GlobalAnimationDuration
+                    }
+                    PropertyAnimation{
+                        id: mouseExitedAnimationP
+                        target: animatingRectP
+                        property: "color"
+                        easing.type: Easing.OutInQuad
+                        to: "transparent"
+                        duration: rFileSystem.GlobalAnimationDuration
                     }
 
                     Image {
@@ -183,7 +249,10 @@ Popup{
 
                     MouseArea{
                         anchors.fill: parent
+                        hoverEnabled: true
                         onClicked: sortingPreference.currentIndex = index
+                        onEntered: mouseEnteredAnimationP.start()
+                        onExited: mouseExitedAnimationP.start()
                     }
                 }
 

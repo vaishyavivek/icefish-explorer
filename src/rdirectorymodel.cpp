@@ -437,7 +437,7 @@ QList<QObject*> RDirectoryModel::getAssociatedServicesList(QString fileName){
     DesktopFileModel *defaultService = new DesktopFileModel();
     defaultService->setDesktopFile("rdesktopservices.desktop");
     defaultService->setServiceName("Select another app...");
-    defaultService->setServiceIcon("/local/Resources/not-found.svg");
+    defaultService->setServiceIcon("/local/assets/not-found.svg");
     associatedServiceList.append(defaultService);
 
     return associatedServiceList;

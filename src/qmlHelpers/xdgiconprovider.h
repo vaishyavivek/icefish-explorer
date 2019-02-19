@@ -16,10 +16,12 @@ public:
             *size = QSize(32, 32);
 
         if(!QIcon::hasThemeIcon(xdgName))
-            return QPixmap("/local/Resources/icons-folder.svg");
+            return QPixmap(":/local/assets/icons-folder.svg");
 
         QIcon icon = QIcon::fromTheme(xdgName);
         QPixmap pixmap = icon.pixmap(requestedSize);
+        if(pixmap.isNull())
+            return QPixmap(":/local/assets/icons-folder.svg");
         return pixmap;
     }
 };

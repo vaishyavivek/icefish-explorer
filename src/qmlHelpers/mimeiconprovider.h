@@ -23,9 +23,9 @@ public:
 
         if(!QIcon::hasThemeIcon(iconName)){
             if(iconName.contains("directory"))
-                return QPixmap("/local/Resources/icons-folder.svg");
+                return QPixmap("/local/assets/icons-folder.svg");
             else
-                return QPixmap("/local/Resources/icons-file.svg");
+                return QPixmap("/local/assets/icons-file.svg");
         }
 
         QIcon icon = QIcon::fromTheme(iconName);

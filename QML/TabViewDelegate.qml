@@ -12,7 +12,7 @@ Rectangle{
     id: tabViewDelegate
     property var qtModel
     property int scaleFactor: qtModel.IconScale
-    property real highlightMoveDuration: rFileSystem.GlobalAnimationDuration
+    property real highlightMoveDuration: rFileSystem.GlobalAnimationDuration*0.5
     property bool editing: false
     property bool searching: false
     property int selectionCount: 0
@@ -371,9 +371,12 @@ Rectangle{
                         id: emptyComp
                         Rectangle{
                             anchors.fill: parent
+                            color: rFileSystem.BackgroundColor
+                            anchors.topMargin: 50
                             Text {
                                 width: parent.width
                                 text: qsTr("This directory is empty")
+                                color: rFileSystem.IconColor
                                 font.pointSize: 11
                                 horizontalAlignment: Text.AlignHCenter
                             }

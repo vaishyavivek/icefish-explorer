@@ -21,11 +21,7 @@ ApplicationWindow{
             width: 35
             height: parent.height
             color: "transparent"
-            SidePanel{
-                id: sidePanel
-                normalizedWidth: Math.min(35, mainWindow.width*0.05)
-                widthWhenExpanded: Math.min(200, mainWindow.width*0.25)
-            }
+            SidePanel{}
         }
 
         Column{

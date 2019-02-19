@@ -385,7 +385,6 @@ Component{
                 onEntered: mouseEnteredAnimation.start()
                 onExited: mouseExitedAnimation.start()
                 onClicked: fileFolderListView.currentIndex = index
-
                 onDoubleClicked: updateModel(model.modelData.Path, index)
             }
 

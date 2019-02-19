@@ -44,7 +44,7 @@ Popup{
                     height: parent.height
                     width: height
                     anchors.right: parent.right
-                    icon.source: "/local/Resources/icons-close.svg"
+                    icon.source: "/local/assets/icons-close.svg"
                     icon.color: rFileSystem.IconColor
                     onClicked: notificationPanel.close()
                 }

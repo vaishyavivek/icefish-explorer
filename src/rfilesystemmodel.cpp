@@ -37,6 +37,7 @@ RFileSystemModel::RFileSystemModel(QObject *parent)
     backgroundColor = settings.value("global/backgroundColor").toString();
     iconColor = settings.value("global/iconColor").toString();
     animationDuration = settings.value("global/animationDuration").toInt();
+    isPinPinned = settings.value("global/isPinPinned").toBool();
 }
 
 
@@ -417,6 +418,18 @@ void RFileSystemModel::setGlobalAnimationDuration(const int GlobalAnimationDurat
         animationDuration = GlobalAnimationDuration;
         settings.setValue("global/animationDuration", GlobalAnimationDuration);
         emit GlobalAnimationDurationChanged();
+    }
+}
+
+bool RFileSystemModel::IsPinPinned() const{
+    return isPinPinned;
+}
+
+void RFileSystemModel::setIsPinPinned(const bool IsPinPinned){
+    if(IsPinPinned != isPinPinned){
+        isPinPinned = IsPinPinned;
+        settings.setValue("global/isPinPinned", IsPinPinned);
+        emit IsPinPinnedChanged();
     }
 }
 

@@ -46,7 +46,7 @@ class RFileSystemModel : public QObject
     Q_PROPERTY(QString IconColor READ IconColor WRITE setIconColor NOTIFY IconColorChanged)
     Q_PROPERTY(QString HighlightColor READ HighlightColor WRITE setHighlightColor NOTIFY HighlightColorChanged)
     Q_PROPERTY(QString SelectedColor READ SelectedColor WRITE setSelectedColor NOTIFY SelectedColorChanged)
-
+    Q_PROPERTY(bool IsPinPinned READ IsPinPinned WRITE setIsPinPinned NOTIFY IsPinPinnedChanged)
     /* While opening a new directory in any tab, first preference is given to these global properties and then the per directory settings are applied
      * 'Default(0)': Each directory will follow its own settings
      * 'Enabled(1)' AND 'Disabled(2)': Enforce these properties on each directory loading irrespective of the per directory values
@@ -112,6 +112,9 @@ public:
     QString SelectedColor() const;
     void setSelectedColor(const QString &SelectedColor);
 
+    bool IsPinPinned() const;
+    void setIsPinPinned(const bool IsPinPinned);
+
     int GlobalIsHiddenItemsShown() const;
     void setGlobalIsHiddenItemsShown(const int GlobalIsHiddenItemsShown);
 
@@ -165,6 +168,7 @@ signals:
     void IconColorChanged();
     void HighlightColorChanged();
     void SelectedColorChanged();
+    void IsPinPinnedChanged();
 
     void GlobalIsHiddenItemsShownChanged();
     void GlobalIsPreviewAvailableChanged();
@@ -201,6 +205,7 @@ private:
     QString highlightColor;
     QString selectedColor;
     int animationDuration;
+    bool isPinPinned;
 
     // Global Settings handler object
     QSettings settings;

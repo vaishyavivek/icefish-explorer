@@ -68,7 +68,7 @@ Button {
         id: tooltip
         visible: toolTipEnabled && parent.hovered
         text: hoverText
-        delay: 200
+        delay: 500
         timeout: 1000
         contentItem: Text {
             text: tooltip.text
