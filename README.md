@@ -1,6 +1,6 @@
-## Turbo File eXplorer
+## IceFish Explorer
 
-*A File Manager, for power users needing customizations.*
+*Next Generation File Manager with Cloud support*
 
 ---
 
@@ -30,7 +30,7 @@ Comes with default Light theme with an optional Dark theme and 5 others.
 
 **The Cloud on the Ground**
 
-<coming soon>Get your Google Drive, Dropbox and OneDrive files in your local PC without actually downloading them.
+Get your Dropbox , Google Drive and OneDrive files in your local PC without actually downloading them.<partial support>
 
 **FreeDesktop.org compliant**
 
@@ -38,6 +38,6 @@ Built for easy switching from Dolphin and Nautilus.
 
 **Cross Platform**
 
-<ongoing>One File Manager, one UI, constant across all your devices, Linux and Windows supported, macOS port is under development.
+One File Manager, one UI, constant across all your devices, Linux and Windows supported.
 
 ---
