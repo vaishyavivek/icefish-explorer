@@ -50,5 +50,6 @@
         <file>assets/icefish-blue.png</file>
         <file>assets/google-drive.svg</file>
         <file>assets/onedrive.svg</file>
+        <file>assets/explorer-icefish.png</file>
     </qresource>
 </RCC>

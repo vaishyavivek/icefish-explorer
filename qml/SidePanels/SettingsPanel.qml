@@ -359,7 +359,7 @@ Popup{
                                 anchors.fill: parent
                                 spacing: 5
                                 Image {
-                                    source: "/local/assets/icefish-blue.png"
+                                    source: "/local/assets/explorer-icefish.png"
                                     sourceSize.width: parent.width*0.4
                                     sourceSize.height: parent.width*0.4
                                     anchors.horizontalCenter: parent.horizontalCenter

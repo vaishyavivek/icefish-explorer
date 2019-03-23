@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
     //set the application icon, themed icon is not used since windows doesn't allow themed icons
-    app.setWindowIcon(QIcon(":/local/assets/icefish-blue.png"));
+    app.setWindowIcon(QIcon(":/local/assets/explorer-icefish.png"));
 
     qmlRegisterType<MimeInfoProvider>("com.mimeinfoprovider", 1, 0, "MimeInfoProvider");
 
