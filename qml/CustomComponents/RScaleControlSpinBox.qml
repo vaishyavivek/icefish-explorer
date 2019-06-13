@@ -54,11 +54,11 @@ SpinBox {
         implicitWidth: scaleControl.width/3 - 5
         implicitHeight: scaleControl.height
         color: scaleControl.up.pressed ? "lightblue" : "transparent"
-        border.color: enabled ? rFileSystem.IconColor : "black"
+        border.color: enabled ? rFileSystem.IconColor1 : "black"
         Text {
             text: "+"
             font.pointSize: scaleControl.height*0.75
-            color: scaleControl.up.pressed ? "skyblue" : rFileSystem.IconColor
+            color: scaleControl.up.pressed ? "skyblue" : rFileSystem.IconColor1
             anchors.fill: parent
             fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
@@ -72,11 +72,11 @@ SpinBox {
         implicitWidth: scaleControl.width/3 - 5
         implicitHeight: scaleControl.height
         color: scaleControl.down.pressed ? "lightblue" : "transparent"
-        border.color: enabled ? rFileSystem.IconColor : "black"
+        border.color: enabled ? rFileSystem.IconColor1 : "black"
         Text {
             text: "-"
             font.pointSize: scaleControl.height*0.75
-            color: scaleControl.down.pressed ? "skyblue" : rFileSystem.IconColor
+            color: scaleControl.down.pressed ? "skyblue" : rFileSystem.IconColor1
             anchors.fill: parent
             fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
@@ -86,17 +86,19 @@ SpinBox {
 
     ToolTip{
         id: tooltip
-        visible: toolTipEnabled && scaleControl.hovered
+        visible: toolTipEnabled && parent.hovered
         text: hoverText
-        delay: 200
+        delay: 500
         timeout: 1000
         contentItem: Text {
             text: tooltip.text
             font: tooltip.font
-            color: rFileSystem.BackgroundColor
+            color: rFileSystem.IconColor2
         }
         background: Rectangle {
-            color: rFileSystem.IconColor
+            radius: 5
+            color: rFileSystem.BackgroundColor2
+            opacity: 0.75
         }
     }
 }

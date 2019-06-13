@@ -25,9 +25,9 @@ Component{
 
         property int chechboxWidth: scaleFactor*0.5
         property int iconWidth: scaleFactor
-        property int fileNameWidth: (width - scaleFactor*1.5)*0.35
-        property int lastModifiedWidth: (width - scaleFactor*1.5)*0.12
-        property int sizeWidth: (width - scaleFactor*1.5)*0.12
+        property int fileNameWidth: (width - scaleFactor*1.5)*0.29
+        property int lastModifiedWidth: (width - scaleFactor*1.5)*0.19
+        property int sizeWidth: (width - scaleFactor*1.5)*0.19
         property int typeWidth: (width - scaleFactor*1.5)*0.2
 
         anchors.fill: parent
@@ -41,7 +41,7 @@ Component{
         header: Rectangle{
             width: parent.width
             height: scaleFactor
-            color: rFileSystem.BackgroundColor
+            color: rFileSystem.BackgroundColor1
             z: 2
 
             Row{

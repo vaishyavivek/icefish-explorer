@@ -32,7 +32,7 @@ SOURCES += cpp/main.cpp \
     cpp/fileStructures/onedrive/onedrive.cpp
 
 RESOURCES += qml.qrc \
-    iconlibrary.qrc
+    icons.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

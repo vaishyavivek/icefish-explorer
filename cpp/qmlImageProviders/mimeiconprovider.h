@@ -33,7 +33,7 @@ public:
             *size = QSize(32, 32);
 
         if(filePath == "Directory" || filePath == "folder")
-            return  QPixmap(":/local/assets/folder.svg").scaled(requestedSize);
+            return QIcon::fromTheme("folder").pixmap(requestedSize);
 
         QMimeDatabase mimeDb;
         QMimeType mime = mimeDb.mimeTypeForFile("file." + filePath, QMimeDatabase::MatchExtension);

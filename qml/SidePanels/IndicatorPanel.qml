@@ -114,7 +114,7 @@ Popup{
                             width: parent.width
                             height: 25
                             text: "Currently Ongoing Processes"
-                            icon.source: "/local/assets/" + (ongoingProcesses.sExpanded ? "collapse.svg" : "expand.svg")
+                            icon.source: "/local/assets/" + (ongoingProcesses.isExpanded ? "collapse.svg" : "expand.svg")
                             icon.color: rFileSystem.IconColor
                             onClicked: ongoingProcesses.isExpanded = !ongoingProcesses.isExpanded
                         }
@@ -213,7 +213,7 @@ Popup{
                             width: parent.width
                             height: 25
                             text: "Process waiting in Queue"
-                            icon.source: "/local/assets/" + (waitingProcesses.sExpanded ? "collapse.svg" : "expand.svg")
+                            icon.source: "/local/assets/" + (waitingProcesses.isExpanded ? "collapse.svg" : "expand.svg")
                             icon.color: rFileSystem.IconColor
                             onClicked: waitingProcesses.isExpanded = !waitingProcesses.isExpanded
                         }

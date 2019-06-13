@@ -18,26 +18,27 @@ ComboBox {
     }
 
     indicator: Rectangle{
-        x: control.width - width - control.rightPadding
-        y: control.topPadding + (control.availableHeight - height) / 2
-        width: 8
-        height: 8
+        x: control.width - height
+        width: height
+        height: control.height
+        color: "transparent"
 
         Image {
             id: image
-            source: "/local/assets/move-forward.svg"
-            sourceSize.width: parent.width
-            sourceSize.height: parent.height
+            source: "/local/assets/combobox-arrow.svg"
+            sourceSize.width: parent.width*0.5
+            sourceSize.height: parent.height*0.5
+            anchors.centerIn: parent
         }
         ColorOverlay{
-            anchors.fill: parent
+            anchors.fill: image
             source: image
             color: rFileSystem.HighlightColor
         }
     }
 
     contentItem: Text {
-        leftPadding: 2
+        leftPadding: control.height*0.25
         rightPadding: control.indicator.width + control.spacing
 
         text: control.displayText
@@ -49,6 +50,7 @@ ComboBox {
 
     background: Rectangle {
         color: rFileSystem.HighlightColor
+        opacity: 0.25
         implicitWidth: control.width
         implicitHeight: control.height
         border.color: control.pressed ? rFileSystem.SelectedColor : rFileSystem.HighlightColor

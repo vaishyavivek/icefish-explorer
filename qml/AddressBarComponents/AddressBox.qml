@@ -82,6 +82,7 @@ Item {
                             id: name
                             anchors.centerIn: parent
                             text: sectionMenuBtn.text
+                            font.pointSize: 10
                             color: sectionMenuBtn.hovered ? rFileSystem.HighlightColor : rFileSystem.IconColor
                         }
                         Component.onCompleted: {

@@ -57,8 +57,10 @@ class RFileSystemModel : public QObject
      * Defaults to Light theme if nothing is found, like started for the first time
      */
     Q_PROPERTY(int AppTheme READ AppTheme WRITE setAppTheme NOTIFY AppThemeChanged)
-    Q_PROPERTY(QString BackgroundColor READ BackgroundColor WRITE setBackgroundColor NOTIFY BackgroundColorChanged)
-    Q_PROPERTY(QString IconColor READ IconColor WRITE setIconColor NOTIFY IconColorChanged)
+    Q_PROPERTY(QString BackgroundColor1 READ BackgroundColor1 WRITE setBackgroundColor1 NOTIFY BackgroundColor1Changed)
+    Q_PROPERTY(QString BackgroundColor2 READ BackgroundColor2 WRITE setBackgroundColor2 NOTIFY BackgroundColor2Changed)
+    Q_PROPERTY(QString IconColor1 READ IconColor1 WRITE setIconColor1 NOTIFY IconColor1Changed)
+    Q_PROPERTY(QString IconColor2 READ IconColor2 WRITE setIconColor2 NOTIFY IconColor2Changed)
     Q_PROPERTY(QString HighlightColor READ HighlightColor WRITE setHighlightColor NOTIFY HighlightColorChanged)
     Q_PROPERTY(QString SelectedColor READ SelectedColor WRITE setSelectedColor NOTIFY SelectedColorChanged)
     Q_PROPERTY(bool IsPinPinned READ IsPinPinned WRITE setIsPinPinned NOTIFY IsPinPinnedChanged)
@@ -115,11 +117,17 @@ public:
     int AppTheme() const;
     void setAppTheme(const int AppTheme);
 
-    QString BackgroundColor() const;
-    void setBackgroundColor(const QString &BackgroundColor);
+    QString BackgroundColor1() const;
+    void setBackgroundColor1(const QString &BackgroundColor1);
 
-    QString IconColor() const;
-    void setIconColor(const QString &IconColor);
+    QString BackgroundColor2() const;
+    void setBackgroundColor2(const QString &BackgroundColor2);
+
+    QString IconColor1() const;
+    void setIconColor1(const QString &IconColor1);
+
+    QString IconColor2() const;
+    void setIconColor2(const QString &IconColor2);
 
     QString HighlightColor() const;
     void setHighlightColor(const QString &HighlightColor);
@@ -179,8 +187,10 @@ signals:
     void TrashListChanged();
 
     void AppThemeChanged();
-    void BackgroundColorChanged();
-    void IconColorChanged();
+    void BackgroundColor1Changed();
+    void BackgroundColor2Changed();
+    void IconColor1Changed();
+    void IconColor2Changed();
     void HighlightColorChanged();
     void SelectedColorChanged();
     void IsPinPinnedChanged();
@@ -215,8 +225,10 @@ private:
 
     NotificationModel *nm;
 
-    QString backgroundColor;
-    QString iconColor;
+    QString backgroundColor1;
+    QString backgroundColor2;
+    QString iconColor1;
+    QString iconColor2;
     QString highlightColor;
     QString selectedColor;
     int animationDuration;

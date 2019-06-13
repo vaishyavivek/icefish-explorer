@@ -13,10 +13,12 @@
     You should have received a copy of the GNU General Public License
     along with IceFish Explorer. If not, see <http://www.gnu.org/licenses/>.
 */
+
 import QtQuick 2.8
-import QtQuick.Controls 2.2
 import QtQuick.Controls 1.4
+import QtQuick.Controls 2.5
 import QtQuick.Controls.Styles 1.4
+import QtQuick.Window 2.2
 import "SidePanels"
 import "CustomComponents"
 import "Popups"
@@ -27,180 +29,207 @@ ApplicationWindow{
     minimumWidth: 900
     minimumHeight: 600
 
-    color: rFileSystem.BackgroundColor
+    flags: Qt.CustomizeWindowHint
+    x: Screen.desktopAvailableWidth*0.5 - width*0.5
+    y: Screen.desktopAvailableHeight*0.5 - height*0.5
+
+    color: "transparent"//rFileSystem.BackgroundColor1
 
     Row{
         anchors.fill: parent
         Rectangle{
             id: sideBar
-            width: 35
+            width: 45
             height: parent.height
             color: "transparent"
             SidePanel{}
         }
 
         Column{
-            id: tabParentLayout
-            readonly property int tabLimit: 8
             width: parent.width - sideBar.width
             height: parent.height
 
             Rectangle{
                 id: tabHeaderParentRect
                 width: parent.width
-                height: 35
-                color: "transparent"
+                height: 45
 
                 Rectangle{
+                    id: bgColor
                     anchors.fill: parent
-                    opacity: 0.2
-                    color: rFileSystem.HighlightColor
+                    color: rFileSystem.BackgroundColor1
+                    opacity: 0.25
                 }
+
 
                 Row{
                     anchors.fill: parent
-                    ListView{
-                        id: tabHeader
-                        property int perDelegateWidth: width/count
-                        width: parent.width - addNewTabBtn.width
+                    anchors.bottomMargin: 1
+                    spacing: 5
+
+                    Rectangle{
+                        width: parent.width - windowControlBar.width
                         height: parent.height
-                        model: rFileSystem.TabHeaderList
-                        clip: true
-                        orientation: ListView.Horizontal
-                        layoutDirection: ListView.LeftToRight
-                        highlightFollowsCurrentItem: true
+                        color: "transparent"
 
-                        delegate: Rectangle{
-                            id: tabHeaderDelegate
-                            width: tabHeader.perDelegateWidth
-                            height: parent.height
-                            color: (tabHeader.currentIndex == index) ? "transparent" : "lightgray"
-                            opacity: (tabHeader.currentIndex == index) ? 1 : 0.4
+                        Row{
+                            anchors.fill: parent
 
-                            Row{
-                                anchors.fill: parent
-                                Rectangle{
-                                    id: materialButton
-                                    width: parent.height
+                            ListView{
+                                id: tabHeader
+                                property int perDelegateWidth: width/count
+                                width: parent.width - addNewTabBtn.width
+                                height: parent.height*0.8
+                                anchors.verticalCenter: parent.verticalCenter
+                                model: rFileSystem.TabHeaderList
+                                clip: true
+                                orientation: ListView.Horizontal
+                                layoutDirection: ListView.LeftToRight
+                                highlightFollowsCurrentItem: true
+
+                                delegate: Rectangle{
+                                    id: tabHeaderDelegate
+                                    width: tabHeader.perDelegateWidth
                                     height: parent.height
                                     color: "transparent"
+                                    opacity: (tabHeader.currentIndex == index) ? 1 : 0.25
 
-                                    Image {
-                                        source: "image://mime/" + model.modelData.FileType
-                                        sourceSize.width: parent.width*0.75
-                                        sourceSize.height: parent.height*0.75
-                                        anchors.centerIn: parent
-                                        asynchronous: true
+                                    Row{
+                                        anchors.fill: parent
+                                        Rectangle{
+                                            id: materialButton
+                                            width: parent.height
+                                            height: parent.height
+                                            color: "transparent"
+
+                                            Image {
+                                                source: "image://mime/" + model.modelData.FileType
+                                                sourceSize.width: parent.width*0.75
+                                                sourceSize.height: parent.height*0.75
+                                                anchors.centerIn: parent
+                                                asynchronous: true
+                                            }
+                                        }
+
+                                        Rectangle{
+                                            width: parent.width - materialButton.width - closeBtn.width
+                                            height: parent.height
+                                            clip: true
+                                            color: "transparent"
+                                            Text {
+                                                text: model.modelData.DisplayName
+                                                font.pointSize: 12
+                                                verticalAlignment: Text.AlignVCenter
+                                                color: rFileSystem.IconColor
+                                                width: parent.width
+                                                height: parent.height
+                                                clip: true
+                                            }
+                                        }
+                                        RImageButton{
+                                            id: closeBtn
+                                            height: parent.height/2
+                                            width: height
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            icon.source: "/local/assets/close.svg"
+                                            icon.color: rFileSystem.IconColor
+                                            hoverText: "Close"
+                                            onClicked: deleteTab(index)
+                                        }
+                                    }
+
+                                    MouseArea{
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        z: -1
+                                        onEntered: mouseEnteredAnimation.start()
+                                        onExited: mouseExitedAnimation.start()
+                                        onClicked: {
+                                            tabHeader.currentIndex = index
+                                            mainTabControl.currentIndex = index
+                                        }
+                                    }
+
+                                    Rectangle{
+                                        id: animatingRect
+                                        anchors.fill: parent
+                                        opacity: 0.25
+                                        radius: 5
+                                        color: "transparent"
+                                    }
+
+                                    PropertyAnimation{
+                                        id: mouseEnteredAnimation
+                                        target: animatingRect
+                                        property: "color"
+                                        to: rFileSystem.HighlightColor
+                                        duration: rFileSystem.GlobalAnimationDuration
+                                    }
+                                    PropertyAnimation{
+                                        id: mouseExitedAnimation
+                                        target: animatingRect
+                                        property: "color"
+                                        to: "transparent"
+                                        duration: rFileSystem.GlobalAnimationDuration
                                     }
                                 }
 
-                                Rectangle{
-                                    width: parent.width - materialButton.width - closeBtn.width
-                                    height: parent.height
-                                    clip: true
-                                    color: "transparent"
-                                    Text {
-                                        text: model.modelData.DisplayName
-                                        font.pointSize: 12
-                                        verticalAlignment: Text.AlignVCenter
-                                        color: rFileSystem.IconColor
-                                        width: parent.width
-                                        height: parent.height
-                                        clip: true
+
+                                onCountChanged: {
+                                    if(count < mainTabControl.tabLimit && !addNewTabBtn.visible){
+                                        addNewTabBtn.visible = true
+                                        addNewTabBtn.width = addNewTabBtn.height
                                     }
-                                }
-                                RImageButton{
-                                    id: closeBtn
-                                    height: parent.height/2
-                                    width: height
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    icon.source: "/local/assets/close.svg"
-                                    icon.color: rFileSystem.IconColor
-                                    hoverText: "Close"
-                                    onClicked: deleteTab(index)
                                 }
                             }
 
-                            MouseArea{
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                z: -1
-                                onEntered: mouseEnteredAnimation.start()
-                                onExited: mouseExitedAnimation.start()
+                            RImageButton{
+                                id: addNewTabBtn
+                                height: parent.height*0.8
+                                width: height
+                                anchors.verticalCenter: parent.verticalCenter
+                                icon.source: "/local/assets/add.svg"
+                                icon.width: width/2
+                                icon.height: height/2
+                                icon.color: rFileSystem.IconColor
+                                hoverText: "New Tab"
                                 onClicked: {
-                                    tabHeader.currentIndex = index
-                                    mainTabControl.currentIndex = index
+                                    if(tabHeader.count === mainTabControl.tabLimit - 1){
+                                        addNewTabBtn.visible = false
+                                        addNewTabBtn.width = 0
+                                    }
+                                    rFileSystem.createNewTab()
                                 }
-                            }
-
-                            Rectangle{
-                                id: animatingRect
-                                anchors.fill: parent
-                                opacity: 0.3
-                                radius: height/2
-                                color: "transparent"
-                            }
-
-                            PropertyAnimation{
-                                id: mouseEnteredAnimation
-                                target: animatingRect
-                                property: "color"
-                                to: rFileSystem.HighlightColor
-                                duration: rFileSystem.GlobalAnimationDuration
-                            }
-                            PropertyAnimation{
-                                id: mouseExitedAnimation
-                                target: animatingRect
-                                property: "color"
-                                to: (tabHeader.currentIndex == index) ? "transparent" : "lightgray"
-                                duration: rFileSystem.GlobalAnimationDuration
-                            }
-                        }
-
-
-                        onCountChanged: {
-                            if(count < tabParentLayout.tabLimit && !addNewTabBtn.visible){
-                                addNewTabBtn.visible = true
-                                addNewTabBtn.width = addNewTabBtn.height
                             }
                         }
                     }
 
-                    RImageButton{
-                        id: addNewTabBtn
-                        height: parent.height
-                        width: height
-                        icon.source: "/local/assets/add.svg"
-                        icon.width: width/2
-                        icon.height: height/2
-                        icon.color: rFileSystem.IconColor
-                        hoverText: "New Tab"
-                        onClicked: {
-                            if(tabHeader.count === tabParentLayout.tabLimit - 1){
-                                addNewTabBtn.visible = false
-                                addNewTabBtn.width = 0
-                            }
-                            rFileSystem.createNewTab()
-                        }
+                    RWindowControlBar{
+                        id: windowControlBar
                     }
                 }
-            }
 
-            Rectangle{
-                width: parent.width
-                height: 1
-                opacity: 0.2
-                color: rFileSystem.IconColor
+                Rectangle{
+                    id: separator
+                    color: rFileSystem.BackgroundColor2
+                    opacity: 0.1
+                    height: 1
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                }
             }
 
             TabView{
                 id: mainTabControl
+                property int tabLimit: 8
                 width: parent.width
                 height: parent.height - tabHeaderParentRect.height - 1
                 tabsVisible: false
                 Component.onCompleted: rFileSystem.createNewTab()//createTab()
             }
         }
+
+
     }
 
     function createTab(){
@@ -241,4 +270,5 @@ ApplicationWindow{
         ignoreUnknownSignals: true
         onCreateQmlTab: createTab()
     }
+
 }

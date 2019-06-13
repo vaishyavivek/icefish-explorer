@@ -13,11 +13,11 @@
     You should have received a copy of the GNU General Public License
     along with IceFish Explorer. If not, see <http://www.gnu.org/licenses/>.
 */
-
-import QtQuick 2.12
+import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
+//import Qt.labs.platform 1.0
 import "../CustomComponents"
 
 Popup {
@@ -28,38 +28,30 @@ Popup {
     property int widthWhenExpanded: 200
 
     padding: 0
+    rightPadding: 1
     width: parent.width
     height: parent.height
     closePolicy: Popup.NoAutoClose
-    //clip: true
 
     Rectangle{
         id: sidePanelParentRect
         width: parent.width
         height: parent.height
-        //color: "transparent"
+        color: rFileSystem.BackgroundColor
 
         Rectangle{
-            id: bgColor
-            anchors.fill: sidePanelParentLayout
-            color: rFileSystem.BackgroundColor1
-            opacity: 0.25
+            anchors.fill: parent
+            opacity: 0.2
+            color: rFileSystem.HighlightColor
         }
 
-
         Column{
-            id: sidePanelParentLayout
             anchors.fill: parent
-            anchors.leftMargin: 10
-            //anchors.rightMargin: 1
-            anchors.topMargin: 10
             spacing: 2
-            clip: true
-
             Rectangle{
                 id: controlBar
                 width: parent.width
-                height: normalizedWidth
+                height: normalizedWidth //OR iconScale
                 color: "transparent"
 
                 RImageButton{
@@ -84,17 +76,13 @@ Popup {
             }
 
             Flickable{
-                id: sidePanelParentFlickable
                 width: parent.width
-                height: parent.height - controlBar.height
-                contentWidth: sidePanelChildLayout.width
-                contentHeight: sidePanelChildLayout.height
-                clip: true
+                height: parent.height
+                contentWidth: parent.width
+                contentHeight: (rFileSystem.DiskDataListCount + 14)*normalizedWidth
 
                 Column{
-                    id: sidePanelChildLayout
-                    width: sidePanelParentRect.width
-                    height: (rFileSystem.DiskDataListCount + 14)*(normalizedWidth + 2)
+                    anchors.fill: parent
                     spacing: 2
 
                     ButtonGroup{id: radioGroup}
@@ -103,11 +91,10 @@ Popup {
                         id: homeBar
                         width: parent.width
                         height: normalizedWidth
-                        icon.source: "image://xdg/folder-home"
+                        icon.source: "image://xdg/user-home"
                         text: "Home"
                         onClicked: updateCurrentDirectory("home")
                         ButtonGroup.group: radioGroup
-                        checked: true
                     }
 
                     RImageExpandingButton{
@@ -224,14 +211,13 @@ Popup {
                                     background: Rectangle {
                                         z: -2
                                         clip: true
-                                        color: "transparent"
+                                        color: rFileSystem.HighlightColor
                                         implicitWidth: diskListViewDelegate.width
                                     }
                                     progress: Rectangle {
                                         z: -2
                                         clip: true
-                                        color: rFileSystem.HighlightColor
-                                        opacity: 0.75
+                                        color: rFileSystem.IconColor
                                         implicitWidth: diskListViewDelegate.width
                                     }
                                 }
@@ -375,17 +361,9 @@ Popup {
                             settingsPanel.isOpened = !settingsPanel.isOpened
                         }
                     }
+
                 }
             }
-        }
-
-        Rectangle{
-            id: separator
-            color: rFileSystem.BackgroundColor2
-            opacity: 0.1
-            height: parent.height
-            width: 1
-            anchors.right: parent.right
         }
     }
 
@@ -394,15 +372,15 @@ Popup {
         target: sidePanel
         property: "width"
         to: widthWhenExpanded
-        duration: rFileSystem.GlobalAnimationDuration
+        duration: rFileSystem.GlobalAnimationDuration*2
     }
 
     PropertyAnimation{
         id: reverseExpandAnimation
         target: sidePanel
         property: "width"
-        to: normalizedWidth + 10
-        duration: rFileSystem.GlobalAnimationDuration
+        to: normalizedWidth
+        duration: rFileSystem.GlobalAnimationDuration*2
     }
 
     Component.onCompleted: sidePanel.open()
@@ -420,7 +398,7 @@ Popup {
         if(isExpanded){
             isExpanded = false
             reverseExpandAnimation.start()
-            sideBar.width = normalizedWidth + 10
+            sideBar.width = normalizedWidth
         }
     }
 
@@ -429,7 +407,6 @@ Popup {
         if(!isPined)
             reverseExpandMenu()
     }
-
 
     onIsPinedChanged: {
         widthWhenExpanded = 200

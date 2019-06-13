@@ -10,7 +10,9 @@ Button {
     checkable: true
     hoverEnabled: true
     padding: 0
-    icon.color: rFileSystem.IconColor
+    icon.color: "transparent"
+    font.pointSize: rFileSystem.GlobalIconScale*10
+    font.family: "Segoe UI"
 
     contentItem: Rectangle{
         width: rButton.width
@@ -29,8 +31,8 @@ Button {
                     id: image
                     source: icon.source
                     visible: false
-                    sourceSize.width: parent.height*0.6
-                    sourceSize.height: parent.height*0.6
+                    sourceSize.width: parent.height*0.5
+                    sourceSize.height: parent.height*0.5
                     fillMode: Image.PreserveAspectFit
                     anchors.centerIn: parent
                 }
@@ -63,33 +65,70 @@ Button {
         width: rButton.width - 2
         height: rButton.height - 2
         anchors.centerIn: parent
-        opacity: enabled ? 1 : 0.4
-        color: "transparent"
+        opacity: enabled ? 1 : 0.5
+        radius: 5
+    }
 
-        Rectangle{
-            id: animatingRect
-            anchors.fill: parent
-            opacity: 0.3
-            radius: height/2
-            color: "transparent"
+    ParallelAnimation{
+        id: mouseEnteredAnimation
+        PropertyAnimation{
+            target: backgroundRect
+            property: "color"
+            to: rFileSystem.HighlightColor
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+        PropertyAnimation{
+            target: backgroundRect
+            property: "opacity"
+            to: 0.5
+            duration: rFileSystem.GlobalAnimationDuration
         }
     }
 
+
+    ParallelAnimation{
+        id: mouseExitedAnimation
+        PropertyAnimation{
+            target: backgroundRect
+            property: "color"
+            to: "transparent"
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+        PropertyAnimation{
+            target: backgroundRect
+            property: "opacity"
+            to: 1
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+    }
+
+
     PropertyAnimation{
-        id: mouseEnteredAnimation
-        target: animatingRect
+        id: checkedAnimation
+        target: backgroundRect
         property: "color"
-        to: rFileSystem.HighlightColor
+        to: rFileSystem.SelectedColor
         duration: rFileSystem.GlobalAnimationDuration
     }
 
-    PropertyAnimation{
-        id: mouseExitedAnimation
-        target: animatingRect
-        property: "color"
-        to: "transparent"
-        duration: rFileSystem.GlobalAnimationDuration
+
+    ParallelAnimation{
+        id: mouseExitedAnimationOnChecked
+        PropertyAnimation{
+            target: backgroundRect
+            property: "color"
+            to: rFileSystem.SelectedColor
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+        PropertyAnimation{
+            target: backgroundRect
+            property: "opacity"
+            to: 1
+            duration: rFileSystem.GlobalAnimationDuration
+        }
     }
+
+
 
     ToolTip{
         id: tooltip
@@ -100,11 +139,12 @@ Button {
         contentItem: Text {
             text: tooltip.text
             font: tooltip.font
-            color: rFileSystem.BackgroundColor
+            color: rFileSystem.IconColor2
         }
         background: Rectangle {
-            radius: height/2
-            color: rFileSystem.IconColor
+            radius: 5
+            color: rFileSystem.BackgroundColor2
+            opacity: 0.75
         }
     }
 
@@ -113,8 +153,10 @@ Button {
             mouseEnteredAnimation.start()
         else if(!checked)
             mouseExitedAnimation.start()
+        else
+            mouseExitedAnimationOnChecked.start()
     }
 
-    onCheckedChanged: checked ? mouseEnteredAnimation.start() : mouseExitedAnimation.start()
+    onCheckedChanged: checked ? checkedAnimation.start() : mouseExitedAnimation.start()
 
 }

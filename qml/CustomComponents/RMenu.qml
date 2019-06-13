@@ -18,7 +18,8 @@ ToolTip{
             id: menuListDelegate
             width: menuListView.width
             height: 25
-            color: rFileSystem.BackgroundColor
+            color: "transparent"
+
             Loader{
                 anchors.centerIn: parent
                 width: parent.width - 2
@@ -95,7 +96,7 @@ ToolTip{
                                 id: submenuListDelegate
                                 width: submenuListView.width
                                 height: 25
-                                color: rFileSystem.BackgroundColor
+                                color: "transparent"
 
                                 Row{
                                     anchors.fill: parent
@@ -130,21 +131,29 @@ ToolTip{
                                     }
                                 }
 
+                                Rectangle{
+                                    id: animatingRectSub
+                                    z: -2
+                                    anchors.fill: parent
+                                    color: rFileSystem.BackgroundColor2
+                                    opacity: 0.75
+                                }
+
                                 PropertyAnimation{
                                     id: submouseEnteredAnimation
-                                    target: submenuListDelegate
+                                    target: animatingRectSub
                                     property: "color"
                                     easing.type: Easing.OutInQuad
                                     to: rFileSystem.HighlightColor
-                                    duration: 100
+                                    duration: rFileSystem.GlobalAnimationDuration
                                 }
                                 PropertyAnimation{
                                     id: submouseExitedAnimation
-                                    target: submenuListDelegate
+                                    target: animatingRectSub
                                     property: "color"
                                     easing.type: Easing.OutInQuad
-                                    to: rFileSystem.BackgroundColor
-                                    duration: 100
+                                    to: rFileSystem.BackgroundColor2
+                                    duration: rFileSystem.GlobalAnimationDuration
                                 }
                             }
                         }
@@ -160,21 +169,31 @@ ToolTip{
                 }
             }
 
+
+            Rectangle{
+                id: animatingRect
+                z: -2
+                anchors.fill: parent
+                color: rFileSystem.BackgroundColor2
+                opacity: 0.75
+            }
+
             PropertyAnimation{
                 id: mouseEnteredAnimation
-                target: menuListDelegate
+                target: animatingRect
                 property: "color"
                 easing.type: Easing.OutInQuad
                 to: rFileSystem.HighlightColor
-                duration: 100
+                duration: rFileSystem.GlobalAnimationDuration
             }
+
             PropertyAnimation{
                 id: mouseExitedAnimation
-                target: menuListDelegate
+                target: animatingRect
                 property: "color"
                 easing.type: Easing.OutInQuad
-                to: rFileSystem.BackgroundColor
-                duration: 100
+                to: rFileSystem.BackgroundColor2
+                duration: rFileSystem.GlobalAnimationDuration
             }
         }
     }

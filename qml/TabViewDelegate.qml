@@ -40,22 +40,16 @@ Rectangle{
 
     width: parent.width
     height: parent.height
-    color: rFileSystem.BackgroundColor
-
-    Rectangle{
-        width: parent.width
-        height: 92
-        opacity: 0.2
-        color: rFileSystem.HighlightColor
-    }
+    color: rFileSystem.BackgroundColor1
 
     Column{
         anchors.fill: parent
+        spacing: 2
 
-        //spacing: 5
         Row{
             width: parent.width
             height: 35
+            spacing: 2
 
             RImageButton{
                 id: backBtn
@@ -109,17 +103,18 @@ Rectangle{
 
             AddressBox{
                 id: addressBox
-                width: parent.width - parent.height*3
+                width: parent.width - (parent.height + 2)*3
                 height: parent.height
                 clip: true
             }
         }
 
         Rectangle{
-            width: parent.width
+            id: separator1
+            color: rFileSystem.BackgroundColor2
+            opacity: 0.1
             height: 1
-            opacity: 0.2
-            color: rFileSystem.IconColor
+            width: parent.width
         }
 
         Rectangle{
@@ -349,10 +344,11 @@ Rectangle{
         }
 
         Rectangle{
-            width: parent.width
+            id: separator
+            color: rFileSystem.BackgroundColor2
+            opacity: 0.1
             height: 1
-            opacity: 0.2
-            color: rFileSystem.IconColor
+            width: parent.width
         }
 
         Rectangle{
@@ -361,6 +357,8 @@ Rectangle{
             width: parent.width
             height: parent.height - 92
             color: "transparent"
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
 
 
             FocusScope{

@@ -10,6 +10,7 @@
         <file>assets/add.svg</file>
         <file>assets/pin.png</file>
         <file>assets/unpin.svg</file>
+        <file>assets/combobox-arrow.svg</file>
         <file>assets/close.svg</file>
         <file>assets/check.svg</file>
         <file>assets/search.svg</file>
@@ -51,5 +52,16 @@
         <file>assets/google-drive.svg</file>
         <file>assets/onedrive.svg</file>
         <file>assets/explorer-icefish.png</file>
+        <file>assets/icefish-green.png</file>
+        <file>assets/share.svg</file>
+        <file>assets/window-close.svg</file>
+        <file>assets/window-full.svg</file>
+        <file>assets/window-half.svg</file>
+        <file>assets/window-minimize.svg</file>
+        <file>assets/folder-document.svg</file>
+        <file>assets/folder-home.svg</file>
+        <file>assets/folder-music.svg</file>
+        <file>assets/folder-pictures.svg</file>
+        <file>assets/folder-video.svg</file>
     </qresource>
 </RCC>

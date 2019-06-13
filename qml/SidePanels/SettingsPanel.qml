@@ -33,7 +33,7 @@ Popup{
         height: parent.height - 2
         border.width: 1
         anchors.centerIn: parent
-        color: rFileSystem.BackgroundColor
+        color: "transparent"
 
         Rectangle{
             anchors.fill: parent
@@ -125,22 +125,26 @@ Popup{
                             }
                             RComboBox{
                                 id: themeCb
-                                property var iconColorList: ["black", "white", "darkred", "darkslateblue", "deeppink", "antiquewhite"]
-                                property var backgroundColorList: ["white", "#312d2d", "cornsilk", "azure", "pink", "cornflowerblue"]
-                                property var highlightColorList: ["silver", "lightgray", "moccasin", "paleturquoise", "mistyrose", "slateblue"]
-                                property var selectionColorList: ["grey", "darkgray", "goldenrod", "aqua", "mistyrose", "slateblue"]
+                                property var iconColorList1: ["#000000", "black", "white", "darkred", "darkslateblue", "deeppink", "antiquewhite", "#272B28"]
+                                property var iconColorList2: ["#FFFFFF", "black", "white", "darkred", "darkslateblue", "deeppink", "antiquewhite", "#272B28"]
+                                property var backgroundColorList1: ["#FFFFFF", "white", "#312d2d", "cornsilk", "azure", "pink", "cornflowerblue", "#09789e"]
+                                property var backgroundColorList2: ["#000000", "white", "#312d2d", "cornsilk", "azure", "pink", "cornflowerblue", "#E8E7E1"]
+                                property var highlightColorList: ["#1E90FF", "silver", "lightgray", "moccasin", "paleturquoise", "mistyrose", "slateblue", "#086786"]
+                                property var selectionColorList: ["#1E90FF", "grey", "darkgray", "goldenrod", "aqua", "mistyrose", "slateblue", "#1e96dc"]
 
                                 width: parent.width*0.5
                                 height: 30
                                 anchors.left: parent.left
                                 anchors.leftMargin: 10
                                 anchors.bottom: parent.bottom
-                                model: ["Light", "Dark", "Cream", "Aqua", "Rose", "Corn Flower"]
+                                model: ["Style8", "Light", "Dark", "Cream", "Aqua", "Rose", "Corn Flower", "Chocolate"]
                                 currentIndex: rFileSystem.AppTheme
                                 onCurrentTextChanged: {
                                     rFileSystem.AppTheme = currentIndex
-                                    rFileSystem.IconColor = iconColorList[currentIndex]
-                                    rFileSystem.BackgroundColor = backgroundColorList[currentIndex]
+                                    rFileSystem.IconColor1 = iconColorList1[currentIndex]
+                                    rFileSystem.IconColor2 = iconColorList2[currentIndex]
+                                    rFileSystem.BackgroundColor1 = backgroundColorList1[currentIndex]
+                                    rFileSystem.BackgroundColor2 = backgroundColorList2[currentIndex]
                                     rFileSystem.HighlightColor = highlightColorList[currentIndex]
                                     rFileSystem.SelectedColor = selectionColorList[currentIndex]
                                 }

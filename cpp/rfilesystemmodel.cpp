@@ -52,8 +52,10 @@ RFileSystemModel::RFileSystemModel(QObject *parent)
 
     historyKeeperThread.start();
 
-    backgroundColor = settings.value("global/backgroundColor").toString();
-    iconColor = settings.value("global/iconColor").toString();
+    backgroundColor1 = settings.value("global/backgroundColor1").toString();
+    backgroundColor2 = settings.value("global/backgroundColor2").toString();
+    iconColor1 = settings.value("global/iconColor1").toString();
+    iconColor2 = settings.value("global/iconColor2").toString();
     animationDuration = settings.value("global/animationDuration").toInt();
     isPinPinned = settings.value("global/isPinPinned").toBool();
 }
@@ -393,29 +395,54 @@ void RFileSystemModel::setAppTheme(const int AppTheme){
     settings.setValue("global/appTheme", AppTheme);
 }
 
-QString RFileSystemModel::BackgroundColor() const{
-    return backgroundColor;
+QString RFileSystemModel::BackgroundColor1() const{
+    return backgroundColor1;
 }
 
-void RFileSystemModel::setBackgroundColor(const QString &BackgroundColor){
-    if(backgroundColor != BackgroundColor){
-        backgroundColor = BackgroundColor;
-        settings.setValue("global/backgroundColor", BackgroundColor);
-        emit BackgroundColorChanged();
+void RFileSystemModel::setBackgroundColor1(const QString &BackgroundColor1){
+    if(backgroundColor1 != BackgroundColor1){
+        backgroundColor1 = BackgroundColor1;
+        settings.setValue("global/backgroundColor1", BackgroundColor1);
+        emit BackgroundColor1Changed();
     }
 }
 
-QString RFileSystemModel::IconColor() const{
-    return iconColor;
+QString RFileSystemModel::BackgroundColor2() const{
+    return backgroundColor2;
 }
 
-void RFileSystemModel::setIconColor(const QString &IconColor){
-    if(iconColor != IconColor){
-        iconColor = IconColor;
-        settings.setValue("global/iconColor", iconColor);
-        emit IconColorChanged();
+void RFileSystemModel::setBackgroundColor2(const QString &BackgroundColor2){
+    if(backgroundColor2 != BackgroundColor2){
+        backgroundColor2 = BackgroundColor2;
+        settings.setValue("global/backgroundColor2", BackgroundColor2);
+        emit BackgroundColor2Changed();
     }
 }
+
+QString RFileSystemModel::IconColor1() const{
+    return iconColor1;
+}
+
+void RFileSystemModel::setIconColor1(const QString &IconColor1){
+    if(iconColor1 != IconColor1){
+        iconColor1 = IconColor1;
+        settings.setValue("global/iconColor1", iconColor1);
+        emit IconColor1Changed();
+    }
+}
+
+QString RFileSystemModel::IconColor2() const{
+    return iconColor2;
+}
+
+void RFileSystemModel::setIconColor2(const QString &IconColor2){
+    if(iconColor2 != IconColor2){
+        iconColor2 = IconColor2;
+        settings.setValue("global/iconColor2", iconColor2);
+        emit IconColor2Changed();
+    }
+}
+
 
 QString RFileSystemModel::HighlightColor() const{
     return highlightColor;

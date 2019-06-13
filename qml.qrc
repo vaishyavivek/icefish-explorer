@@ -19,6 +19,7 @@
         <file>qml/CustomComponents/RMenu.qml</file>
         <file>qml/CustomComponents/RTextButton.qml</file>
         <file>qml/CustomComponents/RComboBox.qml</file>
+        <file>qml/CustomComponents/RWindowControlBar.qml</file>
         <file>qml/Popups/SortingPanel.qml</file>
         <file>qml/Popups/NotificationPanel.qml</file>
         <file>qml/Popups/NewFolderDialogBox.qml</file>

@@ -29,20 +29,20 @@ Component{
         keyNavigationEnabled: true
         model: qtModel.FileFolderList
         cellWidth: scaleFactor*2
-        cellHeight: scaleFactor*4
+        cellHeight: scaleFactor*3
 
         delegate: Rectangle{
             id: fileFolderGridViewDelegate
             property variant filePath: model.modelData.Path
             property variant menuModel: model.modelData.ActionsMenu
-            width: fileFolderGridView.cellWidth*0.9
-            height: fileFolderGridView.cellHeight*0.8
+            width: fileFolderGridView.cellWidth*0.75
+            height: fileFolderGridView.cellHeight*0.75
             color: "transparent"
 
             RCheckBox{
                 id: check
-                height: scaleFactor/2
-                width: scaleFactor/2
+                height: 15
+                width: 15
                 checked: model.modelData.Selected || selectAll.checked
                 onCheckedChanged: {
                     model.modelData.Selected = checked
@@ -84,11 +84,13 @@ Component{
                     TextInput {
                         id: nameInput
                         text: model.modelData.DisplayName
-                        font.family: "Sans Serif"
+                        font.family: "Arial"
                         horizontalAlignment: Text.AlignHCenter
-                        color: rFileSystem.IconColor
-                        font.pointSize: Math.max(scaleFactor*0.16, 8)
+                        color: rFileSystem.IconColor1
+                        font.pointSize: Math.max(scaleFactor*0.16, 10)
                         anchors.verticalCenter: parent.verticalCenter
+                        //anchors.horizontalCenter: parent.horizontalCenter
+                        //wrapMode: Text.WrapAnywhere
 
                         readOnly: true
                         validator: RegExpValidator{regExp: /^[-\w^&'@{}[\],$=!#().%+~ ]+$/}
@@ -104,7 +106,7 @@ Component{
 
             ToolTip{
                 id: perItemActionMenu
-                visible: (fileFolderGridView.currentIndex === index && !selectAll.checked)
+                visible: false//(fileFolderGridView.currentIndex === index && !selectAll.checked)
                 y: parent.height
                 x: 0
                 height: scaleFactor
@@ -178,11 +180,15 @@ Component{
             MouseArea{
                 anchors.fill: parent
                 hoverEnabled: true
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
                 z: -1
                 onEntered: mouseEnteredAnimation.start()
                 onExited: mouseExitedAnimation.start()
-                onClicked: fileFolderGridView .currentIndex = index
-
+                onClicked: {
+                    fileFolderGridView .currentIndex = index
+                    if(mouse.button == Qt.RightButton)
+                        perItemActionMenu.visible = true
+                }
                 onDoubleClicked: updateModel(model.modelData.Path, index)
             }
 
@@ -190,7 +196,7 @@ Component{
                 id: animatingRect
                 anchors.fill: parent
                 radius: 5
-                opacity: 0.3
+                opacity: 0.25
                 color: "transparent"
             }
 
@@ -222,7 +228,7 @@ Component{
             width: fileFolderGridView.cellWidth
             height: fileFolderGridView.cellHeight
             color: rFileSystem.SelectedColor
-            opacity: 0.4
+            opacity: 0.75
             radius: 5
         }
 
