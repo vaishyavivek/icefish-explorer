@@ -28,7 +28,7 @@ Popup{
         id: notificationPanelParentRect
         width: parent.width
         height: parent.height
-        color: rFileSystem.BackgroundColor
+        color: rFileSystem.BackgroundColor1
         border.width: 1
         Column{
             anchors.fill: parent
@@ -49,7 +49,7 @@ Popup{
                     height: parent.height
                     text: rFileSystem.NModel.Header
                     font.family: "Sans Serif"
-                    color: rFileSystem.IconColor
+                    color: rFileSystem.IconColor1
                     clip: true
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     verticalAlignment: Text.AlignVCenter
@@ -60,7 +60,7 @@ Popup{
                     width: height
                     anchors.right: parent.right
                     icon.source: "/local/assets/close.svg"
-                    icon.color: rFileSystem.IconColor
+                    icon.color: rFileSystem.IconColor1
                     onClicked: notificationPanel.close()
                 }
             }

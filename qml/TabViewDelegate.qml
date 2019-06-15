@@ -122,6 +122,7 @@ Rectangle{
             width: parent.width
             height: 35
             color: "transparent"
+            visible: fileFolderView.sourceComponent != startPage
 
             Rectangle{
                 id: defaultLayout
@@ -135,7 +136,7 @@ Rectangle{
 
                 Row{
                     anchors.fill: parent
-                    spacing: 1
+                    spacing: 5
 
                     RCheckBox{
                         id: selectAll
@@ -143,6 +144,7 @@ Rectangle{
                         width: height
                         checked: selectionCount === qtModel.FileFolderListCount
                         Component.onCompleted: checked = false
+                        onCheckedChanged: selectionCount = qtModel.FileFolderListCount
                     }
 
                     RImageButton{
@@ -162,6 +164,7 @@ Rectangle{
                             height: 155
                             y: newFileBtn.height
                         }
+
                     }
 
                     RImageButton{
@@ -219,7 +222,7 @@ Rectangle{
 
                 Row{
                     anchors.fill: parent
-                    spacing: 1
+                    spacing: 5
 
                     RImageButton{
                         id: deselectAll
@@ -230,6 +233,8 @@ Rectangle{
                         onClicked: {
                             selectAll.checked = false
                             selectionCount = 0
+                            layoutWhenSelected.visible = false
+                            defaultLayout.visible = true
                             reloadView()
                         }
                     }
@@ -261,10 +266,10 @@ Rectangle{
             Row{
                 id: globalControls
                 height: parent.height
-                width: height*11 + 7
+                width: height*12 + 7
                 anchors.right: parent.right
                 anchors.rightMargin: 7
-                spacing: 1
+                spacing: 5
 
                 RImageButton{
                     id: favoriteBtn
@@ -316,8 +321,8 @@ Rectangle{
                     width: parent.height*3.5
                     anchors.verticalCenter: parent.verticalCenter
                     text: sortPopup.currentSelection
-                    checkable: false
                     hoverText: "Sort By"
+                    checked: sortPopup.isOpened
                     onClicked: {
                         sortPopup.isOpened ? sortPopup.close() : sortPopup.open()
                         sortPopup.isOpened = !sortPopup.isOpened
@@ -331,14 +336,18 @@ Rectangle{
                     }
                 }
 
-                RScaleControlSpinBox{
+
+                RSlider{
                     id: scaleControl
                     height: parent.height*0.75
-                    width: parent.height*3.5
+                    width: parent.height*4
                     anchors.verticalCenter: parent.verticalCenter
+                    from: 32
+                    to: 128
+                    stepSize: 16
                     hoverText: "Icon Scale"
-                    onValueModified: qtModel.IconScale = getValue()
-                    value: setValue(qtModel.IconScale)
+                    onValueChanged: qtModel.IconScale = value
+                    value: qtModel.IconScale
                 }
             }
         }
@@ -371,6 +380,10 @@ Rectangle{
                     property int currentIndexForReloading: 0
                     anchors.fill: parent
                     sourceComponent: qtModel.FileFolderListCount === 0 ? emptyComp : (qtModel.CurrentView === 0 ? fileFolderListView : fileFolderGridView)
+
+                    StartPage{
+                        id: startPage
+                    }
 
                     FileFolderListView{
                         id: fileFolderListView

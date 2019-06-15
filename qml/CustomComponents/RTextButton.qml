@@ -5,11 +5,13 @@ Button {
     id: rTextButton
     property string hoverText: ""
     property bool toolTipEnabled: hoverText.length > 0
+    property bool alignTextCenter: true
 
     hoverEnabled: true
     padding: 0
     font.pointSize: 9
     font.family: "Segoe UI"
+
 
     contentItem: Item{
         width: rTextButton.width
@@ -19,11 +21,11 @@ Button {
             width: parent.width
             height: parent.height
             text: rTextButton.text
-            color: rFileSystem.IconColor
+            color: rFileSystem.IconColor1
             font: rTextButton.font
             clip: true
             verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+            horizontalAlignment: alignTextCenter ? Text.AlignHCenter : Text.AlignLeft
         }
     }
 

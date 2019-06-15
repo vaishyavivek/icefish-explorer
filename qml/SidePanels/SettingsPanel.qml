@@ -72,7 +72,7 @@ Popup{
                         anchors.leftMargin: 10
                         verticalAlignment: Text.AlignVCenter
                         font.pointSize: 12
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                     }
                 }
                 RImageButton{
@@ -81,7 +81,7 @@ Popup{
                     width: height
                     anchors.right: parent.right
                     icon.source: "/local/assets/popup-close.svg"
-                    icon.color: rFileSystem.IconColor
+                    icon.color: rFileSystem.IconColor1
                     onClicked: {
                         isOpened = false
                         settingsPanel.close()
@@ -120,15 +120,15 @@ Popup{
                                 text: qsTr("Application Theme")
                                 font.pointSize: 10
                                 anchors.left: parent.left
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                                 anchors.leftMargin: 10
                             }
                             RComboBox{
                                 id: themeCb
-                                property var iconColorList1: ["#000000", "black", "white", "darkred", "darkslateblue", "deeppink", "antiquewhite", "#272B28"]
-                                property var iconColorList2: ["#FFFFFF", "black", "white", "darkred", "darkslateblue", "deeppink", "antiquewhite", "#272B28"]
-                                property var backgroundColorList1: ["#FFFFFF", "white", "#312d2d", "cornsilk", "azure", "pink", "cornflowerblue", "#09789e"]
-                                property var backgroundColorList2: ["#000000", "white", "#312d2d", "cornsilk", "azure", "pink", "cornflowerblue", "#E8E7E1"]
+                                property var iconColor1List1: ["#000000", "#000000", "white", "darkred", "darkslateblue", "deeppink", "antiquewhite", "#272B28"]
+                                property var iconColor1List2: ["#FFFFFF", "grey", "white", "darkred", "darkslateblue", "deeppink", "antiquewhite", "#272B28"]
+                                property var backgroundColorList1: ["#FFFFFF", "#FFFFFF", "#312d2d", "cornsilk", "azure", "pink", "cornflowerblue", "#09789e"]
+                                property var backgroundColorList2: ["#000000", "#000000", "#312d2d", "cornsilk", "azure", "pink", "cornflowerblue", "#E8E7E1"]
                                 property var highlightColorList: ["#1E90FF", "silver", "lightgray", "moccasin", "paleturquoise", "mistyrose", "slateblue", "#086786"]
                                 property var selectionColorList: ["#1E90FF", "grey", "darkgray", "goldenrod", "aqua", "mistyrose", "slateblue", "#1e96dc"]
 
@@ -141,8 +141,8 @@ Popup{
                                 currentIndex: rFileSystem.AppTheme
                                 onCurrentTextChanged: {
                                     rFileSystem.AppTheme = currentIndex
-                                    rFileSystem.IconColor1 = iconColorList1[currentIndex]
-                                    rFileSystem.IconColor2 = iconColorList2[currentIndex]
+                                    rFileSystem.IconColor11 = iconColor1List1[currentIndex]
+                                    rFileSystem.IconColor12 = iconColor1List2[currentIndex]
                                     rFileSystem.BackgroundColor1 = backgroundColorList1[currentIndex]
                                     rFileSystem.BackgroundColor2 = backgroundColorList2[currentIndex]
                                     rFileSystem.HighlightColor = highlightColorList[currentIndex]
@@ -166,7 +166,7 @@ Popup{
                                 text: qsTr("Animation Duration")
                                 font.pointSize: 10
                                 anchors.left: parent.left
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                                 anchors.leftMargin: 10
                             }
                             Slider{
@@ -184,7 +184,7 @@ Popup{
                                     implicitHeight: 16
                                     radius: 8
                                     color: animationDurationSlider.pressed ? rFileSystem.SelectedColor : rFileSystem.HighlightColor
-                                    border.color: rFileSystem.IconColor
+                                    border.color: rFileSystem.IconColor1
                                 }
 
                                 from: 50
@@ -208,7 +208,7 @@ Popup{
                             color: "transparent"
                             Text {
                                 text: "Keep these values to default to allow each directory \nto have its seperate settings."
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                                 anchors.verticalCenterOffset: 0
                                 anchors.left: parent.left
@@ -233,7 +233,7 @@ Popup{
                                 text: qsTr("Image Preview")
                                 font.pointSize: 10
                                 anchors.left: parent.left
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                                 anchors.leftMargin: 10
                             }
                             RComboBox{
@@ -264,7 +264,7 @@ Popup{
                                 text: qsTr("Show Hidden Items")
                                 font.pointSize: 10
                                 anchors.left: parent.left
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                                 anchors.leftMargin: 10
                             }
                             RComboBox{
@@ -295,7 +295,7 @@ Popup{
                                 text: qsTr("Icon Scaling")
                                 font.pointSize: 10
                                 anchors.left: parent.left
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                                 anchors.leftMargin: 10
                             }
                             RComboBox{
@@ -326,7 +326,7 @@ Popup{
                                 text: qsTr("Display Style")
                                 font.pointSize: 10
                                 anchors.left: parent.left
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                                 anchors.leftMargin: 10
                             }
                             RComboBox{
@@ -357,7 +357,7 @@ Popup{
                                 text: qsTr("Manage Cloud Accounts")
                                 font.pointSize: 10
                                 anchors.left: parent.left
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                                 anchors.leftMargin: 10
                             }
                         }
@@ -386,13 +386,13 @@ Popup{
                                 Text {
                                     text: qsTr("IceFish Explorer")
                                     font.pointSize: 16
-                                    color: rFileSystem.IconColor
+                                    color: rFileSystem.IconColor1
                                     anchors.horizontalCenter: parent.horizontalCenter
                                 }
                                 Text {
                                     text: qsTr("Version 1.2")
                                     font.pointSize: 10
-                                    color: rFileSystem.IconColor
+                                    color: rFileSystem.IconColor1
                                     anchors.horizontalCenter: parent.horizontalCenter
                                 }
                                 Image {
@@ -405,14 +405,14 @@ Popup{
                                     ColorOverlay{
                                         anchors.fill: companyLogo
                                         source: companyLogo
-                                        color: rFileSystem.IconColor
+                                        color: rFileSystem.IconColor1
                                     }
                                 }
 
                                 Text {
                                     text: qsTr("Qt Version: 5.12\n Qml Version: 2")
                                     font.pointSize: 10
-                                    color: rFileSystem.IconColor
+                                    color: rFileSystem.IconColor1
                                     anchors.horizontalCenter: parent.horizontalCenter
                                 }
                             }

@@ -33,6 +33,7 @@ public:
 signals:
     void setHeader(const QString &);
     void setProgress(int );
+    void setSubHeader(const QString &);
     void setStatusReport(RFileOperator::OperationState);
     void setTimeRequired(const QString &);
     void setTransferSpeed(const QString &);
@@ -51,6 +52,9 @@ protected:
     int errored = 0;
     qint64 totalFileSize = 0;
     double transferSpeed = 0;
+
+    int dirCount = 0;
+    int fileCount = 0;
 };
 
 #endif // OPERATION_H

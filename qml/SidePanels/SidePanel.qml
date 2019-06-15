@@ -190,11 +190,11 @@ Popup {
                     }
 
                     Rectangle{
-                        height: 2
+                        //id: separator
+                        color: rFileSystem.BackgroundColor2
+                        opacity: 0.1
+                        height: 1
                         width: parent.width
-                        color: "grey"
-                        opacity: 0.5
-                        clip: true
                     }
 
                     ListView{
@@ -251,11 +251,11 @@ Popup {
                     }
 
                     Rectangle{
-                        height: 2
+                        //id: separator
+                        color: rFileSystem.BackgroundColor2
+                        opacity: 0.1
+                        height: 1
                         width: parent.width
-                        color: "grey"
-                        opacity: 0.5
-                        clip: true
                     }
 
                     RImageExpandingButton{
@@ -323,11 +323,11 @@ Popup {
                     }
 
                     Rectangle{
-                        height: 2
+                        //id: separator
+                        color: rFileSystem.BackgroundColor2
+                        opacity: 0.1
+                        height: 1
                         width: parent.width
-                        color: "grey"
-                        opacity: 0.5
-                        clip: true
                     }
 
                     RImageExpandingButton{

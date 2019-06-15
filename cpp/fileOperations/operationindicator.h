@@ -24,6 +24,7 @@ class OperationIndicator: public QObject{
 
     Q_PROPERTY(QString Header READ Header NOTIFY HeaderChanged)
     Q_PROPERTY(int Progress READ Progress NOTIFY ProgressChanged)
+    Q_PROPERTY(QString SubHeader READ SubHeader NOTIFY SubHeaderChanged)
     //Q_PROPERTY(QString StatusReport READ StatusReport NOTIFY StatusReportChanged)
     Q_PROPERTY(QString TimeRequired READ TimeRequired NOTIFY TimeRequiredChanged)
     Q_PROPERTY(QString TransferSpeed READ TransferSpeed NOTIFY TransferSpeedChanged)
@@ -45,6 +46,14 @@ public:
         if(progress != Progress){
             progress = Progress;
             emit ProgressChanged();
+        }
+    }
+
+    QString SubHeader() const{ return subHeader;}
+    void setSubHeader(const QString &SubHeader){
+        if(subHeader != SubHeader){
+            subHeader = SubHeader;
+            emit SubHeaderChanged();
         }
     }
 
@@ -75,6 +84,7 @@ public:
 signals:
     void HeaderChanged();
     void ProgressChanged();
+    void SubHeaderChanged();
     void StatusReportChanged();
     void TimeRequiredChanged();
     void TransferSpeedChanged();
@@ -82,6 +92,7 @@ signals:
 private:
     QString header;
     int progress;
+    QString subHeader;
     RFileOperator::OperationState statusReport;
     QString timeRequired;
     QString transferSpeed;

@@ -41,32 +41,52 @@ SpinBox {
     }
 
     contentItem: Text{
-        color: rFileSystem.IconColor
+        color: rFileSystem.IconColor1
         text: scaleControl.textFromValue(scaleControl.value, scaleControl.locale)
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
 
 
-    up.indicator: Rectangle {
+    up.indicator: RTextButton{
         x: scaleControl.mirrored ? 0 : parent.width - width
-        height: parent.height
-        implicitWidth: scaleControl.width/3 - 5
-        implicitHeight: scaleControl.height
-        color: scaleControl.up.pressed ? "lightblue" : "transparent"
-        border.color: enabled ? rFileSystem.IconColor1 : "black"
+        width: scaleControl.width*0.25
+        height: scaleControl.height
+        text: "+"
+        onClicked: scaleControl.increase()
+    }
+
+    down.indicator: RTextButton{
+        x: scaleControl.mirrored ? parent.width - width : 0
+        width: scaleControl.width*0.25
+        height: scaleControl.height
+        text: "-"
+        onClicked: scaleControl.decrease()
+    }
+
+    /*up.indicator: Rectangle {
+        x: scaleControl.mirrored ? 0 : parent.width - width
+        width: scaleControl.width*0.25
+        height: scaleControl.height
+        color: scaleControl.up.pressed ? rFileSystem.SelectedColor : "transparent"
+        border.color: rFileSystem.IconColor1
+        opacity: enabled ? 1 : 0.5
+
         Text {
             text: "+"
             font.pointSize: scaleControl.height*0.75
-            color: scaleControl.up.pressed ? "skyblue" : rFileSystem.IconColor1
-            anchors.fill: parent
+            color: scaleControl.up.pressed ? rFileSystem.SelectedColor : rFileSystem.IconColor1
+            anchors.centerIn: parent
+            width: parent.width
+            height: parent.height
             fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
-    }
 
-    down.indicator: Rectangle {
+    }*/
+
+    /*down.indicator: Rectangle {
         x: scaleControl.mirrored ? parent.width - width : 0
         height: parent.height
         implicitWidth: scaleControl.width/3 - 5
@@ -82,7 +102,7 @@ SpinBox {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
-    }
+    }*/
 
     ToolTip{
         id: tooltip

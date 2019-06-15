@@ -25,7 +25,7 @@ Rectangle{
             width: height
             hoverText: "Full Window"
             icon.source: "/local/assets/window-full.svg"
-            icon.color: rFileSystem.IconColor
+            icon.color: rFileSystem.IconColor1
             onClicked: {
                 if(windowState){
                     showNormal()

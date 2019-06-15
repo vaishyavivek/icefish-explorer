@@ -20,32 +20,37 @@ Popup{
     id: shortcutMenu
     property int fontSize: 10
 
-    padding: 1
+    padding: 0
 
     Rectangle{
         id: shortcutMenuListViewParentRect
-        height: qtModel.AddressBoxShortcutMenuListCount*fontSize*1.7
-        color: rFileSystem.BackgroundColor
-        border.color: rFileSystem.IconColor
+        height: qtModel.AddressBoxShortcutMenuListCount* (fontSize*2.5 + 3) + 10
+        color: rFileSystem.BackgroundColor1
+        border.color: rFileSystem.IconColor1
         border.width: 1
-        //radius: 5
+        radius: 5
+
         ListView{
             id: shortcutMenuListView
-            anchors.margins: 2
-            height: parent.height
+            height: parent.height - 10
+            anchors.verticalCenter: parent.verticalCenter
             clip: true
             highlightFollowsCurrentItem: true
             keyNavigationEnabled: false
+            spacing: 3
             model: qtModel.AddressBoxShortcutMenuList
+
             delegate: Rectangle{
                 id: shortcutMenuListViewDelegate
                 width: shortcutMenuListView.width
-                height: fontSize + 7
+                height: fontSize + 15
                 color: "transparent"
+                radius: 5
+
                 Text{
                     id: optionText
                     text: model.modelData.DisplayName
-                    color: rFileSystem.IconColor
+                    color: rFileSystem.IconColor1
                     anchors.verticalCenter: parent.verticalCenter
                     font.pointSize: fontSize
                     anchors.left: parent.left
@@ -76,19 +81,29 @@ Popup{
                     }
                 }
 
+                Rectangle{
+                    id: animatingRect
+                    width: parent.width - 10
+                    height: parent.height
+                    anchors.centerIn: parent
+                    color: "transparent"
+                    radius: 5
+                    z: -1
+                }
+
                 PropertyAnimation{
                     id: mouseEnteredAnimation
-                    target: shortcutMenuListViewDelegate
+                    target: animatingRect
                     property: "color"
-                    to: "lightblue"
-                    duration: 250
+                    to: rFileSystem.HighlightColor
+                    duration: rFileSystem.GlobalAnimationDuration
                 }
                 PropertyAnimation{
                     id: mouseExitedAnimation
-                    target: shortcutMenuListViewDelegate
+                    target: animatingRect
                     property: "color"
                     to: "transparent"
-                    duration: 250
+                    duration: rFileSystem.GlobalAnimationDuration
                 }
             }
         }

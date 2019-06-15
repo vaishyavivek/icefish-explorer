@@ -52,13 +52,11 @@ Item {
                     icon.source: "/local/assets/shortcut-menu.svg"
                     text: model.modelData.Path
                     display: AbstractButton.IconOnly
-                    icon.color: hovered ? rFileSystem.HighlightColor : rFileSystem.IconColor
+                    icon.color: hovered ? rFileSystem.HighlightColor : rFileSystem.IconColor1
 
                     background: Rectangle {
                         width: shortcutMenuBtn.width - 2
                         height: shortcutMenuBtn.height - 2
-                        anchors.centerIn: parent
-                        opacity: enabled ? 1 : 0.4
                         color: "transparent"
                     }
 
@@ -83,7 +81,7 @@ Item {
                             anchors.centerIn: parent
                             text: sectionMenuBtn.text
                             font.pointSize: 10
-                            color: sectionMenuBtn.hovered ? rFileSystem.HighlightColor : rFileSystem.IconColor
+                            color: sectionMenuBtn.hovered ? rFileSystem.HighlightColor : rFileSystem.IconColor1
                         }
                         Component.onCompleted: {
                             listviewDelegate.width = name.paintedWidth + 25
@@ -96,8 +94,6 @@ Item {
                     background: Rectangle {
                         width: sectionMenuBtn .width - 2
                         height: sectionMenuBtn.height - 2
-                        anchors.centerIn: parent
-                        opacity: enabled ? 1 : 0.4
                         color: "transparent"
                     }
 

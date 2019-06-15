@@ -27,5 +27,7 @@
         <file>qml/Popups/WildSearchPanel.qml</file>
         <file>qml/Popups/PropertiesPanel.qml</file>
         <file>qml/FileFolderSelectionDialogBox.qml</file>
+        <file>qml/CustomComponents/RSlider.qml</file>
+        <file>qml/StartPage.qml</file>
     </qresource>
 </RCC>

@@ -46,6 +46,19 @@ Component{
                 checked: model.modelData.Selected || selectAll.checked
                 onCheckedChanged: {
                     model.modelData.Selected = checked
+                    if(checked && selectionCount < qtModel.FileFolderListCount)
+                        selectionCount += 1
+                    else if(qtModel.FileFolderListCount > 0)
+                        selectionCount -= 1
+
+                    if(selectionCount > 0){
+                        defaultLayout.visible = false
+                        layoutWhenSelected.visible = true
+                    }
+                    else{
+                        defaultLayout.visible = true
+                        layoutWhenSelected.visible = false
+                    }
                 }
             }
 
@@ -110,29 +123,34 @@ Component{
                 y: parent.height
                 x: 0
                 height: scaleFactor
-                width: height*3
+                width: height*3 - 10
                 padding: 0
                 closePolicy: Popup.CloseOnPressOutside
                 modal: false
 
+                background: Rectangle{
+                    opacity: 0.3
+                    color: rFileSystem.BackgroundColor1
+                }
+
                 Rectangle{
                     anchors.fill: parent
-                    color: "transparent"
-
-                    Rectangle{
-                        anchors.fill: parent
-                        opacity: 0.3
-                        color: rFileSystem.BackgroundColor
-                    }
+                    color: rFileSystem.BackgroundColor1
+                    border.color: rFileSystem.IconColor1
+                    border.width: 1
+                    radius: 5
 
                     Row{
                         anchors.fill: parent
+                        anchors.margins: 5
+                        spacing: 5
+
                         RImageButton{
                             id: renameBtn
                             height: parent.height
                             width: height
                             icon.source: "/local/assets/rename.svg"
-                            icon.color: rFileSystem.IconColor
+                            icon.color: rFileSystem.IconColor1
                             hoverText: "Rename"
                             onClicked: {
                                 nameInput.readOnly = false
@@ -146,7 +164,7 @@ Component{
                             height: parent.height
                             width: height
                             icon.source: "/local/assets/trash.svg"
-                            icon.color: rFileSystem.IconColor
+                            icon.color: rFileSystem.IconColor1
                             hoverText: "Delete"
                             onClicked: qtModel.deleteFile(index)
                         }
@@ -155,7 +173,7 @@ Component{
                             height: parent.height
                             width: height
                             icon.source: "/local/assets/switch.svg"
-                            icon.color: rFileSystem.IconColor
+                            icon.color: rFileSystem.IconColor1
                             hoverText: "More Actions"
                             onClicked: {
                                 model.modelData.ActionsMenu = qtModel.getActionMenuFor(model.modelData.Path)
@@ -166,11 +184,10 @@ Component{
                                 id: actionMenu
                                 menuList: model.modelData.ActionsMenu
                                 filePath: model.modelData.Path
-                                height: (model.modelData.ActionsMenuCount)*26
-                                width: 200
-                                clip: true
-                                x: propertiesBtn.x - 220
-                                y: propertiesBtn.y + propertiesBtn.height
+                                actionMenuCount: model.modelData.ActionsMenuCount
+                                //clip: true
+                                x: actionBtn.x - 220
+                                y: actionBtn.y + actionBtn.height
                             }
                         }
                     }
@@ -178,12 +195,21 @@ Component{
             }
 
             MouseArea{
+                id: mouseArea
                 anchors.fill: parent
                 hoverEnabled: true
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 z: -1
-                onEntered: mouseEnteredAnimation.start()
-                onExited: mouseExitedAnimation.start()
+                onEntered: {
+                    tooltip.visible = true
+                    mouseEnteredAnimation.start()
+                }
+
+                onExited: {
+                    tooltip.visible = false
+                    mouseExitedAnimation.start()
+                }
+
                 onClicked: {
                     fileFolderGridView .currentIndex = index
                     if(mouse.button == Qt.RightButton)
@@ -217,6 +243,27 @@ Component{
                 to: "transparent"
                 duration: rFileSystem.GlobalAnimationDuration
             }
+
+            ToolTip{
+                id: tooltip
+                visible: false
+                x: mouseArea.mouseX + 10
+                y: mouseArea.mouseY
+                text: model.modelData.DisplayName
+                delay: 500
+                timeout: 1000
+                contentItem: Text {
+                    text: tooltip.text
+                    font: tooltip.font
+                    color: rFileSystem.IconColor2
+                }
+                background: Rectangle {
+                    radius: 5
+                    color: rFileSystem.BackgroundColor2
+                    opacity: 0.75
+                }
+            }
+
         }
 
 

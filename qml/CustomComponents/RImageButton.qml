@@ -28,6 +28,7 @@ Button {
             anchors.fill: image
             source: image
             color: rButton.icon.color
+            opacity: 0.5
         }
     }
 

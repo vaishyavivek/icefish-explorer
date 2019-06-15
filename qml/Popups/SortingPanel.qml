@@ -25,89 +25,50 @@ Popup{
     property string currentSelection: sortingRole.currentItem.role + " " + sortingOrder.currentItem.order
 
     padding: 0
-    margins: 0
-    modal: true
-    height: 278
+    //margins: 0
 
     Rectangle{
         width: parent.width
-        height: parent.height
-        color: rFileSystem.BackgroundColor
+        height: 313
+        color: rFileSystem.BackgroundColor1
+        border.color: rFileSystem.IconColor1
+        border.width: 1
+        radius: 5
+
         Column{
-            anchors.margins: 5
+            anchors.margins: 10
             anchors.fill: parent
-            spacing: 5
+            spacing: 10
+
+            Rectangle{
+                id: sortingRoleHeader
+                width: parent.width
+                height: 11
+                color: "transparent"
+                Text {
+                    width: parent.width
+                    height: parent.height
+                    anchors.leftMargin: 5
+                    text: qsTr("Sorting Roles")
+                    color: rFileSystem.IconColor
+                    font.pointSize: 10
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
 
             ListView{
                 id: sortingRole
                 width: parent.width
-                height: 135
+                height: 114
                 currentIndex: qtModel.SortingRole
 
-                header: Rectangle{
-                    width: parent.width
-                    height: 21
-                    color: "transparent"
-                    Text {
-                        width: parent.width
-                        height: parent.height
-                        anchors.leftMargin: 5
-                        text: qsTr("Sorting Roles")
-                        color: rFileSystem.IconColor
-                        font.pointSize: 10
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-
-                delegate: Rectangle{
+                delegate: RTextButton{
                     property string role: model.role
+                    text: role
                     width: parent.width
                     height: 28
-                    color: (sortingRole.currentIndex == index) ? rFileSystem.SelectedColor : "transparent"
-
-                    Rectangle{
-                        id: animatingRect
-                        anchors.fill: parent
-                        radius: 5
-                        opacity: 0.3
-                        color: "transparent"
-                    }
-
-
-                    PropertyAnimation{
-                        id: mouseEnteredAnimation
-                        target: animatingRect
-                        property: "color"
-                        easing.type: Easing.OutInQuad
-                        to: rFileSystem.HighlightColor
-                        duration: rFileSystem.GlobalAnimationDuration
-                    }
-                    PropertyAnimation{
-                        id: mouseExitedAnimation
-                        target: animatingRect
-                        property: "color"
-                        easing.type: Easing.OutInQuad
-                        to: "transparent"
-                        duration: rFileSystem.GlobalAnimationDuration
-                    }
-
-                    Text {
-                        width: parent.width
-                        height: parent.height
-                        text: role
-                        color: rFileSystem.IconColor
-                        font.family: "Sans Serif"
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                    }
-
-                    MouseArea{
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: sortingRole.currentIndex = index
-                        onEntered: mouseEnteredAnimation.start()
-                        onExited: mouseExitedAnimation.start()
-                    }
+                    onClicked: sortingRole.currentIndex = index
+                    checked: sortingRole.currentIndex == index
                 }
 
                 model: ListModel{
@@ -141,52 +102,13 @@ Popup{
                 orientation: Qt.Horizontal
                 currentIndex: qtModel.SortingOrder
 
-                delegate: Rectangle{
+                delegate: RImageButton{
                     property string order: model.order
+                    icon.source: image
                     width: sortingOrder.width/2
                     height: 28
-                    color: (sortingOrder.currentIndex == index) ? rFileSystem.SelectedColor : "transparent"
-
-                    Rectangle{
-                        id: animatingRectS
-                        anchors.fill: parent
-                        radius: 5
-                        opacity: 0.3
-                        color: "transparent"
-                    }
-
-
-                    PropertyAnimation{
-                        id: mouseEnteredAnimationS
-                        target: animatingRectS
-                        property: "color"
-                        easing.type: Easing.OutInQuad
-                        to: rFileSystem.HighlightColor
-                        duration: rFileSystem.GlobalAnimationDuration
-                    }
-                    PropertyAnimation{
-                        id: mouseExitedAnimationS
-                        target: animatingRectS
-                        property: "color"
-                        easing.type: Easing.OutInQuad
-                        to: "transparent"
-                        duration: rFileSystem.GlobalAnimationDuration
-                    }
-
-                    Image {
-                        source: image
-                        sourceSize.height: parent.height*0.9
-                        sourceSize.width: parent.height*0.9
-                        anchors.centerIn: parent
-                    }
-
-                    MouseArea{
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: sortingOrder.currentIndex = index
-                        onEntered: mouseEnteredAnimationS.start()
-                        onExited: mouseExitedAnimationS.start()
-                    }
+                    onClicked: sortingOrder.currentIndex = index
+                    checked: sortingOrder.currentIndex == index
                 }
 
                 model: ListModel{
@@ -224,51 +146,12 @@ Popup{
                 orientation: Qt.Horizontal
                 currentIndex: qtModel.SortingPreference
 
-                delegate: Rectangle{
+                delegate: RImageButton{
+                    icon.source: preference
                     width: sortingPreference.width/2
                     height: 28
-                    color: (sortingPreference.currentIndex == index) ? rFileSystem.SelectedColor : "transparent"
-
-                    Rectangle{
-                        id: animatingRectP
-                        anchors.fill: parent
-                        radius: 5
-                        opacity: 0.3
-                        color: "transparent"
-                    }
-
-
-                    PropertyAnimation{
-                        id: mouseEnteredAnimationP
-                        target: animatingRectP
-                        property: "color"
-                        easing.type: Easing.OutInQuad
-                        to: rFileSystem.HighlightColor
-                        duration: rFileSystem.GlobalAnimationDuration
-                    }
-                    PropertyAnimation{
-                        id: mouseExitedAnimationP
-                        target: animatingRectP
-                        property: "color"
-                        easing.type: Easing.OutInQuad
-                        to: "transparent"
-                        duration: rFileSystem.GlobalAnimationDuration
-                    }
-
-                    Image {
-                        source: preference
-                        sourceSize.height: parent.height*0.9
-                        sourceSize.width: parent.height*0.9
-                        anchors.centerIn: parent
-                    }
-
-                    MouseArea{
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: sortingPreference.currentIndex = index
-                        onEntered: mouseEnteredAnimationP.start()
-                        onExited: mouseExitedAnimationP.start()
-                    }
+                    onClicked: sortingPreference.currentIndex = index
+                    checked: sortingPreference.currentIndex == index
                 }
 
                 model: ListModel{
@@ -313,4 +196,6 @@ Popup{
             easing.type: Easing.OutInQuad
         }
     }
+
+    onClosed: isOpened = false
 }

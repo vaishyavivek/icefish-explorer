@@ -4,198 +4,96 @@ import QtQuick.Controls 2.2
 ToolTip{
     id: rmenu
     property bool isOpened: false
+    property int actionMenuCount: 0
     property string filePath
     property variant menuList
-    padding: 2
+    padding: 0
+    contentHeight: actionMenuCount*29
+    contentWidth: 200
+    background: Rectangle{
+        opacity: 0.3
+        color: rFileSystem.BackgroundColor1
+    }
 
-    ListView{
-        id: menuListView
+    Rectangle{
         anchors.fill: parent
-        clip: true
-        model: menuList
+        color: rFileSystem.BackgroundColor1
+        border.color: rFileSystem.IconColor1
+        border.width: 1
+        radius: 5
 
-        delegate: Rectangle{
-            id: menuListDelegate
-            width: menuListView.width
-            height: 25
-            color: "transparent"
+        ListView{
+            id: menuListView
+            width: parent.width - 10
+            height: parent.height - 10
+            anchors.centerIn: parent
+            spacing: 3
+            model: menuList
 
-            Loader{
-                anchors.centerIn: parent
-                width: parent.width - 2
-                height: parent.height - 2
-                sourceComponent: model.modelData.HasSubmenu ? submenu : menuItem
-            }
-
-            Component{
-                id: menuItem
-                Rectangle{
-                    width: menuListDelegate.width
-                    height: menuListDelegate.height
-                    color: "transparent"
-                    Text {
-                        width: parent.width
-                        height: parent.height
-                        text: "      " + model.modelData.ServiceName
-                        color: rFileSystem.IconColor
-                        font.family: "Sans Serif"
-                        font.pointSize: Math.max(scaleFactor*0.16, 8)
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                    MouseArea{
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onEntered: mouseEnteredAnimation.start()
-                        onExited: mouseExitedAnimation.start()
-                        onClicked: {
-                            var action = model.modelData.Action
-                            if(action === "newtab")
-                                rFileSystem.createNewTab(filePath)
-                            else
-                                qtModel.performAction(filePath, action)
-                            rmenu.close()
-                        }
+            delegate: RTextButton{
+                width: menuListView.width
+                height: 25
+                text: (model.modelData.HasSubmenu ? "<    ": "      ")  + model.modelData.ServiceName
+                alignTextCenter: false
+                onClicked: {
+                    if(model.modelData.HasSubmenu)
+                        submenuPopup.open()
+                    else{
+                        var action = model.modelData.Action
+                        if(action === "newtab")
+                            rFileSystem.createNewTab(filePath)
+                        else
+                            qtModel.performAction(filePath, action)
+                        rmenu.close()
                     }
                 }
-            }
 
-            Component{
-                id: submenu
-                Rectangle{
-                    width: menuListDelegate.width
-                    height: menuListDelegate.height
-                    color: "transparent"
-
-                    Text {
-                        id: displayText
-                        width: parent.width
-                        height: parent.height
-                        text: "<    " + model.modelData.ServiceName
-                        color: rFileSystem.IconColor
-                        font.family: "Sans Serif"
-                        font.pointSize: Math.max(scaleFactor*0.16, 8)
-                        verticalAlignment: Text.AlignVCenter
+                ToolTip{
+                    id: submenuPopup
+                    property bool isOpened: false
+                    property string action: model.modelData.Action
+                    property variant subMenuModel: model.modelData.Submenu
+                    padding: 0
+                    contentWidth: 200
+                    contentHeight: (model.modelData.SubmenuCount)*29
+                    x: parent.x - 202
+                    y: parent.y
+                    background: Rectangle{
+                        opacity: 0.3
+                        color: rFileSystem.BackgroundColor1
                     }
-                    ToolTip{
-                        id: submenuPopup
-                        property bool isOpened: false
-                        property string action: model.modelData.Action
-                        property variant subMenuModel: model.modelData.Submenu
-                        padding: 2
-                        width: 200
-                        height: (model.modelData.SubmenuCount)*25 + 2
-                        x: parent.x - 202
-                        y: parent.y
+
+                    Rectangle{
+                        anchors.fill: parent
+                        color: rFileSystem.BackgroundColor1
+                        border.color: rFileSystem.IconColor1
+                        border.width: 1
+                        radius: 5
+
                         ListView{
                             id: submenuListView
-                            anchors.fill: parent
-                            clip: true
+                            width: parent.width - 10
+                            height: parent.height - 10
+                            anchors.centerIn: parent
+                            spacing: 3
                             model: submenuPopup.subMenuModel
 
-                            delegate: Rectangle{
-                                id: submenuListDelegate
+                            delegate: RImageExpandingButton{
                                 width: submenuListView.width
                                 height: 25
-                                color: "transparent"
-
-                                Row{
-                                    anchors.fill: parent
-                                    spacing: 5
-                                    Image {
-                                        id: image
-                                        width: parent.height
-                                        height: parent.height
-                                        source: model.modelData.ServiceIcon
-                                        sourceSize.height: parent.height
-                                        sourceSize.width: parent.height
-                                    }
-                                    Text {
-                                        width: parent.width - image.width
-                                        height: parent.height
-                                        text: model.modelData.ServiceName
-                                        color: rFileSystem.IconColor
-                                        font.family: "Sans Serif"
-                                        font.pointSize: Math.max(scaleFactor*0.16, 8)
-                                        verticalAlignment: Text.AlignVCenter
-                                    }
-                                }
-
-                                MouseArea{
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    onEntered: submouseEnteredAnimation.start()
-                                    onExited: submouseExitedAnimation.start()
-                                    onClicked: {
-                                        qtModel.performAction(filePath, submenuPopup.action, model.modelData.DesktopFile)
-                                        submenuPopup.close()
-                                    }
-                                }
-
-                                Rectangle{
-                                    id: animatingRectSub
-                                    z: -2
-                                    anchors.fill: parent
-                                    color: rFileSystem.BackgroundColor2
-                                    opacity: 0.75
-                                }
-
-                                PropertyAnimation{
-                                    id: submouseEnteredAnimation
-                                    target: animatingRectSub
-                                    property: "color"
-                                    easing.type: Easing.OutInQuad
-                                    to: rFileSystem.HighlightColor
-                                    duration: rFileSystem.GlobalAnimationDuration
-                                }
-                                PropertyAnimation{
-                                    id: submouseExitedAnimation
-                                    target: animatingRectSub
-                                    property: "color"
-                                    easing.type: Easing.OutInQuad
-                                    to: rFileSystem.BackgroundColor2
-                                    duration: rFileSystem.GlobalAnimationDuration
+                                icon.source: model.modelData.ServiceIcon
+                                text: model.modelData.ServiceName
+                                onClicked: {
+                                    qtModel.performAction(filePath, submenuPopup.action, model.modelData.DesktopFile)
+                                    submenuPopup.close()
                                 }
                             }
                         }
                     }
-
-                    MouseArea{
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onEntered: mouseEnteredAnimation.start()
-                        onExited: mouseExitedAnimation.start()
-                        onClicked: submenuPopup.open()
-                    }
                 }
-            }
-
-
-            Rectangle{
-                id: animatingRect
-                z: -2
-                anchors.fill: parent
-                color: rFileSystem.BackgroundColor2
-                opacity: 0.75
-            }
-
-            PropertyAnimation{
-                id: mouseEnteredAnimation
-                target: animatingRect
-                property: "color"
-                easing.type: Easing.OutInQuad
-                to: rFileSystem.HighlightColor
-                duration: rFileSystem.GlobalAnimationDuration
-            }
-
-            PropertyAnimation{
-                id: mouseExitedAnimation
-                target: animatingRect
-                property: "color"
-                easing.type: Easing.OutInQuad
-                to: rFileSystem.BackgroundColor2
-                duration: rFileSystem.GlobalAnimationDuration
             }
         }
     }
+
     onClosed: isOpened = false
 }

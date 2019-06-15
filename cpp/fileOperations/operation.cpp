@@ -86,9 +86,12 @@ QString Operation::getTimeRequired(qint64 timeInNanoSec){
 qint64 Operation::getTheOverallFileSize(QFileInfo file){
     if(file.exists()){
         qint64 finalSize = 0;
-        if(file.isFile())
+        if(file.isFile()){
+            fileCount++;
             finalSize += file.size();
+        }
         else if(file.isDir()){
+            dirCount++;
             QDir dir(file.absoluteFilePath());
             QFileInfoList fileList = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
             foreach (QFileInfo anotherFile, fileList) {

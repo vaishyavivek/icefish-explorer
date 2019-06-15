@@ -29,7 +29,7 @@ ApplicationWindow{
     minimumWidth: 900
     minimumHeight: 600
 
-    flags: Qt.CustomizeWindowHint
+    flags: Qt.FramelessWindowHint
     x: Screen.desktopAvailableWidth*0.5 - width*0.5
     y: Screen.desktopAvailableHeight*0.5 - height*0.5
 
@@ -191,7 +191,7 @@ ApplicationWindow{
                                 icon.source: "/local/assets/add.svg"
                                 icon.width: width/2
                                 icon.height: height/2
-                                icon.color: rFileSystem.IconColor
+                                icon.color: rFileSystem.IconColor1
                                 hoverText: "New Tab"
                                 onClicked: {
                                     if(tabHeader.count === mainTabControl.tabLimit - 1){
@@ -231,6 +231,18 @@ ApplicationWindow{
 
 
     }
+
+    MouseArea{
+        id: mouseArea
+        z: -5
+        anchors.fill: parent
+        onPressAndHold: {
+            console.log(mouse.x, mouse.y)
+
+        }
+    }
+
+    Drag.active: mouseArea.drag.active
 
     function createTab(){
         var tab = mainTabControl.addTab("", Qt.createComponent("TabViewDelegate.qml"))
