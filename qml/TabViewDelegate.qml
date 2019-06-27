@@ -56,7 +56,7 @@ Rectangle{
                 height: parent.height
                 width: height
                 icon.source: "/local/assets/move-back.svg"
-                icon.color: enabled ? rFileSystem.IconColor : "#4d26282a"
+                icon.color: enabled ? rFileSystem.IconColor1 : "#4d26282a"
                 hoverText: "Move Backward"
                 enabled: false
                 onClicked: navigateBackward()
@@ -104,7 +104,8 @@ Rectangle{
             AddressBox{
                 id: addressBox
                 width: parent.width - (parent.height + 2)*3
-                height: parent.height
+                height: parent.height*0.9
+                anchors.verticalCenter: parent.verticalCenter
                 clip: true
             }
         }
@@ -122,7 +123,7 @@ Rectangle{
             width: parent.width
             height: 35
             color: "transparent"
-            visible: fileFolderView.sourceComponent != startPage
+            //visible: fileFolderView.sourceComponent != startPage
 
             Rectangle{
                 id: defaultLayout
@@ -342,9 +343,9 @@ Rectangle{
                     height: parent.height*0.75
                     width: parent.height*4
                     anchors.verticalCenter: parent.verticalCenter
-                    from: 32
+                    from: 16
                     to: 128
-                    stepSize: 16
+                    stepSize: 8
                     hoverText: "Icon Scale"
                     onValueChanged: qtModel.IconScale = value
                     value: qtModel.IconScale
@@ -380,10 +381,6 @@ Rectangle{
                     property int currentIndexForReloading: 0
                     anchors.fill: parent
                     sourceComponent: qtModel.FileFolderListCount === 0 ? emptyComp : (qtModel.CurrentView === 0 ? fileFolderListView : fileFolderGridView)
-
-                    StartPage{
-                        id: startPage
-                    }
 
                     FileFolderListView{
                         id: fileFolderListView

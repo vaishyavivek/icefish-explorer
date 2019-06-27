@@ -58,6 +58,13 @@ RFileSystemModel::RFileSystemModel(QObject *parent)
     iconColor2 = settings.value("global/iconColor2").toString();
     animationDuration = settings.value("global/animationDuration").toInt();
     isPinPinned = settings.value("global/isPinPinned").toBool();
+
+    dropboxViewer = new DropboxViewer();
+    oneDriveViewerObj = new OneDriveViewer();
+    googleDriveViewerObj = new GoogleDriveViewer();
+
+    rvp = new RPhotoModel();
+    emit PhotoViewProviderChanged();
 }
 
 
@@ -289,7 +296,28 @@ void RFileSystemModel::updateStoredBookmarkList(){
 
 
 void RFileSystemModel::createNewTab(QString Path){
-    if(!Path.startsWith("cloud://")){
+    if(Path.startsWith("startpage")){
+        FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
+        ffm->setFileType("folder");
+        ffm->changeTabTitle("Start Page");
+
+        sph = new StartPageHandler();
+        emit StartPageHandleChanged();
+
+        tabHeaderList.append(ffm);
+        emit TabHeaderListChanged();
+    }
+    else if(Path.startsWith("pictures")){
+        FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
+        ffm->setFileType("camera-photo");
+        ffm->changeTabTitle("Photo Viewer");
+
+        tabHeaderList.append(ffm);
+        emit TabHeaderListChanged();
+
+        emit cppTabListChanged("/qml/Tabs/PhotosViewer/GalleryView.qml");
+    }
+    else if(!Path.startsWith("cloud://")){
         FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
         ffm->setFileType("Directory");
         LocalFiles *newTab = new LocalFiles();
@@ -306,10 +334,12 @@ void RFileSystemModel::createNewTab(QString Path){
         connect(newTab, &LocalFiles::WriteBookmarkThreaded, this, &RFileSystemModel::writeBookmarkAsync);
         connect(newTab, &LocalFiles::WriteHistoryTabbed, this, &RFileSystemModel::writeHistoryThreaded);
 
-        emit createQmlTab();
+        emit cppTabListChanged();
     }
     else if(Path.contains("dropbox")){
         FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
+        ffm->setFileType("dropbox");
+        ffm->setDisplayName("Dropbox");
         Dropbox *dbTab = new Dropbox();
 
         connect(dbTab, &Dropbox::TitleChanged, ffm, &FileFolderModel::changeTabTitle);
@@ -319,35 +349,51 @@ void RFileSystemModel::createNewTab(QString Path){
         emit TabHeaderListChanged();
 
         tabDataList.append(dbTab);
-        emit createQmlTab();
+        emit cppTabListChanged();
     }
     else if(Path.contains("onedrive")){
         FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
+        ffm->setFileType("skydrive");
+        ffm->setDisplayName("OneDrive");
         OneDrive *odTab = new OneDrive();
 
-        connect(odTab, &Dropbox::TitleChanged, ffm, &FileFolderModel::changeTabTitle);
-        connect(odTab, &Dropbox::notify, nm, &NotificationModel::Notify);
+        connect(odTab, &OneDrive::TitleChanged, ffm, &FileFolderModel::changeTabTitle);
+        connect(odTab, &OneDrive::notify, nm, &NotificationModel::Notify);
 
         tabHeaderList.append(ffm);
         emit TabHeaderListChanged();
 
         tabDataList.append(odTab);
-        emit createQmlTab();
+        emit cppTabListChanged();
     }
-    else if(Path.contains("onedrive")){
+    else if(Path.contains("google-drive")){
         FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
+        ffm->setFileType("google-drive");
+        ffm->setDisplayName("Google Drive");
         GoogleDrive *gdTab = new GoogleDrive();
 
-        connect(gdTab, &Dropbox::TitleChanged, ffm, &FileFolderModel::changeTabTitle);
-        connect(gdTab, &Dropbox::notify, nm, &NotificationModel::Notify);
+        connect(gdTab, &GoogleDrive::TitleChanged, ffm, &FileFolderModel::changeTabTitle);
+        connect(gdTab, &GoogleDrive::notify, nm, &NotificationModel::Notify);
 
         tabHeaderList.append(ffm);
         emit TabHeaderListChanged();
 
         tabDataList.append(gdTab);
-        emit createQmlTab();
+        emit cppTabListChanged();
     }
 }
+
+int RFileSystemModel::doesTabExist(QString key){
+    int i = -1;
+    for(i = 0; i < tabHeaderList.length(); i++){
+        auto ffm = qobject_cast<FileFolderModel*>(tabHeaderList.at(i));
+        if(ffm->DisplayName() == key)
+            return i;
+    }
+    return -1;
+}
+
+
 
 QObject* RFileSystemModel::getTabData(){
     return  tabDataList.last();
@@ -362,14 +408,21 @@ QObject* RFileSystemModel::getTabData(int index){
 
 
 void RFileSystemModel::updateCurrentDirectoryOnCurrentView(QString stdName, int activeIndex){
-    if(!stdName.contains("/")){
-        if(stdName.compare("home") == 0)
-            qobject_cast<LocalFiles*>(getTabData(activeIndex))->updateCurrentDirectory(QDir::homePath());
+    if(activeIndex > 0){
+        if(!stdName.contains("/")){
+            if(stdName.compare("home") == 0)
+                qobject_cast<LocalFiles*>(getTabData(activeIndex))->updateCurrentDirectory(QDir::homePath());
+            else
+                qobject_cast<LocalFiles*>(getTabData(activeIndex))->updateCurrentDirectory(QDir::homePath() + "/" + stdName);
+        }
         else
-            qobject_cast<LocalFiles*>(getTabData(activeIndex))->updateCurrentDirectory(QDir::homePath() + "/" + stdName);
+            qobject_cast<LocalFiles*>(getTabData(activeIndex))->updateCurrentDirectory(stdName);
     }
-    else
-        qobject_cast<LocalFiles*>(getTabData(activeIndex))->updateCurrentDirectory(stdName);
+    else{
+        if(!stdName.contains("/"))
+            stdName = QDir::homePath() + ((stdName.compare("home") == 0) ? "" : "/" + stdName);
+        createNewTab(stdName);
+    }
 }
 
 
@@ -526,9 +579,5 @@ int RFileSystemModel::GlobalFileFolderView() const{
 
 void RFileSystemModel::setGlobalFileFolderView(const int &GlobalFileFolderView){
     settings.setValue("global/currentView", GlobalFileFolderView);
-}
-
-RFileSystemModel::~RFileSystemModel(){
-    deleteLater();
 }
 

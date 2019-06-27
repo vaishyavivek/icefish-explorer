@@ -38,6 +38,7 @@ void GoogleDrive::authorize(){
 }
 
 void GoogleDrive::isGranted(){
+    qDebug() << oauth2->token();
     updateCurrentDirectory("");
 }
 

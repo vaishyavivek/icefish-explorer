@@ -18,7 +18,7 @@ import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import "../CustomComponents"
 
-Popup{
+ToolTip{
     id: trashPanel
     padding: 0
     property int widthWhenExpanded
@@ -26,32 +26,40 @@ Popup{
 
     clip: true
     closePolicy: Popup.NoAutoClose
+    contentWidth: widthWhenExpanded
+
+    background: Rectangle{
+        id: bgRect
+        color: rFileSystem.BackgroundColor1
+        border.color: rFileSystem.IconColor1
+        border.width: 1
+        radius: 5
+        implicitWidth: parent.width
+        implicitHeight: content.height
+
+        RectangularGlow{
+            id: effect
+            z: -1
+            anchors.fill: parent
+            glowRadius: 5
+            spread: 0.5
+            color: rFileSystem.BackgroundColor2
+            cornerRadius: parent.radius + glowRadius
+        }
+    }
 
     Rectangle{
-        id: trashPanelParentRect
+        id: content
         width: parent.width
         height: parent.height
-        border.width: 1
-        anchors.centerIn: parent
-        color: rFileSystem.BackgroundColor
-
-        Rectangle{
-            anchors.fill: parent
-            opacity: 0.2
-            color: rFileSystem.HighlightColor
-        }
+        color: "transparent"
+        visible: isOpened
 
         Column{
-            id: column
-            anchors.fill: parent
+            width: parent.width - 10
+            height: parent.height - 10
+            anchors.centerIn: parent
             spacing: 5
-
-            Rectangle{
-                height: 2
-                width: parent.width
-                color: "grey"
-                opacity: 0.5
-            }
 
             Rectangle{
                 id: headerBar
@@ -73,7 +81,7 @@ Popup{
                         anchors.leftMargin: 10
                         verticalAlignment: Text.AlignVCenter
                         font.pointSize: 12
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                     }
                 }
                 RImageButton{
@@ -82,7 +90,7 @@ Popup{
                     width: height
                     anchors.right: parent.right
                     icon.source: "/local/assets/popup-close.svg"
-                    icon.color: rFileSystem.IconColor
+                    icon.color: rFileSystem.IconColor1
                     onClicked: {
                         isOpened = false
                         trashPanel.close()
@@ -91,10 +99,11 @@ Popup{
             }
 
             Rectangle{
+                color: rFileSystem.BackgroundColor2
+                opacity: 0.1
                 height: 2
-                width: parent.width
-                color: "grey"
-                opacity: 0.5
+                width: parent.width - 10
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             Rectangle{
@@ -113,7 +122,7 @@ Popup{
                         height: parent.height
                         width: height
                         icon.source: "/local/assets/reload.svg"
-                        icon.color: enabled ? rFileSystem.IconColor : "#4d26282a"
+                        icon.color: enabled ? rFileSystem.IconColor1 : "#4d26282a"
                         hoverText: "Reload"
                         onClicked: rFileSystem.prepareTrashList()
                     }
@@ -142,7 +151,7 @@ Popup{
                             z: 2
                             anchors.fill: previewIndicator
                             source: previewIndicator
-                            color: rFileSystem.IconColor
+                            color: rFileSystem.IconColor1
                         }
                     }
 
@@ -178,7 +187,7 @@ Popup{
                     z: 2
                     width: trashList.width
                     height: 40
-                    color: rFileSystem.BackgroundColor
+                    color: rFileSystem.BackgroundColor1
 
                     Row{
                         anchors.fill: parent
@@ -207,7 +216,7 @@ Popup{
                                 height: parent.height
                                 text: "Display Name\nDeleted Time"
                                 verticalAlignment: Text.AlignVCenter
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                             }
                         }
                     }
@@ -246,7 +255,7 @@ Popup{
                                 height: parent.height
                                 text: model.modelData.DisplayName + "\n" + model.modelData.DeletedDate
                                 verticalAlignment: Text.AlignVCenter
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                             }
                         }
                     }
@@ -270,7 +279,7 @@ Popup{
                                 height: parent.height
                                 width: height
                                 icon.source: "/local/assets/remove.svg"
-                                icon.color: rFileSystem.IconColor
+                                icon.color: rFileSystem.IconColor1
                                 hoverText: "Remove"
                                 onClicked: {
                                     trashList.indexBeforeUpdating = index
@@ -284,7 +293,7 @@ Popup{
                                 height: parent.height
                                 width: height
                                 icon.source: "/local/assets/recover.svg"
-                                icon.color: rFileSystem.IconColor
+                                icon.color: rFileSystem.IconColor1
                                 hoverText: "Recover"
                                 onClicked: {
                                     trashList.indexBeforeUpdating = index
@@ -298,7 +307,7 @@ Popup{
                                 height: parent.height
                                 width: height
                                 icon.source: "/local/assets/about.svg"
-                                icon.color: rFileSystem.IconColor
+                                icon.color: rFileSystem.IconColor1
                                 hoverText: "More Info"
                             }
                         }
@@ -354,7 +363,7 @@ Popup{
                     Rectangle{
                         width: 5
                         height: parent.height
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                     }
                 }
 

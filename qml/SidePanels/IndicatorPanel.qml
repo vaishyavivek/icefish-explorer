@@ -17,7 +17,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import "../CustomComponents"
 
-Popup{
+ToolTip{
     id: indicatorPanel
     padding: 0
     property int widthWhenExpanded
@@ -25,30 +25,27 @@ Popup{
 
     clip: true
     closePolicy: Popup.NoAutoClose
+    contentWidth: widthWhenExpanded
+
+    background: Rectangle{
+        opacity: 0.3
+        color: rFileSystem.BackgroundColor1
+    }
 
     Rectangle{
-        id: bookmarkPanelParentRect
+        id: settingsPanelParentRect
         width: parent.width
         height: parent.height
+        color: rFileSystem.BackgroundColor1
+        border.color: rFileSystem.IconColor1
         border.width: 1
-        color: rFileSystem.BackgroundColor
-
-        Rectangle{
-            anchors.fill: parent
-            opacity: 0.2
-            color: rFileSystem.HighlightColor
-        }
+        radius: 5
 
         Column{
-            anchors.fill: parent
+            width: parent.width - 10
+            height: parent.height - 10
+            anchors.centerIn: parent
             spacing: 5
-
-            Rectangle{
-                height: 2
-                width: parent.width
-                color: "grey"
-                opacity: 0.5
-            }
 
             Rectangle{
                 id: headerBar
@@ -70,7 +67,7 @@ Popup{
                         anchors.leftMargin: 10
                         verticalAlignment: Text.AlignVCenter
                         font.pointSize: 12
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                     }
                 }
                 RImageButton{
@@ -79,7 +76,7 @@ Popup{
                     width: height
                     anchors.right: parent.right
                     icon.source: "/local/assets/popup-close.svg"
-                    icon.color: rFileSystem.IconColor
+                    icon.color: rFileSystem.IconColor1
                     onClicked: {
                         isOpened = false
                         indicatorPanel.close()
@@ -88,10 +85,11 @@ Popup{
             }
 
             Rectangle{
+                color: rFileSystem.BackgroundColor2
+                opacity: 0.1
                 height: 2
-                width: parent.width
-                color: "grey"
-                opacity: 0.5
+                width: parent.width - 10
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             ScrollView{
@@ -115,7 +113,7 @@ Popup{
                             height: 25
                             text: "Currently Ongoing Processes"
                             icon.source: "/local/assets/" + (ongoingProcesses.isExpanded ? "collapse.svg" : "expand.svg")
-                            icon.color: rFileSystem.IconColor
+                            icon.color: rFileSystem.IconColor1
                             onClicked: ongoingProcesses.isExpanded = !ongoingProcesses.isExpanded
                         }
                         ListView{
@@ -141,7 +139,7 @@ Popup{
                                         Text{
                                             text: model.modelData.Header
                                             font.family: "Sans Serif"
-                                            color: rFileSystem.IconColor
+                                            color: rFileSystem.IconColor1
                                         }
                                     }
 
@@ -161,7 +159,7 @@ Popup{
                                         Text{
                                             text: model.modelData.TimeRequired
                                             font.family: "Sans Serif"
-                                            color: rFileSystem.IconColor
+                                            color: rFileSystem.IconColor1
                                         }
                                     }
 
@@ -172,7 +170,7 @@ Popup{
                                         Text{
                                             text: model.modelData.TransferSpeed
                                             font.family: "Sans Serif"
-                                            color: rFileSystem.IconColor
+                                            color: rFileSystem.IconColor1
                                         }
                                     }
                                 }
@@ -191,7 +189,7 @@ Popup{
                                 font.family: "Sans Serif"
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                             }
                         }
                     }
@@ -214,7 +212,7 @@ Popup{
                             height: 25
                             text: "Process waiting in Queue"
                             icon.source: "/local/assets/" + (waitingProcesses.isExpanded ? "collapse.svg" : "expand.svg")
-                            icon.color: rFileSystem.IconColor
+                            icon.color: rFileSystem.IconColor1
                             onClicked: waitingProcesses.isExpanded = !waitingProcesses.isExpanded
                         }
 
@@ -241,7 +239,7 @@ Popup{
                                         Text{
                                             text: model.modelData.Header
                                             font.family: "Sans Serif"
-                                            color: rFileSystem.IconColor
+                                            color: rFileSystem.IconColor1
                                         }
                                     }
 
@@ -261,7 +259,7 @@ Popup{
                                         Text{
                                             text: model.modelData.TimeRequired
                                             font.family: "Sans Serif"
-                                            color: rFileSystem.IconColor
+                                            color: rFileSystem.IconColor1
                                         }
                                     }
 
@@ -272,7 +270,7 @@ Popup{
                                         Text{
                                             text: model.modelData.TransferSpeed
                                             font.family: "Sans Serif"
-                                            color: rFileSystem.IconColor
+                                            color: rFileSystem.IconColor1
                                         }
                                     }
                                 }
@@ -291,7 +289,7 @@ Popup{
                                 font.family: "Sans Serif"
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                             }
                         }
                     }
@@ -314,7 +312,7 @@ Popup{
                             height: 25
                             text: "Completed Processes"
                             icon.source: "/local/assets/" + (completedProcesses.sExpanded ? "collapse.svg" : "expand.svg")
-                            icon.color: rFileSystem.IconColor
+                            icon.color: rFileSystem.IconColor1
                             onClicked: completedProcesses.isExpanded = !completedProcesses.isExpanded
                         }
 
@@ -341,7 +339,7 @@ Popup{
                                         Text{
                                             text: model.modelData.Header
                                             font.family: "Sans Serif"
-                                            color: rFileSystem.IconColor
+                                            color: rFileSystem.IconColor1
                                         }
                                     }
 
@@ -352,7 +350,7 @@ Popup{
                                         Text{
                                             text: model.modelData.TimeRequired
                                             font.family: "Sans Serif"
-                                            color: rFileSystem.IconColor
+                                            color: rFileSystem.IconColor1
                                         }
                                     }
 
@@ -363,7 +361,7 @@ Popup{
                                         Text{
                                             text: model.modelData.TransferSpeed
                                             font.family: "Sans Serif"
-                                            color: rFileSystem.IconColor
+                                            color: rFileSystem.IconColor1
                                         }
                                     }
                                 }
@@ -382,7 +380,7 @@ Popup{
                                 font.family: "Sans Serif"
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                             }
                         }
                     }

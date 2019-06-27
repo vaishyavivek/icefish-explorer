@@ -43,7 +43,7 @@ ComboBox {
 
         text: control.displayText
         font: control.font
-        color: control.pressed ? rFileSystem.SelectedColor : rFileSystem.IconColor
+        color: control.pressed ? rFileSystem.SelectedColor : rFileSystem.IconColor1
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }
@@ -53,7 +53,7 @@ ComboBox {
         opacity: 0.25
         implicitWidth: control.width
         implicitHeight: control.height
-        border.color: control.pressed ? rFileSystem.SelectedColor : rFileSystem.HighlightColor
+        radius: 5
     }
 
     popup: Popup {
@@ -72,7 +72,7 @@ ComboBox {
         }
 
         background: Rectangle {
-            border.color: rFileSystem.IconColor
+            border.color: rFileSystem.IconColor1
         }
     }
 }

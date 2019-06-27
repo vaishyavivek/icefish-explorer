@@ -1,5 +1,5 @@
-QT += quick networkauth
-CONFIG += c++11
+QT += quick networkauth sql
+CONFIG += c++11 libm
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -14,6 +14,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += cpp/main.cpp \
+    cpp/fileStructures/startpagehandler.cpp \
+    cpp/models/cloudAccountViewer/cloudaccountviewer.cpp \
+    cpp/multimediaProviders/photoViewer/rphotomodel.cpp \
+    cpp/multimediaProviders/photoViewer/cachecreatorthread.cpp \
+    cpp/multimediaProviders/photoViewer/rphotodetailsmodel.cpp \
+    cpp/multimediaProviders/photoViewer/photoquerymodel.cpp \
     cpp/rfilesystemmodel.cpp \
     cpp/models/bookmarkInfo/bookmarkinfomodel.cpp \
     cpp/models/diskInfo/diskinfomodel.cpp \
@@ -46,6 +52,17 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    cpp/fileStructures/startpagehandler.h \
+    cpp/models/cloudAccountViewer/cloudaccountviewer.h \
+    cpp/models/cloudAccountViewer/dropboxviewer.h \
+    cpp/models/cloudAccountViewer/googledriveviewer.h \
+    cpp/models/cloudAccountViewer/onedriveviewer.h \
+    cpp/multimediaProviders/photoViewer/rphotomodel.h \
+    cpp/multimediaProviders/photoViewer/cachecreatorthread.h \
+    cpp/multimediaProviders/photoViewer/rphotodetailsmodel.h \
+    cpp/multimediaProviders/photoViewer/photoquerymodel.h \
+    cpp/multimediaProviders/photoViewer/templates.h \
+    cpp/multimediaProviders/photoViewer/imagepreviewprovider.h \
     cpp/rfilesystemmodel.h \
     cpp/models/addressboxmodel.h \
     cpp/models/desktopfilemodel.h \

@@ -63,5 +63,19 @@
         <file>assets/folder-music.svg</file>
         <file>assets/folder-pictures.svg</file>
         <file>assets/folder-video.svg</file>
+        <file>assets/ram.png</file>
+        <file>assets/hard-disk.png</file>
+        <file>assets/clean.png</file>
+        <file>assets/edit-image.svg</file>
+        <file>assets/zoom-in.svg</file>
+        <file>assets/zoom-out.svg</file>
+        <file>assets/rotate-right.svg</file>
+        <file>assets/rotate-left.svg</file>
+        <file>assets/save.svg</file>
+        <file>assets/crop.svg</file>
+        <file>assets/scale.svg</file>
+        <file>assets/user-trash.png</file>
+        <file>assets/generic.png</file>
+        <file>assets/drive-harddisk.png</file>
     </qresource>
 </RCC>

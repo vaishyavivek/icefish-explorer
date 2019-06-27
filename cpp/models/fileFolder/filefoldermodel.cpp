@@ -84,7 +84,9 @@ void FileFolderModel::setFileType(QString FileType){
 
 
 QString FileFolderModel::FileSize() const{
-    if(fileInfo.isDir()){
+    if(t_FileType == "folder")
+        return QString::number(fileSize) + " Files/Folders";
+    else if(fileInfo.isDir()){
         QDir directory(fileInfo.filePath());
         return QString::number(directory.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot).length()) + " Files/Folders";
     }

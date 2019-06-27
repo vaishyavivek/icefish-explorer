@@ -102,14 +102,14 @@ void DiskInfoModel::GenerateExtras(){
     emit IconPathChanged();
 
     if(usedVolumeSize < 1024)
-        diskUsageAnalysis = QString::number(usedVolumeSize, 'f', 2) + " MBytes ";
+        diskUsageAnalysis = QString::number(usedVolumeSize, 'f', 1) + " MB ";
     else if(usedVolumeSize < 1048576)
-        diskUsageAnalysis = QString::number(usedVolumeSize/1024, 'f', 2) + " GBytes ";
+        diskUsageAnalysis = QString::number((usedVolumeSize)/1024, 'f', 1) + " GB ";
 
-    diskUsageAnalysis += "Used of ";
+    diskUsageAnalysis += "free of ";
 
     if(totalVolumeSize < 1024)
-        diskUsageAnalysis += QString::number(totalVolumeSize, 'f', 2) + " MBytes";
+        diskUsageAnalysis += QString::number(totalVolumeSize, 'f', 1) + " MB";
     else if(totalVolumeSize < 1048576)
-        diskUsageAnalysis += QString::number(totalVolumeSize/1024, 'f', 2) + " GBytes";
+        diskUsageAnalysis += QString::number(totalVolumeSize/1024, 'f', 1) + " GB";
 }

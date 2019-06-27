@@ -15,6 +15,7 @@
 */
 import QtQuick 2.7
 import QtQuick.Controls 2.12
+import QtGraphicalEffects 1.0
 import "../CustomComponents"
 
 Popup{
@@ -27,13 +28,31 @@ Popup{
     padding: 0
     //margins: 0
 
-    Rectangle{
-        width: parent.width
-        height: 313
+    background: Rectangle{
+        id: bgRect
         color: rFileSystem.BackgroundColor1
         border.color: rFileSystem.IconColor1
         border.width: 1
         radius: 5
+        implicitWidth: parent.width
+        implicitHeight: content.height
+
+        RectangularGlow{
+            id: effect
+            z: -1
+            anchors.fill: parent
+            glowRadius: 5
+            spread: 0.5
+            color: rFileSystem.BackgroundColor2
+            cornerRadius: parent.radius + glowRadius
+        }
+    }
+
+    Rectangle{
+        id: content
+        width: parent.width
+        height: 313
+        color: "transparent"
 
         Column{
             anchors.margins: 10

@@ -4,8 +4,9 @@ import QtGraphicalEffects 1.0
 
 Button {
     id: rButton
-    property string hoverText: "Your " + text + " Folder"
+    property string hoverText//: "Your " + text + " Folder"
     property bool toolTipEnabled: hoverText.length > 0
+    property var fontColor: rFileSystem.IconColor2
 
     checkable: true
     hoverEnabled: true
@@ -48,7 +49,7 @@ Button {
                 height: parent.height
                 color: "transparent"
                 Text {
-                    color: rFileSystem.IconColor1
+                    color: fontColor
                     text: rButton.text
                     font: rButton.font
                     verticalAlignment: Text.AlignVCenter
@@ -67,11 +68,31 @@ Button {
         anchors.centerIn: parent
         opacity: enabled ? 1 : 0.5
         radius: 5
+        color: "transparent"
     }
 
     ParallelAnimation{
         id: mouseEnteredAnimation
         PropertyAnimation{
+            target: image
+            property: "sourceSize.width"
+            to: rButton.width*0.75
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+
+        PropertyAnimation{
+            target: image
+            property: "sourceSize.height"
+            to: rButton.height*0.75
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+        PropertyAnimation{
+            target: rButton
+            property: "font.pointSize"
+            to: 11
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+        /*PropertyAnimation{
             target: backgroundRect
             property: "color"
             to: rFileSystem.HighlightColor
@@ -82,12 +103,33 @@ Button {
             property: "opacity"
             to: 0.5
             duration: rFileSystem.GlobalAnimationDuration
-        }
+        }*/
     }
 
 
     ParallelAnimation{
         id: mouseExitedAnimation
+
+        PropertyAnimation{
+            target: image
+            property: "sourceSize.width"
+            to: rButton.width*0.5
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+
+        PropertyAnimation{
+            target: image
+            property: "sourceSize.height"
+            to: rButton.height*0.5
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+        PropertyAnimation{
+            target: rButton
+            property: "font.pointSize"
+            to: 9
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+
         PropertyAnimation{
             target: backgroundRect
             property: "color"
@@ -114,6 +156,26 @@ Button {
 
     ParallelAnimation{
         id: mouseExitedAnimationOnChecked
+        PropertyAnimation{
+            target: image
+            property: "sourceSize.width"
+            to: rButton.width*0.5
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+
+        PropertyAnimation{
+            target: image
+            property: "sourceSize.height"
+            to: rButton.height*0.5
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+        PropertyAnimation{
+            target: rButton
+            property: "font.pointSize"
+            to: 9
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+
         PropertyAnimation{
             target: backgroundRect
             property: "color"

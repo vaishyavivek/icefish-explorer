@@ -32,17 +32,30 @@ void OneDrive::authorize(){
     oauth2->setClientIdentifier("9d8e7019-7164-4d89-a12a-f9af8c2dc871");
     oauth2->setClientIdentifierSharedKey("1auG(GbOOCKO:.Tg3(b{");
     oauth2->setScope("files.readwrite.all");
+
     oauth2->setAuthorizationUrl(QUrl("https://login.microsoftonline.com/common/oauth2/v2.0/authorize"));
     oauth2->setAccessTokenUrl(QUrl("https://login.microsoftonline.com/common/oauth2/v2.0/token"));
-    connect(oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
-    auto replyHandler = new CustomHttpListener();
-    oauth2->setReplyHandler(replyHandler);
-    connect(oauth2, &QOAuth2AuthorizationCodeFlow::granted, this, &OneDrive::isGranted);
-    //connect(oauth2, &QOAuth2AuthorizationCodeFlow::authorizationCallbackReceived, this, &OneDrive::requestAccessToken);
-    oauth2->grant();
+
+    QString token = settings.value("onedrive/token").toString();
+    if(token.isEmpty()){
+        connect(oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
+
+        auto replyHandler = new CustomHttpListener();
+        oauth2->setReplyHandler(replyHandler);
+        connect(oauth2, &QOAuth2AuthorizationCodeFlow::granted, this, &OneDrive::isGranted);
+
+        //connect(oauth2, &QOAuth2AuthorizationCodeFlow::authorizationCallbackReceived, this, &OneDrive::requestAccessToken);
+        oauth2->grant();
+    }
+    else{
+        oauth2->setToken(token);
+        oauth2->refreshAccessToken();
+        qDebug() << oauth2->expirationAt().toString("DD-MM-YY");
+        getRootDirectory();
+    }
 }
 
-void OneDrive::isGranted(){
+void OneDrive::getRootDirectory(){
     emit backNavBtnEnabled(false);
     emit forNavBtnEnabled(false);
     QUrl query("https://graph.microsoft.com/v1.0/me/drive/root/children");
@@ -51,6 +64,12 @@ void OneDrive::isGranted(){
     addressBoxData = "OneDrive";
     emit TitleChanged(addressBoxData);
     currentRequestCompleted = false;
+}
+
+void OneDrive::isGranted(){
+    settings.setValue("onedrive/token", oauth2->token());
+    qDebug() << oauth2->token();
+    getRootDirectory();
 }
 
 void OneDrive::updateCurrentDirectory(QString newDirectoryID){
@@ -91,6 +110,7 @@ void OneDrive::receiveDirectoryInfo(QNetworkReply *reply){
 
         QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
         QJsonArray jsonArr = jsonDoc.object()["value"].toArray();
+        qDebug() << jsonDoc;
 
         foreach (const QJsonValue &anotherValue, jsonArr) {
             QJsonObject obj = anotherValue.toObject();
@@ -100,11 +120,22 @@ void OneDrive::receiveDirectoryInfo(QNetworkReply *reply){
             newModel->setDate_Time_Modified(obj["lastModifiedDateTime"].toString());
             newModel->setPath(obj["id"].toString());
 
+            if(obj["folder"].isNull()){
+                QString fileType = newModel->DisplayName();
+                fileType = fileType.mid(fileType.indexOf('.'));
+                newModel->setFileType(fileType);
+                newModel->setFileSize(obj["size"].toInt());
+            }
+            else{
+                newModel->setFileType("folder");
+                auto folder = obj["folder"].toObject()["childCount"].toInt();
+                newModel->setFileSize(folder);
+            }
+
             QJsonValue parentRefArr = obj["parentReference"].toObject();
             if(driveId != parentRefArr["driveId"].toString())
                 driveId = parentRefArr["driveId"].toString();
 
-            newModel->setFileSize(obj["size"].toInt());
             fileFolderList.append(newModel);
         }
         emit FileFolderListChanged();

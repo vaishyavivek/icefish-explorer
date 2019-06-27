@@ -6,10 +6,11 @@ Button {
     property string hoverText: ""
     property bool toolTipEnabled: hoverText.length > 0
     property bool alignTextCenter: true
+    property int fontSize: 9
 
     hoverEnabled: true
     padding: 0
-    font.pointSize: 9
+    font.pointSize: fontSize
     font.family: "Segoe UI"
 
 
@@ -18,8 +19,9 @@ Button {
         height: rTextButton.height
 
         Text {
-            width: parent.width
+            width: parent.width - 5
             height: parent.height
+            anchors.horizontalCenter: parent.horizontalCenter
             text: rTextButton.text
             color: rFileSystem.IconColor1
             font: rTextButton.font
@@ -36,11 +38,19 @@ Button {
         anchors.centerIn: parent
         opacity: enabled ? 1 : 0.5
         radius: 5
+        color: "transparent"
     }
 
     ParallelAnimation{
         id: mouseEnteredAnimation
         PropertyAnimation{
+            target: rTextButton
+            property: "font.pointSize"
+            to: fontSize + 2
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+
+        /*PropertyAnimation{
             target: backgroundRect
             property: "color"
             to: rFileSystem.HighlightColor
@@ -51,12 +61,18 @@ Button {
             property: "opacity"
             to: 0.5
             duration: rFileSystem.GlobalAnimationDuration
-        }
+        }*/
     }
 
 
     ParallelAnimation{
         id: mouseExitedAnimation
+        PropertyAnimation{
+            target: rTextButton
+            property: "font.pointSize"
+            to: fontSize
+            duration: rFileSystem.GlobalAnimationDuration
+        }
         PropertyAnimation{
             target: backgroundRect
             property: "color"
@@ -83,6 +99,12 @@ Button {
 
     ParallelAnimation{
         id: mouseExitedAnimationOnChecked
+        PropertyAnimation{
+            target: rTextButton
+            property: "font.pointSize"
+            to: fontSize
+            duration: rFileSystem.GlobalAnimationDuration
+        }
         PropertyAnimation{
             target: backgroundRect
             property: "color"

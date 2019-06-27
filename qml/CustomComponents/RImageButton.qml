@@ -17,6 +17,7 @@ Button {
         color: "transparent"
         Image{
             id: image
+            visible: false
             source: icon.source
             sourceSize.width: parent.width*0.5
             sourceSize.height: parent.height*0.5
@@ -28,7 +29,7 @@ Button {
             anchors.fill: image
             source: image
             color: rButton.icon.color
-            opacity: 0.5
+            //opacity: 0.5
         }
     }
 
@@ -39,10 +40,26 @@ Button {
         anchors.centerIn: parent
         opacity: enabled ? 1 : 0.5
         radius: 5
+        color: "transparent"
     }
 
     ParallelAnimation{
         id: mouseEnteredAnimation
+        PropertyAnimation{
+            target: image
+            property: "sourceSize.width"
+            to: rButton.width*0.75
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+
+        PropertyAnimation{
+            target: image
+            property: "sourceSize.height"
+            to: rButton.height*0.75
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+
+        /*Highlight animations
         PropertyAnimation{
             target: backgroundRect
             property: "color"
@@ -54,12 +71,26 @@ Button {
             property: "opacity"
             to: 0.5
             duration: rFileSystem.GlobalAnimationDuration
-        }
+        }*/
     }
 
 
     ParallelAnimation{
         id: mouseExitedAnimation
+        PropertyAnimation{
+            target: image
+            property: "sourceSize.width"
+            to: rButton.width*0.5
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+
+        PropertyAnimation{
+            target: image
+            property: "sourceSize.height"
+            to: rButton.height*0.5
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+        /* Highlight animations
         PropertyAnimation{
             target: backgroundRect
             property: "color"
@@ -71,7 +102,7 @@ Button {
             property: "opacity"
             to: 1
             duration: rFileSystem.GlobalAnimationDuration
-        }
+        }*/
     }
 
 
@@ -96,6 +127,20 @@ Button {
             target: backgroundRect
             property: "opacity"
             to: 1
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+
+        PropertyAnimation{
+            target: image
+            property: "sourceSize.width"
+            to: rButton.width*0.5
+            duration: rFileSystem.GlobalAnimationDuration
+        }
+
+        PropertyAnimation{
+            target: image
+            property: "sourceSize.height"
+            to: rButton.height*0.5
             duration: rFileSystem.GlobalAnimationDuration
         }
     }

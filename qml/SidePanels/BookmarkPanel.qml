@@ -15,9 +15,10 @@
 */
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtGraphicalEffects 1.0
 import "../CustomComponents"
 
-Popup{
+ToolTip{
     id: bookmarkPanel
     padding: 0
     property int widthWhenExpanded
@@ -25,31 +26,40 @@ Popup{
 
     clip: true
     closePolicy: Popup.NoAutoClose
+    contentWidth: widthWhenExpanded
+
+    background: Rectangle{
+        id: bgRect
+        color: rFileSystem.BackgroundColor1
+        border.color: rFileSystem.IconColor1
+        border.width: 1
+        radius: 5
+        implicitWidth: parent.width
+        implicitHeight: content.height
+
+        RectangularGlow{
+            id: effect
+            z: -1
+            anchors.fill: parent
+            glowRadius: 5
+            spread: 0.5
+            color: rFileSystem.BackgroundColor2
+            cornerRadius: parent.radius + glowRadius
+        }
+    }
 
     Rectangle{
-        id: bookmarkPanelParentRect
+        id: content
         width: parent.width
         height: parent.height
-        border.width: 1
-        anchors.centerIn: parent
-        color: rFileSystem.BackgroundColor
-
-        Rectangle{
-            anchors.fill: parent
-            opacity: 0.2
-            color: rFileSystem.HighlightColor
-        }
+        color: "transparent"
+        visible: isOpened
 
         Column{
-            anchors.fill: parent
+            width: parent.width - 10
+            height: parent.height - 10
+            anchors.centerIn: parent
             spacing: 5
-
-            Rectangle{
-                height: 2
-                width: parent.width
-                color: "grey"
-                opacity: 0.5
-            }
 
             Rectangle{
                 id: headerBar
@@ -71,7 +81,7 @@ Popup{
                         anchors.leftMargin: 10
                         verticalAlignment: Text.AlignVCenter
                         font.pointSize: 12
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                     }
                 }
                 RImageButton{
@@ -80,7 +90,7 @@ Popup{
                     width: height
                     anchors.right: parent.right
                     icon.source: "/local/assets/popup-close.svg"
-                    icon.color: rFileSystem.IconColor
+                    icon.color: rFileSystem.IconColor1
                     onClicked: {
                         isOpened = false
                         bookmarkPanel.close()
@@ -89,10 +99,11 @@ Popup{
             }
 
             Rectangle{
+                color: rFileSystem.BackgroundColor2
+                opacity: 0.1
                 height: 2
-                width: parent.width
-                color: "grey"
-                opacity: 0.5
+                width: parent.width - 10
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             ListView{
@@ -132,7 +143,7 @@ Popup{
                                 height: parent.height
                                 text: model.modelData.DisplayName
                                 font.family: "Sans Serif"
-                                color: rFileSystem.IconColor
+                                color: rFileSystem.IconColor1
                                 anchors.verticalCenter: parent.verticalCenter
                                 clip: true
                                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -143,7 +154,7 @@ Popup{
                             height: parent.height
                             width: height
                             icon.source: "/local/assets/close.svg"
-                            icon.color: rFileSystem.IconColor
+                            icon.color: rFileSystem.IconColor1
                             onClicked: {
                                 bookmarkListDelegate.visible = false
                                 rFileSystem.writeBookmarkAsync(model.modelData.ActualPath, false)

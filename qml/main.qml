@@ -42,7 +42,7 @@ ApplicationWindow{
             width: 45
             height: parent.height
             color: "transparent"
-            SidePanel{}
+            SidePanel{ id: sidePanel}
         }
 
         Column{
@@ -53,12 +53,13 @@ ApplicationWindow{
                 id: tabHeaderParentRect
                 width: parent.width
                 height: 45
+                color: "transparent"
 
                 Rectangle{
                     id: bgColor
                     anchors.fill: parent
-                    color: rFileSystem.BackgroundColor1
-                    opacity: 0.25
+                    color: Qt.darker(rFileSystem.BackgroundColor2)
+                    opacity: 0.5
                 }
 
 
@@ -103,7 +104,7 @@ ApplicationWindow{
                                             color: "transparent"
 
                                             Image {
-                                                source: "image://mime/" + model.modelData.FileType
+                                                source: "image://xdg/" + model.modelData.FileType
                                                 sourceSize.width: parent.width*0.75
                                                 sourceSize.height: parent.height*0.75
                                                 anchors.centerIn: parent
@@ -120,7 +121,7 @@ ApplicationWindow{
                                                 text: model.modelData.DisplayName
                                                 font.pointSize: 12
                                                 verticalAlignment: Text.AlignVCenter
-                                                color: rFileSystem.IconColor
+                                                color: rFileSystem.IconColor2
                                                 width: parent.width
                                                 height: parent.height
                                                 clip: true
@@ -132,7 +133,7 @@ ApplicationWindow{
                                             width: height
                                             anchors.verticalCenter: parent.verticalCenter
                                             icon.source: "/local/assets/close.svg"
-                                            icon.color: rFileSystem.IconColor
+                                            icon.color: rFileSystem.IconColor2
                                             hoverText: "Close"
                                             onClicked: deleteTab(index)
                                         }
@@ -147,6 +148,7 @@ ApplicationWindow{
                                         onClicked: {
                                             tabHeader.currentIndex = index
                                             mainTabControl.currentIndex = index
+                                            sidePanel.radioGroup.checked = Qt.Unchecked
                                         }
                                     }
 
@@ -191,7 +193,7 @@ ApplicationWindow{
                                 icon.source: "/local/assets/add.svg"
                                 icon.width: width/2
                                 icon.height: height/2
-                                icon.color: rFileSystem.IconColor1
+                                icon.color: rFileSystem.IconColor2
                                 hoverText: "New Tab"
                                 onClicked: {
                                     if(tabHeader.count === mainTabControl.tabLimit - 1){
@@ -225,7 +227,11 @@ ApplicationWindow{
                 width: parent.width
                 height: parent.height - tabHeaderParentRect.height - 1
                 tabsVisible: false
-                Component.onCompleted: rFileSystem.createNewTab()//createTab()
+                Component.onCompleted: {
+                    rFileSystem.createNewTab("startpage")
+                    var tab = mainTabControl.addTab("", Qt.createComponent("StartPage.qml"))
+                    tab.active = true
+                }
             }
         }
 
@@ -238,20 +244,22 @@ ApplicationWindow{
         anchors.fill: parent
         onPressAndHold: {
             console.log(mouse.x, mouse.y)
-
         }
     }
 
     Drag.active: mouseArea.drag.active
 
-    function createTab(){
-        var tab = mainTabControl.addTab("", Qt.createComponent("TabViewDelegate.qml"))
-        tab.active = true
-        /*if(path === undefined)
-            rFileSystem.createNewTab()
+    function createTab(tabName){
+        var tab = undefined
+        if(tabName === "")
+            tab = mainTabControl.addTab("", Qt.createComponent("TabViewDelegate.qml"))
         else
-            rFileSystem.createNewTab(path)*/
-        tab.item.qtModel = rFileSystem.getTabData()
+            tab = mainTabControl.addTab("", Qt.createComponent(tabName))
+        tab.active = true
+
+        if(tabName === "")
+            tab.item.qtModel = rFileSystem.getTabData()
+        //console.log(tab.item.qtModel)
         mainTabControl.currentIndex = tabHeader.count - 1
         tabHeader.currentIndex = tabHeader.count - 1
     }
@@ -262,7 +270,7 @@ ApplicationWindow{
         else if(mainTabControl.count > 1)
             mainTabControl.currentIndex = index + 1
         else
-            mainWindow.close()
+            Qt.quit()
 
         mainTabControl.removeTab(index)
         rFileSystem.deleteTab(index)
@@ -280,7 +288,7 @@ ApplicationWindow{
     Connections{
         target: rFileSystem
         ignoreUnknownSignals: true
-        onCreateQmlTab: createTab()
+        onCppTabListChanged: createTab(stdName)
     }
 
 }

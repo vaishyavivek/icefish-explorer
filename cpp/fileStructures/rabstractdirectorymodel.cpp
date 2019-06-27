@@ -255,7 +255,7 @@ QList<QObject*> RAbstractDirectoryModel::getAssociatedServicesList(QString fileN
     DesktopFileModel *defaultService = new DesktopFileModel();
     defaultService->setDesktopFile("rdesktopservices.desktop");
     defaultService->setServiceName("Select another app...");
-    defaultService->setServiceIcon("/local/assets/not-found.svg");
+    defaultService->setServiceIcon("image://xdg/package-x-generic");
     associatedServiceList.append(defaultService);
 
     return associatedServiceList;

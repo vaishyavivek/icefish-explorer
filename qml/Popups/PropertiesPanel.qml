@@ -29,12 +29,12 @@ Popup{
     margins: 0
 
     Rectangle{
-        id: propertiesPanelParentRect
         width: parent.width
         height: parent.height
-        anchors.centerIn: parent
-        color: rFileSystem.BackgroundColor
-        border.width: 0
+        color: rFileSystem.BackgroundColor1
+        border.color: rFileSystem.IconColor1
+        border.width: 1
+        radius: 5
 
         TabView{
             id: propertiesTabBar

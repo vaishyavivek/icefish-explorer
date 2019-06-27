@@ -15,6 +15,7 @@
 */
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtGraphicalEffects 1.0
 import "../CustomComponents"
 
 Item {
@@ -26,6 +27,21 @@ Item {
         height: parent.height
         text: qtModel.AddressBoxData
         onAccepted: qtModel.updateCurrentDirectory(text)
+
+        background: Rectangle{
+            border.width: 1
+            border.color: textField.focus ? rFileSystem.HighlightColor : "grey"
+            radius: 5
+
+            RectangularGlow{
+                anchors.fill: parent
+                glowRadius: 5
+                spread: 0.2
+                color: rFileSystem.BackgroundColor2
+                cornerRadius: parent.radius
+                z: -1
+            }
+        }
     }
 
     ListView{

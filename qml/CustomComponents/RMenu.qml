@@ -10,6 +10,7 @@ ToolTip{
     padding: 0
     contentHeight: actionMenuCount*29
     contentWidth: 200
+
     background: Rectangle{
         opacity: 0.3
         color: rFileSystem.BackgroundColor1
@@ -83,6 +84,7 @@ ToolTip{
                                 height: 25
                                 icon.source: model.modelData.ServiceIcon
                                 text: model.modelData.ServiceName
+                                fontColor: rFileSystem.IconColor1
                                 onClicked: {
                                     qtModel.performAction(filePath, submenuPopup.action, model.modelData.DesktopFile)
                                     submenuPopup.close()

@@ -29,6 +29,7 @@ class OneDrive : public RAbstractDirectoryModel{
 public:
     explicit OneDrive(RAbstractDirectoryModel *parent = nullptr);
 
+    void getRootDirectory();
     void updateCurrentDirectory(QString newDirectoryID);
     void updateAddressBoxShortcutMenuList(QString jumpAddress = "");
     void setAddressBoxData(QString changedAddress = "");

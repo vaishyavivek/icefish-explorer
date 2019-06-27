@@ -15,8 +15,7 @@
 */
 
 import QtQuick 2.12
-import QtQuick.Controls 2.2
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.5
 import QtQuick.Controls.Styles 1.4
 import "../CustomComponents"
 
@@ -29,23 +28,22 @@ Popup {
 
     padding: 0
     width: parent.width
-    height: parent.height
+    height: parent.height - 1
     closePolicy: Popup.NoAutoClose
     //clip: true
+
+    background: Rectangle{
+        opacity: 0.5
+        color: Qt.darker(rFileSystem.BackgroundColor2)
+    }
+
+    ButtonGroup{id: radioGroup}
 
     Rectangle{
         id: sidePanelParentRect
         width: parent.width
         height: parent.height
-        //color: "transparent"
-
-        Rectangle{
-            id: bgColor
-            anchors.fill: sidePanelParentLayout
-            color: rFileSystem.BackgroundColor1
-            opacity: 0.25
-        }
-
+        color: "transparent"
 
         Column{
             id: sidePanelParentLayout
@@ -53,6 +51,7 @@ Popup {
             anchors.leftMargin: 10
             //anchors.rightMargin: 1
             anchors.topMargin: 10
+            anchors.bottomMargin: 10
             spacing: 2
             clip: true
 
@@ -67,7 +66,7 @@ Popup {
                     width: normalizedWidth
                     height: normalizedWidth
                     icon.source: "/local/assets/menu.svg"
-                    icon.color: rFileSystem.IconColor
+                    icon.color: rFileSystem.IconColor1
                     onClicked: (!isPined && isExpanded) ? reverseExpandMenu() : expandMenu()
                 }
 
@@ -78,17 +77,25 @@ Popup {
                     visible: isExpanded
                     anchors.right: parent.right
                     icon.source: isPined ? "/local/assets/pin.png" : "/local/assets/unpin.svg"
-                    icon.color: rFileSystem.IconColor
+                    icon.color: rFileSystem.IconColor1
                     onClicked: rFileSystem.IsPinPinned = !isPined
                 }
             }
 
-            Flickable{
+            ScrollView{
                 id: sidePanelParentFlickable
                 width: parent.width
                 height: parent.height - controlBar.height
-                contentWidth: sidePanelChildLayout.width
-                contentHeight: sidePanelChildLayout.height
+                //contentWidth: sidePanelChildLayout.width
+                //contentHeight: sidePanelChildLayout.height
+                ScrollBar.horizontal: ScrollBar{
+                    policy: ScrollBar.AlwaysOff
+                }
+
+                ScrollBar.vertical: ScrollBar{
+                    policy: ScrollBar.AsNeeded
+                }
+
                 clip: true
 
                 Column{
@@ -96,8 +103,6 @@ Popup {
                     width: sidePanelParentRect.width
                     height: (rFileSystem.DiskDataListCount + 14)*(normalizedWidth + 2)
                     spacing: 2
-
-                    ButtonGroup{id: radioGroup}
 
                     RImageExpandingButton{
                         id: homeBar
@@ -165,7 +170,15 @@ Popup {
                         height: normalizedWidth
                         icon.source: "image://xdg/dropbox"
                         text: "Dropbox"
-                        onClicked: rFileSystem.createNewTab("cloud://dropbox")
+                        onClicked: {
+                            var index = rFileSystem.doesTabExist("Dropbox")
+                            if(index === -1)
+                                rFileSystem.createNewTab("cloud://dropbox")
+                            else{
+                                tabHeader.currentIndex = index
+                                mainTabControl.currentIndex = index
+                            }
+                        }
                         ButtonGroup.group: radioGroup
                     }
 
@@ -173,7 +186,7 @@ Popup {
                         id: onedriveBtn
                         width: parent.width
                         height: normalizedWidth
-                        icon.source: "/local/assets/onedrive.svg"
+                        icon.source: "image://xdg/skydrive"//"/local/assets/onedrive.svg"
                         text: "OneDrive"
                         onClicked: rFileSystem.createNewTab("cloud://onedrive")
                         ButtonGroup.group: radioGroup
@@ -183,9 +196,9 @@ Popup {
                         id: gdriveBtn
                         width: parent.width
                         height: normalizedWidth
-                        icon.source: "/local/assets/google-drive.svg"
+                        icon.source: "image://xdg/google-drive"//"/local/assets/google-drive.svg"
                         text: "Google Drive"
-                        onClicked: rFileSystem.createNewTab("cloud://gdrive")
+                        onClicked: rFileSystem.createNewTab("cloud://google-drive")
                         ButtonGroup.group: radioGroup
                     }
 
@@ -203,6 +216,7 @@ Popup {
                         height: count*normalizedWidth
                         spacing: 2
                         clip: true
+                        interactive: false
                         model: rFileSystem.DiskDataList
 
                         delegate: Rectangle{
@@ -211,30 +225,15 @@ Popup {
                             height: normalizedWidth
                             color: "transparent"
 
-                            ProgressBar {
+                            RProgressBar {
                                 id: progress
                                 opacity: 0.4
                                 width: parent.width - 2
                                 height: parent.height
                                 visible: (width - height > 1)
                                 value: 1 - model.modelData.UsedVolumeSize/model.modelData.TotalVolumeSize
-                                minimumValue: 0
-                                maximumValue: 1
-                                style: ProgressBarStyle {
-                                    background: Rectangle {
-                                        z: -2
-                                        clip: true
-                                        color: "transparent"
-                                        implicitWidth: diskListViewDelegate.width
-                                    }
-                                    progress: Rectangle {
-                                        z: -2
-                                        clip: true
-                                        color: rFileSystem.HighlightColor
-                                        opacity: 0.75
-                                        implicitWidth: diskListViewDelegate.width
-                                    }
-                                }
+                                from: 0
+                                to: 1
                             }
                             RImageExpandingButton{
                                 width: parent.width
@@ -270,9 +269,8 @@ Popup {
                         BookmarkPanel{
                             id: bookmarkPanel
                             x: sidePanel.width
-                            y: sidePanelParentRect.y - bookmarksBtn.y - 2
-                            widthWhenExpanded: mainWindow.width*0.35
-                            height: mainWindow.height - 35
+                            widthWhenExpanded: sidePanel.width*1.5
+                            contentHeight: mainWindow.height - 35
                         }
                         onClicked: {
                             bookmarkPanel.isOpened ? bookmarkPanel.close() : bookmarkPanel.open()
@@ -291,9 +289,8 @@ Popup {
                         RecentsPanel{
                             id: recentsPanel
                             x: sidePanel.width
-                            y: sidePanelParentRect.y - recentsBtn.y - 2
-                            widthWhenExpanded: mainWindow.width*0.35
-                            height: mainWindow.height - 35
+                            widthWhenExpanded: sidePanel.width*1.5
+                            contentHeight: mainWindow.height - 35
                         }
                         onClicked: {
                             recentsPanel.isOpened ? recentsPanel.close() : recentsPanel.open()
@@ -311,9 +308,8 @@ Popup {
                         TrashPanel{
                             id: trashPanel
                             x: sidePanel.width
-                            y: sidePanelParentRect.y - trashBtn.y - 2
-                            widthWhenExpanded: mainWindow.width*0.35
-                            height: mainWindow.height - 35
+                            widthWhenExpanded: sidePanel.width*1.5
+                            contentHeight: mainWindow.height - 35
                         }
 
                         onClicked: {
@@ -334,8 +330,8 @@ Popup {
                         id: processBtn
                         width: parent.width
                         height: normalizedWidth
-                        icon.source: "/local/assets/process.svg"
-                        icon.color: rFileSystem.IconColor
+                        icon.source: "image://xdg/cs-startup-programs"//"/local/assets/process.svg"
+                        //icon.color: rFileSystem.IconColor1
                         text: "Processes"
                         hoverText: "File Operations you perform"
                         checked: indicatorPanel.isOpened
@@ -343,9 +339,8 @@ Popup {
                         IndicatorPanel{
                             id: indicatorPanel
                             x: sidePanel.width
-                            y: sidePanelParentRect.y - processBtn.y - 2
-                            widthWhenExpanded: mainWindow.width*0.35
-                            height: mainWindow.height - 35
+                            widthWhenExpanded: sidePanel.width*1.5
+                            contentHeight: mainWindow.height - 35
                         }
                         onClicked: {
                             indicatorPanel.isOpened ? indicatorPanel.close() : indicatorPanel.open()
@@ -357,8 +352,8 @@ Popup {
                         id: settingsBtn
                         width: parent.width
                         height: normalizedWidth
-                        icon.source: "/local/assets/settings.svg"
-                        icon.color: rFileSystem.IconColor
+                        icon.source: "image://xdg/applications-system"//"/local/assets/settings.svg"
+                        //icon.color: rFileSystem.IconColor1
                         text: "Global Settings"
                         hoverText: "Customize your File Manager"
                         checked: settingsPanel.isOpened
@@ -366,9 +361,8 @@ Popup {
                         SettingsPanel{
                             id: settingsPanel
                             x: sidePanel.width
-                            y: sidePanelParentRect.y - settingsBtn.y - 2
-                            widthWhenExpanded: mainWindow.width*0.35
-                            height: mainWindow.height - 35
+                            widthWhenExpanded: sidePanel.width*1.5//mainWindow.width*0.35
+                            contentHeight: mainWindow.height - 35
                         }
                         onClicked: {
                             settingsPanel.isOpened ? settingsPanel.close() : settingsPanel.open()

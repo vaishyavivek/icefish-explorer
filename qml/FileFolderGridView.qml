@@ -35,8 +35,8 @@ Component{
             id: fileFolderGridViewDelegate
             property variant filePath: model.modelData.Path
             property variant menuModel: model.modelData.ActionsMenu
-            width: fileFolderGridView.cellWidth*0.75
-            height: fileFolderGridView.cellHeight*0.75
+            width: fileFolderGridView.cellWidth*0.85
+            height: fileFolderGridView.cellHeight*0.85
             color: "transparent"
 
             RCheckBox{
@@ -64,7 +64,9 @@ Component{
 
             Column{
                 anchors.margins: 5
-                anchors.fill: parent
+                width: parent.width*0.75
+                height: parent.height*0.75
+                anchors.centerIn: parent
                 spacing: 5
 
                 Rectangle{
@@ -75,6 +77,8 @@ Component{
                     Image {
                         id: iconImage
                         anchors.centerIn: parent
+                        width: parent.width
+                        height: parent.height
                         source: (imagePreviewBtn.nowPreviewing ? "image://preview/" : "image://mime/") + model.modelData.FileType
                         sourceSize.width: parent.width*0.9
                         sourceSize.height: parent.height*0.9
@@ -272,11 +276,20 @@ Component{
         highlightMoveDuration: tabViewDelegate.highlightMoveDuration
 
         highlight: Rectangle{
-            width: fileFolderGridView.cellWidth
-            height: fileFolderGridView.cellHeight
+            width: fileFolderGridView.cellWidth*0.9
+            height: fileFolderGridView.cellHeight*0.9
             color: rFileSystem.SelectedColor
             opacity: 0.75
             radius: 5
+
+            RectangularGlow{
+                anchors.fill: parent
+                glowRadius: 5
+                spread: 0.2
+                color: rFileSystem.BackgroundColor2
+                cornerRadius: parent.radius
+                z: -1
+            }
         }
 
         onModelChanged: {

@@ -74,7 +74,7 @@ Popup{
                     height: parent.height
                     text: rFileSystem.NModel.Comment
                     font.family: "Sans Serif"
-                    color: rFileSystem.IconColor
+                    color: rFileSystem.IconColor1
                     clip: true
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     verticalAlignment: Text.AlignVCenter

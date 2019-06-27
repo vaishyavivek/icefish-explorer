@@ -32,14 +32,23 @@ void Dropbox::authorize(){
     oauth2->setClientIdentifierSharedKey("q3obr0ioxi0jqjy");
     oauth2->setAuthorizationUrl(QUrl("https://www.dropbox.com/oauth2/authorize"));
     oauth2->setAccessTokenUrl(QUrl("https://api.dropboxapi.com/oauth2/token"));
-    connect(oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
-    auto replyHandler = new QOAuthHttpServerReplyHandler(2377, this);
-    oauth2->setReplyHandler(replyHandler);
-    connect(oauth2, &QOAuth2AuthorizationCodeFlow::granted, this, &Dropbox::isGranted);
-    oauth2->grant();
+
+    QString token = settings.value("dropbox/token").toString();
+    if(token.isEmpty()){
+        connect(oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
+        auto replyHandler = new QOAuthHttpServerReplyHandler(2377, this);
+        oauth2->setReplyHandler(replyHandler);
+        connect(oauth2, &QOAuth2AuthorizationCodeFlow::granted, this, &Dropbox::isGranted);
+        oauth2->grant();
+    }
+    else{
+        oauth2->setToken(token);
+        updateCurrentDirectory("");
+    }
 }
 
 void Dropbox::isGranted(){
+    settings.setValue("dropbox/token", oauth2->token());
     updateCurrentDirectory("");
 }
 
@@ -208,11 +217,13 @@ void Dropbox::deleteFile(int index){
     oauth2->setContentType(QAbstractOAuth::ContentType::Json);
     connect(oauth2, &QOAuth2AuthorizationCodeFlow::finished, this, &Dropbox::receiveDeletedInfo);
     oauth2->post(query, parameters);
+    currentRequestCompleted = false;
 }
 
 void Dropbox::receiveDeletedInfo(QNetworkReply *reply){
-    if(reply->error() == QNetworkReply::NoError){
+    if(reply->error() == QNetworkReply::NoError && !currentRequestCompleted){
         reloadCurrentDirectory();
+        currentRequestCompleted = true;
     }
 }
 
@@ -231,17 +242,19 @@ bool Dropbox::createNewFolder(QString folderName){
     parameters.insert("path", nhm->Path() + "/" + folderName);
     parameters.insert("autorename", true);
 
-    QUrl query("https://api.dropboxapi.com/2/files/delete_v2");
+    QUrl query("https://api.dropboxapi.com/2/files/create_folder_v2");
 
     oauth2->setContentType(QAbstractOAuth::ContentType::Json);
     connect(oauth2, &QOAuth2AuthorizationCodeFlow::finished, this, &Dropbox::receiveCreateNewFolderInfo);
     oauth2->post(query, parameters);
+    currentRequestCompleted = false;
     return true;
 }
 
 void Dropbox::receiveCreateNewFolderInfo(QNetworkReply *reply){
-    if(reply->error() == QNetworkReply::NoError){
+    if(reply->error() == QNetworkReply::NoError && !currentRequestCompleted){
         reloadCurrentDirectory();
+        currentRequestCompleted = true;
     }
 }
 
@@ -265,12 +278,14 @@ bool Dropbox::createNewFile(QString fileName, QString fileType){
     oauth2->setContentType(QAbstractOAuth::ContentType::Json);
     connect(oauth2, &QOAuth2AuthorizationCodeFlow::finished, this, &Dropbox::receiveCreateNewFileInfo);
     oauth2->post(query, parameters);
+    currentRequestCompleted = false;
     return true;
 }
 
 void Dropbox::receiveCreateNewFileInfo(QNetworkReply *reply){
-    if(reply->error() == QNetworkReply::NoError){
+    if(reply->error() == QNetworkReply::NoError && !currentRequestCompleted){
         reloadCurrentDirectory();
+        currentRequestCompleted = true;
     }
 }
 

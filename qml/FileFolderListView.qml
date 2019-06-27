@@ -65,7 +65,7 @@ Component{
                     Text{
                         text: "File Name"
                         font.family: "Sans Serif"
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                         font.pointSize: Math.max(scaleFactor*0.32, 10)
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -100,7 +100,7 @@ Component{
                     Text{
                         text: "Last Modified"
                         font.family: "Sans Serif"
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                         font.pointSize: Math.max(scaleFactor*0.32, 10)
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -134,7 +134,7 @@ Component{
                     Text{
                         text: "Size"
                         font.family: "Sans Serif"
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                         font.pointSize: Math.max(scaleFactor*0.32, 10)
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -168,7 +168,7 @@ Component{
                     Text{
                         text: "Type"
                         font.family: "Sans Serif"
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                         font.pointSize: Math.max(scaleFactor*0.32, 10)
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -230,6 +230,8 @@ Component{
                     Image {
                         id: iconImage
                         anchors.centerIn: parent
+                        width: parent.width
+                        height: parent.height
                         source: (imagePreviewBtn.nowPreviewing ? "image://preview/" : "image://mime/") + model.modelData.FileType
                         sourceSize.width: parent.width*0.9
                         sourceSize.height: parent.height*0.9
@@ -253,7 +255,7 @@ Component{
                         id: nameInput
                         text: model.modelData.DisplayName
                         font.family: "Sans Serif"
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                         font.pointSize: Math.max(scaleFactor*0.32, 8)
                         anchors.verticalCenter: parent.verticalCenter
 
@@ -278,7 +280,7 @@ Component{
                         width: parent.width
                         height: parent.height
                         text: model.modelData.Date_Time_Modified
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                         font.family: "Sans Serif"
                         font.pointSize: Math.max(scaleFactor*0.32, 8)
                         anchors.verticalCenter: parent.verticalCenter
@@ -297,7 +299,7 @@ Component{
                         width: parent.width
                         height: parent.height
                         text: model.modelData.FileSize
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                         font.family: "Sans Serif"
                         font.pointSize: Math.max(scaleFactor*0.32, 8)
                         anchors.verticalCenter: parent.verticalCenter
@@ -322,7 +324,7 @@ Component{
                         width: parent.width
                         height: parent.height
                         text: model.modelData.FileType
-                        color: rFileSystem.IconColor
+                        color: rFileSystem.IconColor1
                         font.family: "Sans Serif"
                         font.pointSize: Math.max(scaleFactor*0.32, 8)
                         anchors.verticalCenter: parent.verticalCenter
@@ -348,7 +350,7 @@ Component{
                         height: parent.height
                         width: height
                         icon.source: "/local/assets/rename.svg"
-                        icon.color: rFileSystem.IconColor
+                        icon.color: rFileSystem.IconColor1
                         hoverText: "Rename"
                         onClicked: {
                             nameInput.readOnly = false
@@ -362,7 +364,7 @@ Component{
                         height: parent.height
                         width: height
                         icon.source: "/local/assets/trash.svg"
-                        icon.color: rFileSystem.IconColor
+                        icon.color: rFileSystem.IconColor1
                         hoverText: "Delete"
                         onClicked: qtModel.deleteFile(index)
                     }
@@ -371,7 +373,7 @@ Component{
                         height: parent.height
                         width: height
                         icon.source: "/local/assets/switch.svg"
-                        icon.color: rFileSystem.IconColor
+                        icon.color: rFileSystem.IconColor1
                         hoverText: "More Actions"
                         onClicked: {
                             model.modelData.ActionsMenu = qtModel.getActionMenuFor(model.modelData.Path)
@@ -382,11 +384,9 @@ Component{
                             id: actionMenu
                             menuList: model.modelData.ActionsMenu
                             filePath: model.modelData.Path
-
-                            height: (model.modelData.ActionsMenuCount)*26
-                            width: 200
-                            x: propertiesBtn.x - 220
-                            y: propertiesBtn.y + propertiesBtn.height
+                            actionMenuCount: model.modelData.ActionsMenuCount
+                            x: actionBtn.x - 220
+                            y: actionBtn.y + actionBtn.height
                         }
                     }
                 }
@@ -394,11 +394,21 @@ Component{
 
 
             MouseArea{
+                id: mouseArea
                 anchors.fill: parent
                 hoverEnabled: true
                 z: -1
-                onEntered: mouseEnteredAnimation.start()
-                onExited: mouseExitedAnimation.start()
+
+                onEntered: {
+                    tooltip.visible = true
+                    mouseEnteredAnimation.start()
+                }
+
+                onExited: {
+                    tooltip.visible = false
+                    mouseExitedAnimation.start()
+                }
+
                 onClicked: fileFolderListView.currentIndex = index
                 onDoubleClicked: updateModel(model.modelData.Path, index)
             }
@@ -407,7 +417,7 @@ Component{
                 id: animatingRect
                 anchors.fill: parent
                 radius: 5
-                opacity: 0.3
+                opacity: 0.25
                 color: "transparent"
             }
 
@@ -428,6 +438,26 @@ Component{
                 to: "transparent"
                 duration: rFileSystem.GlobalAnimationDuration
             }
+
+            ToolTip{
+                id: tooltip
+                visible: false
+                x: mouseArea.mouseX + 10
+                y: mouseArea.mouseY
+                text: model.modelData.DisplayName
+                delay: 500
+                timeout: 1000
+                contentItem: Text {
+                    text: tooltip.text
+                    font: tooltip.font
+                    color: rFileSystem.IconColor2
+                }
+                background: Rectangle {
+                    radius: 5
+                    color: rFileSystem.BackgroundColor2
+                    opacity: 0.75
+                }
+            }
         }
 
         highlightFollowsCurrentItem: true
@@ -438,12 +468,16 @@ Component{
             width: fileFolderListView.width
             height: scaleFactor
             color: rFileSystem.SelectedColor
-            opacity: 0.4
+            opacity: 0.75
             radius: 5
-            Rectangle{
-                width: 5
-                height: parent.height
-                color: rFileSystem.IconColor
+
+            RectangularGlow{
+                anchors.fill: parent
+                glowRadius: 5
+                spread: 0.2
+                color: rFileSystem.BackgroundColor2
+                cornerRadius: parent.radius
+                z: -1
             }
         }
 
@@ -465,7 +499,6 @@ Component{
             target: fileFolderView
             ignoreUnknownSignals: true
             onCurrentIndexChanged: {
-                //console.log("some")
                 fileFolderListView.currentIndex = fileFolderView.currentIndex
             }
         }

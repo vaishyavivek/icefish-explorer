@@ -23,6 +23,11 @@
 #include <QSettings>
 
 #include "models/notification/notificationmodel.h"
+#include "fileStructures/startpagehandler.h"
+#include "models/cloudAccountViewer/dropboxviewer.h"
+#include "models/cloudAccountViewer/onedriveviewer.h"
+#include "models/cloudAccountViewer/googledriveviewer.h"
+#include "multimediaProviders/photoViewer/rphotomodel.h"
 
 class RFileSystemModel : public QObject
 {
@@ -32,6 +37,11 @@ class RFileSystemModel : public QObject
      * connected with each tab to allow changing to new name when the current directory in tab changes
      */
     Q_PROPERTY(QList<QObject*> TabHeaderList READ TabHeaderList NOTIFY TabHeaderListChanged)
+
+
+    Q_PROPERTY(StartPageHandler* StartPageHandle READ StartPageHandle NOTIFY StartPageHandleChanged)
+
+    Q_PROPERTY(RPhotoModel* PhotoViewProvider READ PhotoViewProvider NOTIFY PhotoViewProviderChanged)
 
     /* Provides error/warning data to NotificationPanel
      * connected with each tab via "Notfiy" slot in the NotificationModel class
@@ -75,6 +85,10 @@ class RFileSystemModel : public QObject
     Q_PROPERTY(int GlobalAnimationDuration READ GlobalAnimationDuration WRITE setGlobalAnimationDuration NOTIFY GlobalAnimationDurationChanged)
     Q_PROPERTY(int GlobalFileFolderView READ GlobalFileFolderView WRITE setGlobalFileFolderView NOTIFY GlobalFileFolderViewChanged)
 
+    Q_PROPERTY(DropboxViewer* DropboxViewerObj READ DropboxViewerObj NOTIFY DropboxViewerObjChanged)
+    Q_PROPERTY(OneDriveViewer* OneDriveViewerObj READ OneDriveViewerObj NOTIFY OneDriveViewerObjChanged)
+    Q_PROPERTY(GoogleDriveViewer* GoogleDriveViewerObj READ GoogleDriveViewerObj NOTIFY GoogleDriveViewerObjChanged)
+
 public:
     explicit RFileSystemModel(QObject *parent = nullptr);
 
@@ -89,6 +103,8 @@ public:
      */
     //as the name suggest
     Q_INVOKABLE void createNewTab(QString Path = QDir::homePath());
+
+    Q_INVOKABLE int doesTabExist(QString key);
     //returns pointer to lastly added new Tab and QML code links that pointer with the newly created TabUI handler
     Q_INVOKABLE QObject* getTabData();
     //NOT USED YET
@@ -102,6 +118,10 @@ public:
     //following all the methods are just C++ wrappers to properties declared above using Q_Property
 
     QList<QObject*> TabHeaderList() const{ return tabHeaderList;}
+
+    StartPageHandler* StartPageHandle() const{ return sph;}
+
+    RPhotoModel* PhotoViewProvider() const{ return rvp;}
 
     NotificationModel* NModel() const{ return nm;}
 
@@ -153,9 +173,12 @@ public:
     int GlobalFileFolderView() const;
     void setGlobalFileFolderView(const int &GlobalFileFolderView);
 
-    ~RFileSystemModel();
+    DropboxViewer* DropboxViewerObj() const{ return dropboxViewer;}
+    OneDriveViewer* OneDriveViewerObj() const{ return oneDriveViewerObj;}
+    GoogleDriveViewer* GoogleDriveViewerObj() const{ return googleDriveViewerObj;}
 
 public slots:
+
     // A Threaded slot called everytime a new place is bookmarked, only does the job of calling actual Threaded BookmarkKeeper class
     void writeBookmarkAsync(QString filePath, bool addOrRemove);
 
@@ -170,7 +193,8 @@ public slots:
     void prepareTrashList(QString nameFilter = "");
 
 signals:
-    void createQmlTab();
+    void cppTabListChanged(const QString stdName = "");
+    void qmlTabChanged(const QString stdName = "");
 
     void NModelChanged();
 
@@ -180,6 +204,8 @@ signals:
 
     // Following all are just Notifiers to make QML code aware of the changes in C++ code
     void TabHeaderListChanged();
+    void StartPageHandleChanged();
+    void PhotoViewProviderChanged();
     void DiskDataListChanged();
     void BookmarkDataListChanged();
     void RecentsListChanged();
@@ -200,6 +226,9 @@ signals:
     void GlobalIconScaleChanged();
     void GlobalAnimationDurationChanged();
     void GlobalFileFolderViewChanged();
+    void DropboxViewerObjChanged();
+    void OneDriveViewerObjChanged();
+    void GoogleDriveViewerObjChanged();
 
     // Linked with Each TabModel to allow async writing of recent events
     void writeHistoryThreaded(QString fileAccessed);
@@ -233,6 +262,14 @@ private:
     QString selectedColor;
     int animationDuration;
     bool isPinPinned;
+
+    void checkCloudDriveSyncStatus();
+    OneDriveViewer* oneDriveViewerObj;
+    GoogleDriveViewer* googleDriveViewerObj;
+    DropboxViewer *dropboxViewer;
+
+    StartPageHandler *sph;
+    RPhotoModel *rvp;
 
     // Global Settings handler object
     QSettings settings;
