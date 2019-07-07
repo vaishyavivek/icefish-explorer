@@ -110,12 +110,13 @@ Rectangle {
                                 Canvas{
                                     id: canvas
                                     property var picturesCount: rFileSystem.PhotoViewProvider.PhotoCount
+                                    property var videoCount: rFileSystem.VideoViewProvider.VideoCount
 
-                                    property var stoppersModelValues: [200, picturesCount, 240, 145, 453, 1000]
+                                    property var stoppersModelValues: [200, picturesCount, 240, videoCount, 453, 1000]
 
                                     property var totalMediaCount: stoppersModelValues.reduce((a, b) => a + b, 0)
 
-                                    property var stoppersModelPercent: [0, picturesCount/totalMediaCount, 0.36, 0.55, 0.7, 0.85, 1.0]
+                                    property var stoppersModelPercent: stoppersModelValues.map(item => item/totalMediaCount)
 
                                     property var stoppersModelName: ["Documents", "Pictures", "Music", "Videos", "Archives", "Others"]
                                     property var stoppersModelColors: ["#F57F17", "#01579B", "#D81B60", "#7B1FA2", "tomato", "#FFA000"]
@@ -134,12 +135,18 @@ Rectangle {
                                         ctx.lineJoin = "round"
 
                                         var i;
+                                        var lastValue = 0;
                                         for(i = 0; i < 6; i++){
                                             ctx.beginPath();
                                             ctx.moveTo(center, center);
-                                            ctx.strokeStyle = stoppersModelColors[i]
-                                            ctx.fillStyle = Qt.lighter(stoppersModelColors[i])
-                                            ctx.arc(center, center, center - 5, stoppersModelPercent[i]*2*Math.PI, stoppersModelPercent[i + 1]*2*Math.PI);
+                                            ctx.strokeStyle = stoppersModelColors[i];
+                                            ctx.fillStyle = Qt.lighter(stoppersModelColors[i]);
+
+                                            var value = stoppersModelValues[i]/totalMediaCount + lastValue;
+                                            ctx.arc(center, center, center - 5, lastValue*2*Math.PI, value*2*Math.PI);
+                                            lastValue = value;
+                                            stoppersModelPercent[i] = value;
+
                                             ctx.stroke();
                                             ctx.fill();
                                             ctx.closePath();
@@ -171,7 +178,7 @@ Rectangle {
                                     width: parent.width - canvas.width
                                     height: 180
                                     anchors.verticalCenter: parent.verticalCenter
-                                    model: 6
+                                    model: canvas.stoppersModelPercent
                                     spacing: 5
                                     delegate: Rectangle{
                                         width: parent.width
@@ -191,7 +198,7 @@ Rectangle {
                                                 Text{
                                                     width: parent.width
                                                     height: parent.height
-                                                    text: (canvas.stoppersModelPercent[index + 1] - canvas.stoppersModelPercent[index]).toPrecision(2)*100 + "%"
+                                                    text: modelData.toFixed(2)*100 + "%"
                                                     verticalAlignment: Text.AlignVCenter
                                                     horizontalAlignment: Text.AlignHCenter
                                                     color: rFileSystem.IconColor2

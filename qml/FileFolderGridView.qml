@@ -79,7 +79,7 @@ Component{
                         anchors.centerIn: parent
                         width: parent.width
                         height: parent.height
-                        source: (imagePreviewBtn.nowPreviewing ? "image://preview/" : "image://mime/") + model.modelData.FileType
+                        source: (imagePreviewBtn.nowPreviewing ? "image://preview/" + model.modelData.Path : "image://mime/" + model.modelData.FileType)
                         sourceSize.width: parent.width*0.9
                         sourceSize.height: parent.height*0.9
                         asynchronous: true
@@ -104,7 +104,7 @@ Component{
                         font.family: "Arial"
                         horizontalAlignment: Text.AlignHCenter
                         color: rFileSystem.IconColor1
-                        font.pointSize: Math.max(scaleFactor*0.16, 10)
+                        font.pointSize: Math.min(Math.max(scaleFactor*0.32, 10), 15)
                         anchors.verticalCenter: parent.verticalCenter
                         //anchors.horizontalCenter: parent.horizontalCenter
                         //wrapMode: Text.WrapAnywhere

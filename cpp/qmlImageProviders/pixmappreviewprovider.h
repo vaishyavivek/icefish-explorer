@@ -21,6 +21,7 @@
 #include <QIcon>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QDebug>
 
 class PixmapPreviewProvider: public QQuickImageProvider{
 public:

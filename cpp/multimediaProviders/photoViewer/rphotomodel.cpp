@@ -5,34 +5,47 @@
 #include <QMatrix>
 
 RPhotoModel::RPhotoModel(QObject *parent) : QObject(parent){
-    const QString DRIVER("QSQLITE");
+    /*const QString DRIVER("QSQLITE");
     if(!QSqlDatabase::isDriverAvailable(DRIVER))
-        qDebug() << "No Suitable SqLite Driver was found, Aborting now.";
+        qDebug() << "No Suitable SqLite Driver was found, Aborting now.";*/
 
-    pqModel = new PhotoQueryModel();
+    pqModel = new QueryModel();
 
     cachePath = QDir::homePath() + "/.config/" + QCoreApplication::organizationName();
     QDir::setCurrent(cachePath);
+
     updatePQmodelFromCache();
-    QSqlDatabase::removeDatabase(QSqlDatabase::database("QSQLITE").databaseName());
+
     updateCacheDatabase();
 }
 
 void RPhotoModel::updateCacheDatabase(){
-    ccThread = new CacheCreatorThread();
+    QStringList extensionsToLookFor;
+    extensionsToLookFor.append("*.jpg");
+    extensionsToLookFor.append("*.jpeg");
+    extensionsToLookFor.append("*.png");
+    extensionsToLookFor.append("*.gif");
+    extensionsToLookFor.append("*.svg");
+
+    QStringList pathsToLookInto;
+    pathsToLookInto.append(QDir::homePath());
+
+    ccThread = new CacheCreatorThread("Photos", extensionsToLookFor, pathsToLookInto);
     connect(ccThread, &CacheCreatorThread::cacheCreationCompleted, this, &RPhotoModel::updatePQmodelFromCache);
     connect(ccThread, &CacheCreatorThread::finished, ccThread, &QObject::deleteLater);
     ccThread->start();
 }
 
 void RPhotoModel::updatePQmodelFromCache(){
-    QSqlDatabase sqlDb = QSqlDatabase::addDatabase("QSQLITE");
-    sqlDb.setDatabaseName("icefishGxCache.sqlite");
+    QSqlDatabase sqlDb = QSqlDatabase::database("mainThread");
+
+    sqlDb.setDatabaseName("icefishPhotosCache.sqlite");
     if(!sqlDb.open())
         qDebug() << "Failed to open database file, Aborting now" << sqlDb.lastError().text();
 
     pqModel->setQuery("SELECT * FROM PhotosList", sqlDb);
     emit PQmodelChanged();
+    sqlDb.close();
     activeIndex = -1;
 }
 

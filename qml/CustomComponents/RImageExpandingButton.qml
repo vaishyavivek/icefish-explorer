@@ -76,7 +76,7 @@ Button {
         PropertyAnimation{
             target: image
             property: "sourceSize.width"
-            to: rButton.width*0.75
+            to: rButton.height*0.75
             duration: rFileSystem.GlobalAnimationDuration
         }
 
@@ -113,7 +113,7 @@ Button {
         PropertyAnimation{
             target: image
             property: "sourceSize.width"
-            to: rButton.width*0.5
+            to: rButton.height*0.5
             duration: rFileSystem.GlobalAnimationDuration
         }
 
@@ -159,7 +159,7 @@ Button {
         PropertyAnimation{
             target: image
             property: "sourceSize.width"
-            to: rButton.width*0.5
+            to: rButton.height*0.5
             duration: rFileSystem.GlobalAnimationDuration
         }
 

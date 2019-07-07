@@ -36,13 +36,13 @@ Popup{
             spacing: 5
             Text {
                 id: title
-                color: mainWindow.fontColor
+                color: rFileSystem.IconColor1
                 text: qsTr("<b>Wild Search for:</b>")
             }
             TextInput{
                 id: searchArea
                 text: searchKey
-                color: mainWindow.fontColor
+                color: Qt.lighter(rFileSystem.IconColor1)
                 onTextChanged: qtModel.WildSearchKey = text
             }
         }

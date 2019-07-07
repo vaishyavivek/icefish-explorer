@@ -20,6 +20,7 @@
 
 #include "rfilesystemmodel.h"
 #include "fileOperations/rfileoperator.h"
+#include "multimediaProviders/videoPlayer/rvideodetailsmodel.h"
 #include "qmlImageProviders/mimeiconprovider.h"
 #include "qmlImageProviders/pixmappreviewprovider.h"
 #include "qmlImageProviders/mimeinfoprovider.h"
@@ -69,6 +70,9 @@ int main(int argc, char *argv[])
 
     RFileOperator *rfop = new RFileOperator(engine);
     ctxt->setContextProperty("rFileOperator", rfop);
+
+    PathSetter *ps = new PathSetter(engine);
+    ctxt->setContextProperty("mediaObj", ps);
 
 
     /* Image Providers for QML

@@ -1,6 +1,6 @@
 ## IceFish Explorer
 
-*Next Generation File Manager with Cloud support*
+*Next Generation File Manager with Cloud support and Multimedia explorer*
 
 ---
 
@@ -10,7 +10,7 @@ Reverse UI style, inspired by Material Design.
 
 **Tabbed exploring**
 
-Wish to have multiple directories opened within single window, we've covered you.
+Open each instance of your folder in a new tab
 
 **Wild Search**
 
@@ -22,7 +22,15 @@ Everything under the same Window, all your file operations can be monitored from
 
 **Custom Icons**
 
-Perfect integration with KDE(Qt5) and Gnome(GTK+) icon caches.
+Perfect integration with KDE(Qt5) and Gnome(GTK+) icon caches. ['Papirus'](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme) is used as a fallback icon theme.
+
+**Multimedia Explorer**
+
+View and explorer photos on your PC, watch videos and movies and listen to music within the explorer.
+
+**Cache Cleaner**
+
+View and clean caches present in your system. (partial)
 
 **Themes**
 
@@ -30,7 +38,7 @@ Comes with default Light theme with an optional Dark theme and 5 others.
 
 **The Cloud on the Ground**
 
-Get your Dropbox , Google Drive and OneDrive files in your local PC without actually downloading them.<partial support>
+Get your Dropbox , Google Drive and OneDrive files in your local PC without actually downloading them.
 
 **FreeDesktop.org compliant**
 

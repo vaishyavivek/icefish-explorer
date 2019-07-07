@@ -15,22 +15,19 @@ public:
         if(size)
             *size = QSize(32, 32);
 
-        //QIcon::setFallbackSearchPaths(QIcon::fallbackSearchPaths() << ":assets");
-        if(!QIcon::hasThemeIcon(xdgName))
+        if(!QIcon::hasThemeIcon(xdgName)){
+            //check if the icon is present in the app local db
+            QPixmap pixmap(":/local/assets/papirus-icons/places/" + xdgName +".svg");
+            if(!pixmap.isNull())
+                return pixmap.scaled(requestedSize);
+
+            //return a generic icon if nothing is present
             return QPixmap(":/local/assets/generic.png");
+        }
 
-        QString theme = QIcon::themeName();
-        theme = QIcon::fallbackThemeName();
-
+        //look for an icon in the system icon theme if it is found
         QIcon icon = QIcon::fromTheme(xdgName);
         QPixmap pixmap = icon.pixmap(requestedSize);
-        if(pixmap.isNull()){
-            pixmap = QPixmap(":/local/assets/" + xdgName);
-            if(pixmap.isNull())
-                return QPixmap(":/local/assets/generic.png");
-            else
-                return pixmap.scaled(requestedSize);
-        }
         return pixmap;
     }
 };

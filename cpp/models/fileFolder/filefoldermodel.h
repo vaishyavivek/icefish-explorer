@@ -46,6 +46,8 @@ class FileFolderModel : public QObject
     Q_PROPERTY(QList<QObject*> ActionsMenu READ ActionsMenu WRITE setActionsMenu NOTIFY ActionsMenuChanged)
     Q_PROPERTY(int ActionsMenuCount READ ActionsMenuCount NOTIFY ActionsMenuCountChanged)
 
+    Q_PROPERTY(int QtModelIndex READ QtModelIndex WRITE setQtModelIndex NOTIFY QtModelIndexChanged)
+
 public:
     FileFolderModel(QObject *parent = nullptr);
 
@@ -87,6 +89,9 @@ public:
 
     int ActionsMenuCount() const{ return actionsMenu.length();}
 
+    int QtModelIndex() const{ return qtModelIndex;}
+    void setQtModelIndex(const int &QtModelIndex){ qtModelIndex = QtModelIndex;}
+
 signals:
     void SelectedChanged();
     void DisplayNameChanged();
@@ -101,6 +106,8 @@ signals:
     void ActionsMenuCountChanged();
     void startThread(QString);
 
+    void QtModelIndexChanged();
+
 private:
     QFileInfo fileInfo;
     QDateTime modified;
@@ -113,6 +120,7 @@ private:
     bool isHidden;
 
     QList<QObject*> actionsMenu;
+    int qtModelIndex;
 };
 
 #endif // FILEFOLDERMODEL_H

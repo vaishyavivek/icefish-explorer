@@ -15,6 +15,7 @@
 */
 #include <sys/vfs.h>
 #include <QCoreApplication>
+#include <QSqlDatabase>
 
 #include "rfilesystemmodel.h"
 #include "fileStructures/local/localfiles.h"
@@ -63,8 +64,13 @@ RFileSystemModel::RFileSystemModel(QObject *parent)
     oneDriveViewerObj = new OneDriveViewer();
     googleDriveViewerObj = new GoogleDriveViewer();
 
+    QSqlDatabase::addDatabase("QSQLITE", "mainThread");
+
     rvp = new RPhotoModel();
     emit PhotoViewProviderChanged();
+
+    vvp = new RVideoModel();
+    emit VideoViewProvider();
 }
 
 
@@ -300,6 +306,7 @@ void RFileSystemModel::createNewTab(QString Path){
         FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
         ffm->setFileType("folder");
         ffm->changeTabTitle("Start Page");
+        ffm->setQtModelIndex(tabHeaderList.length());
 
         sph = new StartPageHandler();
         emit StartPageHandleChanged();
@@ -309,13 +316,23 @@ void RFileSystemModel::createNewTab(QString Path){
     }
     else if(Path.startsWith("pictures")){
         FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
-        ffm->setFileType("camera-photo");
+        ffm->setFileType("folder");
         ffm->changeTabTitle("Photo Viewer");
 
         tabHeaderList.append(ffm);
         emit TabHeaderListChanged();
 
         emit cppTabListChanged("/qml/Tabs/PhotosViewer/GalleryView.qml");
+    }
+    else if(Path.startsWith("video")){
+        FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
+        ffm->setFileType("folder");
+        ffm->changeTabTitle("Video Player");
+
+        tabHeaderList.append(ffm);
+        emit TabHeaderListChanged();
+
+        emit cppTabListChanged("/qml/Tabs/VideoPlayer/GalleryView.qml");
     }
     else if(!Path.startsWith("cloud://")){
         FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
@@ -412,8 +429,11 @@ void RFileSystemModel::updateCurrentDirectoryOnCurrentView(QString stdName, int 
         if(!stdName.contains("/")){
             if(stdName.compare("home") == 0)
                 qobject_cast<LocalFiles*>(getTabData(activeIndex))->updateCurrentDirectory(QDir::homePath());
-            else
-                qobject_cast<LocalFiles*>(getTabData(activeIndex))->updateCurrentDirectory(QDir::homePath() + "/" + stdName);
+            else{
+                auto tabData = qobject_cast<LocalFiles*>(getTabData(activeIndex));
+                tabData->updateCurrentDirectory(QDir::homePath() + "/" + stdName);
+                //(qobject_cast<LocalFiles*>(getTabData(activeIndex)))->updateCurrentDirectory(QDir::homePath() + "/" + stdName);
+            }
         }
         else
             qobject_cast<LocalFiles*>(getTabData(activeIndex))->updateCurrentDirectory(stdName);

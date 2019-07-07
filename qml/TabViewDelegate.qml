@@ -17,7 +17,7 @@ import QtQml 2.1
 import QtQuick 2.8
 import QtQuick.Controls 2.4
 import QtGraphicalEffects 1.0
-import com.mimeinfoprovider 1.0
+//import com.mimeinfoprovider 1.0
 //import com.rdirectorymodel 1.0
 import "CustomComponents"
 import "AddressBarComponents"
@@ -153,7 +153,7 @@ Rectangle{
                         height: parent.height
                         width: height
                         icon.source: "/local/assets/new-file.svg"
-                        icon.color: rFileSystem.IconColor
+                        icon.color: rFileSystem.IconColor1
                         hoverText: "New File"
                         onClicked: newFileDialogBox.open()
 
@@ -173,7 +173,7 @@ Rectangle{
                         height: parent.height
                         width: height
                         icon.source: "/local/assets/new-folder.svg"
-                        icon.color: rFileSystem.IconColor
+                        icon.color: rFileSystem.IconColor1
                         hoverText: "New Folder"
                         onClicked: newFolderDialogBox.open()
 
@@ -230,7 +230,7 @@ Rectangle{
                         height: parent.height
                         width: height
                         icon.source: "/local/assets/back-arrow.svg"
-                        icon.color: rFileSystem.IconColor
+                        icon.color: rFileSystem.IconColor1
                         onClicked: {
                             selectAll.checked = false
                             selectionCount = 0
@@ -245,7 +245,7 @@ Rectangle{
                         height: parent.height
                         width: height
                         icon.source: "/local/assets/copy.svg"
-                        icon.color: rFileSystem.IconColor
+                        icon.color: rFileSystem.IconColor1
                         hoverText: "Copy " + selectionCount + " Item" + (selectionCount == 1 ? "" : "s")
                         onClicked: qtModel.copyOrCutItems(0)
                     }
@@ -255,7 +255,7 @@ Rectangle{
                         height: parent.height
                         width: height
                         icon.source: "/local/assets/cut.svg"
-                        icon.color: rFileSystem.IconColor
+                        icon.color: rFileSystem.IconColor1
                         hoverText: "Cut " + selectionCount + " Item" + (selectionCount == 1 ? "" : "s")
                         onClicked: qtModel.copyOrCutItems(1)
                     }
@@ -278,7 +278,7 @@ Rectangle{
                     height: parent.height
                     width: height
                     icon.source: "/local/assets/bookmark-" + (isBookmarked ? "checked" : "unchecked") + ".svg"
-                    icon.color: rFileSystem.IconColor
+                    icon.color: rFileSystem.IconColor1
                     hoverText: (isBookmarked ? "Remove Bookmark" : "Bookmark this place")
                     onClicked: qtModel.IsBookmarked = !isBookmarked
                 }
@@ -289,7 +289,7 @@ Rectangle{
                     height: parent.height
                     width: height
                     icon.source: "/local/assets/hidden-" + (nowVisible ? "checked" : "unchecked") + ".svg"
-                    icon.color: rFileSystem.IconColor
+                    icon.color: rFileSystem.IconColor1
                     hoverText: (nowVisible ? "Hide Hidden Items" : "Show Hidden Items")
                     onClicked: qtModel.IsHiddenItemsShown = !nowVisible
                 }
@@ -300,7 +300,7 @@ Rectangle{
                     height: parent.height
                     width: height
                     icon.source: "/local/assets/image-preview-" + (nowPreviewing ? "checked" : "unchecked") + ".svg"
-                    icon.color: rFileSystem.IconColor
+                    icon.color: rFileSystem.IconColor1
                     hoverText: (nowPreviewing ? "Stop Previewing items" : "Enable Image Preview")
                     onClicked: qtModel.IsPreviewAvailable = !nowPreviewing
                 }
@@ -311,7 +311,7 @@ Rectangle{
                     height: parent.height
                     width: height
                     icon.source: "/local/assets/" + (currentView == 0 ? "list" : "grid") + "view.svg"
-                    icon.color: rFileSystem.IconColor
+                    icon.color: rFileSystem.IconColor1
                     hoverText: (currentView == 0 ? "Switch to GridView" : "Switch to ListView")
                     onClicked: qtModel.CurrentView = (currentView == 0) ? 1 : 0
                 }

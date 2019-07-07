@@ -34,8 +34,8 @@ ToolTip{
         border.color: rFileSystem.IconColor1
         border.width: 1
         radius: 5
-        implicitWidth: parent.width
-        implicitHeight: content.height
+        width: parent.width
+        height: content.height
 
         RectangularGlow{
             id: effect

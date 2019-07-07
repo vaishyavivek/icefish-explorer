@@ -113,9 +113,10 @@ ToolTip{
                             height: 25
                             text: "Currently Ongoing Processes"
                             icon.source: "/local/assets/" + (ongoingProcesses.isExpanded ? "collapse.svg" : "expand.svg")
-                            icon.color: rFileSystem.IconColor1
+                            fontColor: rFileSystem.IconColor1
                             onClicked: ongoingProcesses.isExpanded = !ongoingProcesses.isExpanded
                         }
+
                         ListView{
                             id: ongoingProcessesContent
                             width: parent.width
@@ -212,7 +213,7 @@ ToolTip{
                             height: 25
                             text: "Process waiting in Queue"
                             icon.source: "/local/assets/" + (waitingProcesses.isExpanded ? "collapse.svg" : "expand.svg")
-                            icon.color: rFileSystem.IconColor1
+                            fontColor: rFileSystem.IconColor1
                             onClicked: waitingProcesses.isExpanded = !waitingProcesses.isExpanded
                         }
 
@@ -311,8 +312,8 @@ ToolTip{
                             width: parent.width
                             height: 25
                             text: "Completed Processes"
-                            icon.source: "/local/assets/" + (completedProcesses.sExpanded ? "collapse.svg" : "expand.svg")
-                            icon.color: rFileSystem.IconColor1
+                            icon.source: "/local/assets/" + (completedProcesses.isExpanded ? "collapse.svg" : "expand.svg")
+                            fontColor: rFileSystem.IconColor1
                             onClicked: completedProcesses.isExpanded = !completedProcesses.isExpanded
                         }
 

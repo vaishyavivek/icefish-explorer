@@ -66,7 +66,7 @@ Component{
                         text: "File Name"
                         font.family: "Sans Serif"
                         color: rFileSystem.IconColor1
-                        font.pointSize: Math.max(scaleFactor*0.32, 10)
+                        font.pointSize: Math.min(Math.max(scaleFactor*0.32, 10), 15)
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -101,7 +101,7 @@ Component{
                         text: "Last Modified"
                         font.family: "Sans Serif"
                         color: rFileSystem.IconColor1
-                        font.pointSize: Math.max(scaleFactor*0.32, 10)
+                        font.pointSize: Math.min(Math.max(scaleFactor*0.32, 10), 15)
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -135,7 +135,7 @@ Component{
                         text: "Size"
                         font.family: "Sans Serif"
                         color: rFileSystem.IconColor1
-                        font.pointSize: Math.max(scaleFactor*0.32, 10)
+                        font.pointSize: Math.min(Math.max(scaleFactor*0.32, 10), 15)
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -169,7 +169,7 @@ Component{
                         text: "Type"
                         font.family: "Sans Serif"
                         color: rFileSystem.IconColor1
-                        font.pointSize: Math.max(scaleFactor*0.32, 10)
+                        font.pointSize: Math.min(Math.max(scaleFactor*0.32, 10), 15)
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -232,7 +232,7 @@ Component{
                         anchors.centerIn: parent
                         width: parent.width
                         height: parent.height
-                        source: (imagePreviewBtn.nowPreviewing ? "image://preview/" : "image://mime/") + model.modelData.FileType
+                        source: (imagePreviewBtn.nowPreviewing ? "image://preview/" + model.modelData.Path : "image://mime/" + model.modelData.FileType)
                         sourceSize.width: parent.width*0.9
                         sourceSize.height: parent.height*0.9
                         asynchronous: true
@@ -256,7 +256,7 @@ Component{
                         text: model.modelData.DisplayName
                         font.family: "Sans Serif"
                         color: rFileSystem.IconColor1
-                        font.pointSize: Math.max(scaleFactor*0.32, 8)
+                        font.pointSize: Math.min(Math.max(scaleFactor*0.32, 10), 15)
                         anchors.verticalCenter: parent.verticalCenter
 
                         readOnly: true
@@ -282,7 +282,7 @@ Component{
                         text: model.modelData.Date_Time_Modified
                         color: rFileSystem.IconColor1
                         font.family: "Sans Serif"
-                        font.pointSize: Math.max(scaleFactor*0.32, 8)
+                        font.pointSize: Math.min(Math.max(scaleFactor*0.32, 10), 15)
                         anchors.verticalCenter: parent.verticalCenter
                         clip: true
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -301,7 +301,7 @@ Component{
                         text: model.modelData.FileSize
                         color: rFileSystem.IconColor1
                         font.family: "Sans Serif"
-                        font.pointSize: Math.max(scaleFactor*0.32, 8)
+                        font.pointSize: Math.min(Math.max(scaleFactor*0.32, 10), 15)
                         anchors.verticalCenter: parent.verticalCenter
                         clip: true
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -326,7 +326,7 @@ Component{
                         text: model.modelData.FileType
                         color: rFileSystem.IconColor1
                         font.family: "Sans Serif"
-                        font.pointSize: Math.max(scaleFactor*0.32, 8)
+                        font.pointSize: Math.min(Math.max(scaleFactor*0.32, 10), 15)
                         anchors.verticalCenter: parent.verticalCenter
                         clip: true
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere

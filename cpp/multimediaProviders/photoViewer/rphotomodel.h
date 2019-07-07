@@ -7,14 +7,14 @@
 #include <QSqlDatabase>
 #include <QDir>
 
-#include "cachecreatorthread.h"
-#include "photoquerymodel.h"
+#include "../cachecreatorthread.h"
+#include "../querymodel.h"
 
 
 class RPhotoModel : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(PhotoQueryModel* PQmodel READ PQmodel NOTIFY PQmodelChanged)
+    Q_PROPERTY(QueryModel* PQmodel READ PQmodel NOTIFY PQmodelChanged)
     Q_PROPERTY(int PhotoCount READ PhotoCount NOTIFY PhotoCountChanged)
     Q_PROPERTY(QString CurrentImagePath READ CurrentImagePath NOTIFY CurrentImagePathChanged)
     Q_PROPERTY(int ActiveIndex READ ActiveIndex WRITE setActiveIndex NOTIFY ActiveIndexChanged)
@@ -22,7 +22,7 @@ class RPhotoModel : public QObject
 public:
     explicit RPhotoModel(QObject *parent = nullptr);
 
-    PhotoQueryModel *PQmodel() const{ return pqModel;}
+    QueryModel *PQmodel() const{ return pqModel;}
 
     int PhotoCount() const{ return pqModel->rowCount();}
 
@@ -54,7 +54,7 @@ public slots:
 
 private:
     CacheCreatorThread *ccThread;
-    PhotoQueryModel *pqModel;
+    QueryModel *pqModel;
     QString cachePath;
     QString currentImagePath;
     int activeIndex;

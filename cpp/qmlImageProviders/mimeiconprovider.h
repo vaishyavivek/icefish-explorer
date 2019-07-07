@@ -32,17 +32,33 @@ public:
         if(size)
             *size = QSize(32, 32);
 
-        if(filePath == "Directory" || filePath == "folder")
-            return QIcon::fromTheme("folder").pixmap(requestedSize);
+        if(filePath == "Directory" || filePath == "folder"){
+
+            //look for an icon in the system icon db
+            QIcon folderIcon = QIcon::fromTheme("folder");
+            if(!folderIcon.isNull())
+                return folderIcon.pixmap(requestedSize);
+
+            //if no icon is present then return the papirus icon
+            return QPixmap(":/local/assets/papirus-icons/places/folder.svg").scaled(requestedSize);
+        }
 
         QMimeDatabase mimeDb;
         QMimeType mime = mimeDb.mimeTypeForFile("file." + filePath, QMimeDatabase::MatchExtension);
         QString iconName = mime.iconName();
 
-        if(!QIcon::hasThemeIcon(iconName))
-            return QPixmap(":/local/assets/file.svg");
+        //check if the system icon db has a relevant icon
+        if(!QIcon::hasThemeIcon(iconName)){
+            //if no icon is present then check if local icon db has one
+            QPixmap localIcon(":/local/assets/papirus-icons/mimetypes/" + mime.iconName() + ".svg");
+            if(!localIcon.isNull())
+                localIcon.scaled(requestedSize);
 
+            //even if local db doesn't have it, what can we do
+            return QPixmap(":/local/assets/file.svg").scaled(requestedSize);
+        }
 
+        //system db has an icon, return it
         QIcon icon = QIcon::fromTheme(iconName);
         QPixmap pixmap = icon.pixmap(requestedSize);
         return pixmap;

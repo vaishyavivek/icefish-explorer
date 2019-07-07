@@ -1,5 +1,6 @@
 QT += quick networkauth sql
-CONFIG += c++11 libm
+CONFIG += c++11
+
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -16,10 +17,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += cpp/main.cpp \
     cpp/fileStructures/startpagehandler.cpp \
     cpp/models/cloudAccountViewer/cloudaccountviewer.cpp \
+    cpp/multimediaProviders/cachecreatorthread.cpp \
     cpp/multimediaProviders/photoViewer/rphotomodel.cpp \
-    cpp/multimediaProviders/photoViewer/cachecreatorthread.cpp \
     cpp/multimediaProviders/photoViewer/rphotodetailsmodel.cpp \
-    cpp/multimediaProviders/photoViewer/photoquerymodel.cpp \
+    cpp/multimediaProviders/querymodel.cpp \
+    cpp/multimediaProviders/videoPlayer/rvideomodel.cpp \
     cpp/rfilesystemmodel.cpp \
     cpp/models/bookmarkInfo/bookmarkinfomodel.cpp \
     cpp/models/diskInfo/diskinfomodel.cpp \
@@ -57,12 +59,13 @@ HEADERS += \
     cpp/models/cloudAccountViewer/dropboxviewer.h \
     cpp/models/cloudAccountViewer/googledriveviewer.h \
     cpp/models/cloudAccountViewer/onedriveviewer.h \
+    cpp/multimediaProviders/cachecreatorthread.h \
     cpp/multimediaProviders/photoViewer/rphotomodel.h \
-    cpp/multimediaProviders/photoViewer/cachecreatorthread.h \
     cpp/multimediaProviders/photoViewer/rphotodetailsmodel.h \
-    cpp/multimediaProviders/photoViewer/photoquerymodel.h \
-    cpp/multimediaProviders/photoViewer/templates.h \
     cpp/multimediaProviders/photoViewer/imagepreviewprovider.h \
+    cpp/multimediaProviders/querymodel.h \
+    cpp/multimediaProviders/videoPlayer/rvideodetailsmodel.h \
+    cpp/multimediaProviders/videoPlayer/rvideomodel.h \
     cpp/rfilesystemmodel.h \
     cpp/models/addressboxmodel.h \
     cpp/models/desktopfilemodel.h \

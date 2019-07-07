@@ -35,5 +35,7 @@
         <file>qml/Tabs/PhotosViewer/Popups/DetailsPopup.qml</file>
         <file>qml/Tabs/PhotosViewer/Popups/ScalePopup.qml</file>
         <file>qml/Popups/FileFolderSelectionDialogBox.qml</file>
+        <file>qml/Tabs/VideoPlayer/GalleryView.qml</file>
+        <file>qml/Tabs/VideoPlayer/VideoPlayer.qml</file>
     </qresource>
 </RCC>

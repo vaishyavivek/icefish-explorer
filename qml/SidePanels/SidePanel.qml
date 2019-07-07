@@ -419,7 +419,9 @@ Popup {
     }
 
     function updateCurrentDirectory(Path){
-        rFileSystem.updateCurrentDirectoryOnCurrentView(Path, tabHeader.currentIndex)
+        var currentItem = tabHeader.currentItem
+        console.log(currentItem.qtModelIndex)
+        rFileSystem.updateCurrentDirectoryOnCurrentView(Path, currentItem.qtModelIndex)
         if(!isPined)
             reverseExpandMenu()
     }

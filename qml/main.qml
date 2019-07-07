@@ -90,6 +90,7 @@ ApplicationWindow{
 
                                 delegate: Rectangle{
                                     id: tabHeaderDelegate
+                                    property int qtModelIndex: model.modelData.QtModelIndex
                                     width: tabHeader.perDelegateWidth
                                     height: parent.height
                                     color: "transparent"
@@ -109,6 +110,7 @@ ApplicationWindow{
                                                 sourceSize.height: parent.height*0.75
                                                 anchors.centerIn: parent
                                                 asynchronous: true
+                                                //Component.onCompleted: console.log(source)
                                             }
                                         }
 
@@ -259,7 +261,7 @@ ApplicationWindow{
 
         if(tabName === "")
             tab.item.qtModel = rFileSystem.getTabData()
-        //console.log(tab.item.qtModel)
+
         mainTabControl.currentIndex = tabHeader.count - 1
         tabHeader.currentIndex = tabHeader.count - 1
     }

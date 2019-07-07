@@ -23,11 +23,15 @@
 #include <QSettings>
 
 #include "models/notification/notificationmodel.h"
+
 #include "fileStructures/startpagehandler.h"
+
 #include "models/cloudAccountViewer/dropboxviewer.h"
 #include "models/cloudAccountViewer/onedriveviewer.h"
 #include "models/cloudAccountViewer/googledriveviewer.h"
+
 #include "multimediaProviders/photoViewer/rphotomodel.h"
+#include "multimediaProviders/videoPlayer/rvideomodel.h"
 
 class RFileSystemModel : public QObject
 {
@@ -42,6 +46,8 @@ class RFileSystemModel : public QObject
     Q_PROPERTY(StartPageHandler* StartPageHandle READ StartPageHandle NOTIFY StartPageHandleChanged)
 
     Q_PROPERTY(RPhotoModel* PhotoViewProvider READ PhotoViewProvider NOTIFY PhotoViewProviderChanged)
+
+    Q_PROPERTY(RVideoModel* VideoViewProvider READ VideoViewProvider NOTIFY VideoViewProviderChanged)
 
     /* Provides error/warning data to NotificationPanel
      * connected with each tab via "Notfiy" slot in the NotificationModel class
@@ -122,6 +128,8 @@ public:
     StartPageHandler* StartPageHandle() const{ return sph;}
 
     RPhotoModel* PhotoViewProvider() const{ return rvp;}
+
+    RVideoModel* VideoViewProvider() const{ return vvp;}
 
     NotificationModel* NModel() const{ return nm;}
 
@@ -206,6 +214,7 @@ signals:
     void TabHeaderListChanged();
     void StartPageHandleChanged();
     void PhotoViewProviderChanged();
+    void VideoViewProviderChanged();
     void DiskDataListChanged();
     void BookmarkDataListChanged();
     void RecentsListChanged();
@@ -270,6 +279,7 @@ private:
 
     StartPageHandler *sph;
     RPhotoModel *rvp;
+    RVideoModel *vvp;
 
     // Global Settings handler object
     QSettings settings;
