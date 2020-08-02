@@ -72,5 +72,5 @@ Thumbs.db
 *.exe
 
 # folders
-src/temp/*
-node/temp/*
+#src/temp/*
+#node/temp/*
