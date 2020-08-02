@@ -350,7 +350,7 @@ void RFileSystemModel::createNewTab(QString Path){
     }
     else if(!Path.startsWith("cloud://")){
         FileFolderModel *ffm = new FileFolderModel(QFileInfo(Path));
-        ffm->setFileType("Directory");
+        ffm->setFileType("folder");
         LocalFiles *newTab = new LocalFiles();
 
         connect(newTab, &LocalFiles::TitleChanged, ffm, &FileFolderModel::changeTabTitle);

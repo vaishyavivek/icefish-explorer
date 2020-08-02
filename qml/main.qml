@@ -41,7 +41,7 @@ ApplicationWindow{
     minimumWidth: 900
     minimumHeight: 600
 
-    flags: Qt.FramelessWindowHint
+    flags: Qt.CustomizeWindowHint
     x: Screen.desktopAvailableWidth*0.5 - width*0.5
     y: Screen.desktopAvailableHeight*0.5 - height*0.5
 
@@ -122,6 +122,7 @@ ApplicationWindow{
                                                 sourceSize.height: parent.height*0.75
                                                 anchors.centerIn: parent
                                                 asynchronous: true
+                                                Component.onCompleted: console.log(source)
                                                 //Component.onCompleted: console.log(source)
                                             }
                                         }
