@@ -16,6 +16,7 @@ Open each instance of your folder in a new tab
 
 No more pressing 'r' 'r' 'r' thousand times, type 'reverse' and you'll get your desired file.
 
+
 **No Additional Popup Windows**
 
 Everything under the same Window, all your file operations can be monitored from side bar like a web browser.
@@ -49,3 +50,4 @@ Built for easy switching from Dolphin and Nautilus.
 One File Manager, one UI, constant across all your devices, Linux and Windows supported.
 
 ---
+![image](https://user-images.githubusercontent.com/68043268/113382891-46fd7c00-93a0-11eb-87db-ca6ec066ec61.png)
