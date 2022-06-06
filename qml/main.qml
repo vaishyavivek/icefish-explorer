@@ -303,7 +303,7 @@ ApplicationWindow{
     Connections{
         target: rFileSystem
         ignoreUnknownSignals: true
-        onCppTabListChanged: createTab(stdName)
+        function onCppTabListChanged(stdName){ createTab(stdName) }
     }
 
 }
