@@ -86,7 +86,7 @@ Dialog{
                         Connections{
                             target: qtModel
                             ignoreUnknownSignals: true
-                            onCreateNew_ChooseAnother: {
+                            function onCreateNew_ChooseAnother(suggestedName){
                                 fileNameInput.text = suggestedName
                                 fileNameInput.forceActiveFocus()
                             }

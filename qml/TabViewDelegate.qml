@@ -76,7 +76,7 @@ Rectangle{
                 Connections{
                     target: qtModel
                     ignoreUnknownSignals: true
-                    onBackNavBtnEnabled: backBtn.enabled = newValue
+                    function onBackNavBtnEnabled(newValue){ backBtn.enabled = newValue }
                 }
             }
 
@@ -95,7 +95,7 @@ Rectangle{
                 Connections{
                     target: qtModel
                     ignoreUnknownSignals: true
-                    onForNavBtnEnabled: forwardBtn.enabled = newValue
+                    function onForNavBtnEnabled(newValue){ forwardBtn.enabled = newValue }
                 }
             }
 
@@ -110,7 +110,7 @@ Rectangle{
                 Connections{
                     target: qtModel
                     ignoreUnknownSignals: true
-                    onReloadBtnEnabled: reloadBtn.enabled = newValue
+                    function onReloadBtnEnabled(newValue){ reloadBtn.enabled = newValue }
                 }
             }
 
@@ -461,7 +461,7 @@ Rectangle{
         Connections{
             target: qtModel
             ignoreUnknownSignals: true
-            onShowProperties: propertiesPanel.open()
+            function onShowProperties(){ propertiesPanel.open() }
         }
     }
 
@@ -503,6 +503,6 @@ Rectangle{
     Connections{
         target: qtModel
         ignoreUnknownSignals: true
-        onRequestToReloadFromQml: reloadView()
+        function onRequestToReloadFromQml(){ reloadView() }
     }
 }

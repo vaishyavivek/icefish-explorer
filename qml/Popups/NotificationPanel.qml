@@ -119,6 +119,6 @@ Popup{
     Connections{
         target: rFileSystem.NModel
         ignoreUnknownSignals: true
-        onShowNotification: notificationPanel.open()
+        function onShowNotification(){ notificationPanel.open() }
     }
 }
